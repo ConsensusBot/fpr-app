@@ -1,12 +1,12 @@
 # gitter-gimp
 
-a [Sails v1](https://sailsjs.com) application
+A chat bot for the Bitcoin Cash Fund Gitter Community
 
 
 ### Links
 
-+ [Sails framework documentation](https://sailsjs.com/documentation)
-+ [Version notes / upgrading](https://sailsjs.com/documentation/upgrading)
-+ [Deployment tips](https://sailsjs.com/documentation/concepts/deployment)
-+ [Community support options](https://sailsjs.com/support)
-+ [Professional / enterprise options](https://sailsjs.com/enterprise)
++ [Bitcoin Cash Fund Homepage](https://thebitcoincash.fund/)
++ [Bitcoin Cash Fund Gitter Community](https://gitter.im/Bitcoin-Cash-Fund/)
++ [Bitcoin Cash Fund Github Organization](https://github.com/The-Bitcoin-Cash-Fund)
++ [Bitcoin Cash Fund Trello](https://trello.com/bitcoincashfund)
++ [Sails.js MVC Framework Docs](https://next.sailsjs.com/documentation/reference)
