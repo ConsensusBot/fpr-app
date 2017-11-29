@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ "$APP_CONFIG" ]; then
+  echo "Starting Gitter-Gimp in environment $APP_CONFIG"
+  NODE_ENV=$APP_CONFIG node app.js
+else
+  echo "No environment found.  Starting Gitter-Gimp in environment localdevelopment"
+  NODE_ENV=localdevelopment node app.js
+fi

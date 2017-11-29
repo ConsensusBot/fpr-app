@@ -2,7 +2,7 @@
   "name": "gitter-gimp",
   "private": true,
   "version": "0.0.0",
-  "description": "a Sails application",
+  "description": "A chat bot for the Bitcoin Cash Fund Gitter Community",
   "keywords": [],
   "dependencies": {
     "sails": "^1.0.0-41",
@@ -26,14 +26,16 @@
     "test": "npm run lint && npm run custom-tests && echo 'Done.'",
     "lint": "node ./node_modules/eslint/bin/eslint . --max-warnings=0 && echo '✔  Your code looks good.'",
     "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
-    "debug": "node debug app.js"
+    "debug": "node debug app.js",
+    "start": "./web",
+    "work": "./worker"
   },
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/tink/gitter-gimp.git"
+    "url": "https://github.com/ConsensusBot/gitter-gimp"
   },
-  "author": "tink",
+  "author": "alwaysAn0n",
   "license": "",
   "engines": {
     "node": "8"

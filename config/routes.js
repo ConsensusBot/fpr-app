@@ -14,6 +14,12 @@ module.exports.routes = {
   //  ╦ ╦╔═╗╔╗ ╔═╗╔═╗╔═╗╔═╗╔═╗
   //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
   //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
+
+  '*': function(req,res) {
+    return res.redirect('https://thebitcoincash.fund/')
+  }
+
+/*
   'GET /':                   { action: 'view-homepage' },
 
   'GET /faq':                { view:   'pages/faq' },
@@ -32,7 +38,6 @@ module.exports.routes = {
   'GET /account':            { action: 'account/view-account-overview' },
   'GET /account/password':   { action: 'account/view-change-password' },
   'GET /account/profile':    { action: 'account/view-edit-profile' },
-
 
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
@@ -60,5 +65,6 @@ module.exports.routes = {
   //  ╩ ╩╩╚═╝╚═╝  ╩╚═╚═╝═╩╝╩╩╚═╚═╝╚═╝ ╩ ╚═╝
   '/terms':                   '/legal/terms',
   '/logout':                  '/api/v1/account/logout',
+*/
 
 };

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ "$APP_CONFIG" ]; then
+
+  if [ "$APP_CONFIG" == "production" ]; then
+    echo "Starting Gitter-Gimp worker node in environment 'worker_prod'"
+    NODE_ENV=worker_prod node app.js
+    exit
+  fi
+
+  if [ "$APP_CONFIG" == "staging" ]; then
+    echo "Starting Gitter-Gimp worker node in environment 'worker_staging'"
+    NODE_ENV=worker_staging node app.js
+    exit
+  fi
+
+else
+  echo "No environment found.  Starting Gitter-Gimp worker node in environment worker_dev"
+  NODE_ENV=worker_dev node app.js
+fi
