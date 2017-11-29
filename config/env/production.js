@@ -22,13 +22,14 @@
 module.exports = {
 
 
-  /**************************************************************************
-  *                                                                         *
-  * Tell Sails what database(s) it should use in production.                *
-  *                                                                         *
-  * (https://sailsjs.com/config/datastores)                                 *
-  *                                                                         *
-  **************************************************************************/
+  gitter: {
+    token: process.env.GITTER_TOKEN,
+    key: process.env.GITTER_KEY,
+    secret: process.env.GITTER_SECRET,
+    redirect: process.env.GITTER_REDIRECT
+  },
+
+
   datastores: {
 
     /***************************************************************************

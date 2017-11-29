@@ -1,11 +1,17 @@
 /**
- * bot hook
+ * Module dependencies
+ */
+
+var Gitter = require('node-gitter');
+
+/**
+ * custom hook
  *
  * @description :: A hook definition.  Extends Sails by adding shadow routes, implicit actions, and/or initialization logic.
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
-module.exports = function defineBotHook(sails) {
+module.exports = function BotHook(sails) {
 
   return {
 
@@ -14,15 +20,28 @@ module.exports = function defineBotHook(sails) {
      *
      * @param {Function} done
      */
-    initialize: function (done) {
+    initialize: async function (done) {
 
-      sails.log.debug('Initializing custom hook (`bot`)');
+      sails.after(['hook:services:loaded', 'hook:orm:loaded'], () => {
 
-      // Be sure and call `done()` when finished!
-      // (Pass in Error as the first argument if something goes wrong to cause Sails
-      //  to stop loading other hooks and give up.)
-      return done();
+        sails.hooks.bot.connections.gitter = new Gitter(sails.config.gitter.token);
 
+        sails.hooks.bot.connections.gitter.rooms.join('Bitcoin-Cash-Fund/Lobby')
+        .then((room) => {
+          console.log('Joined room: ', room.name);
+          return done();
+        })
+        .fail((err) => {
+          console.log('Ruh roh:',err);
+          return done();
+        })
+
+      });
+
+    },
+    connections: {
+      gitter: undefined,
+      github: undefined
     }
 
   };
