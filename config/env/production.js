@@ -105,7 +105,7 @@ module.exports = {
     * https://sailsjs.com/docs/concepts/models-and-orm/model-settings#?migrate *
     *                                                                          *
     ***************************************************************************/
-    migrate: 'alter',
+    migrate: 'safe',
 
     /***************************************************************************
     *                                                                          *
@@ -297,6 +297,16 @@ module.exports = {
 
   },
 
+  sockets: {
+    onlyAllowOrigins: ['https://gitter-gimp.herokuapp.com', 'http://gitter-gimp.herokuapp.com'],
+    adapter: 'socket.io-redis',
+    url: process.env.REDISTOGO_URL
+  },
+
+  session: {
+    adapter: 'connect-redis',
+    url: process.env.REDISTOGO_URL
+  },
 
 
   /**************************************************************************
