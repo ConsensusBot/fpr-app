@@ -15,9 +15,11 @@ module.exports.routes = {
   //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
   //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
 
-  '*': function(req,res) {
-    return res.redirect('https://thebitcoincash.fund/')
-  }
+  // '*': function(req,res) {
+  //   return res.redirect('https://thebitcoincash.fund/')
+  // },
+
+  'GET /form':       { view: 'pages/form' }
 
 /*
   'GET /':                   { action: 'view-homepage' },
