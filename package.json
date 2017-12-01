@@ -6,10 +6,12 @@
   "keywords": [],
   "dependencies": {
     "async": "2.0.1",
+    "cheerio": "1.0.0-rc.2",
     "connect-redis": "3.2.0",
     "grunt": "1.0.1",
     "lodash": "3.10.1",
     "node-gitter": "2.1.0",
+    "request": "2.83.0",
     "sails": "^1.0.0-41",
     "sails-hook-apianalytics": "^2.0.0",
     "sails-hook-grunt": "^2.0.0",
