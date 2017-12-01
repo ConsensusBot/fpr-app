@@ -6,7 +6,6 @@ var Gitter = require('node-gitter');
 
 var request = require('request');
 var j = request.jar();
-// var scraperjs = require('scraperjs');
 var cheerio = require('cheerio');
 var _ = require('lodash');
 var async = require('async');
@@ -18,7 +17,7 @@ var async = require('async');
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
-module.exports = function BotHook(sails) {
+module.exports = function GithubHook(sails) {
 
   return {
 
@@ -29,11 +28,15 @@ module.exports = function BotHook(sails) {
      */
      initialize: function (done) {
 
+      // Copied from the Bot hook.  Currently just the stubb.  Will build later.
+      return done();
+
       sails.after(['hook:services:loaded', 'hook:orm:loaded'], async function () {
 
         // Check for existing tokens in the database before we fetch new ones
 
         var gitterOauthToken = await Token.findOne({ serviceName: 'gitter' });
+
 
         if (gitterOauthToken && gitterOauthToken.tokenExpires > new Date() ) {
           console.log('We have a token',gitterOauthToken);
@@ -222,7 +225,7 @@ module.exports = function BotHook(sails) {
     routes: {
 
       before: {
-        '/botredirect/gitter': {
+        '/oauth/git': {
           skipAssets: true,
           fn: async function(req, res, next){
             var code = req.param('code');
@@ -270,62 +273,6 @@ module.exports = function BotHook(sails) {
           }
         }
       }
-    },
-    testMessage: function(){
-      sails.hooks.bot.sendMessage({
-        words: 'Im just a big dumb bot!  Hows your mempool bro?',
-        roomId: '5a197fbfd73408ce4f803909'
-      });
-      return;
-    },
-    sendMessage: async function(options){
-
-      var oauthToken = await Token.findOne({ serviceName: 'gitter' });
-
-      var messageInfo = {
-        url: 'https://api.gitter.im/v1/rooms/'+options.roomId+'/chatMessages',
-        json: true,
-        form: {
-          text: options.words
-        },
-        headers: {
-          "Authorization": "Bearer "+oauthToken.tokenValue
-        }
-      };
-
-      request.post(messageInfo, function(err, res, body) {
-        if (err) {
-          console.log('fifffth err:',err);
-        }
-
-      });
-
-    },
-    connectGitter: async function() {
-
-      var oauthToken = await Token.findOne({ serviceName: 'gitter' });
-
-      console.log('Gitter bot signing in with token',oauthToken);
-
-      sails.hooks.bot.connections.gitter = new Gitter(oauthToken.tokenValue);
-
-      sails.hooks.bot.connections.gitter.rooms.join('Bitcoin-Cash-Fund/Lobby')
-      .then((room) => {
-        console.log('ConsensusBot has joined the fun! ');
-      })
-      .fail((err) => {
-        console.log('Ruh roh:',err);
-      });
-
-    },
-    connections: {
-      gitter: undefined,
-      github: undefined
-    },
-    tokens: {
-      gitter: undefined,
-      github: undefined
-    }
-  };
+    }  };
 
 };

@@ -26,7 +26,21 @@ module.exports = {
     token: process.env.GITTER_TOKEN,
     key: process.env.GITTER_KEY,
     secret: process.env.GITTER_SECRET,
-    redirect: process.env.GITTER_REDIRECT
+    redirectUrl: process.env.GITTER_REDIRECTURL
+  },
+  github: {
+    login:  process.env.GITHUB_LOGIN,
+    password:  process.env.GITHUB_PASSWORD,
+    oauth: {
+      clientId: process.env.GITHUB_OAUTH_CLIENTID,
+      clientSecret: process.env.GITHUB_OAUTH_CLIENTSECRET,
+      redirectUrl: process.env.GITHUB_OAUTH_REDIRECTURL
+    },
+    app: {
+      clientId: process.env.GITHUB_APP_CLIENTID,
+      clientSecret: process.env.GITHUB_APP_CLIENTSECRET
+    }
+
   },
 
 
