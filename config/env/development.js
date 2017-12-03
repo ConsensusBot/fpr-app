@@ -31,6 +31,7 @@ module.exports = {
     app: {
       clientId: process.env.GITHUB_APP_CLIENTID,
       clientSecret: process.env.GITHUB_APP_CLIENTSECRET,
+      redirectUrl: process.env.GITHUB_APP_REDIRECTURL,
       pem: process.env.GITHUB_APP_PEM,
       userAgent: process.env.GITHUB_APP_USERAGENT
     }
