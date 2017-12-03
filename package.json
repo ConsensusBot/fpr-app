@@ -18,7 +18,7 @@
     "sails-hook-grunt": "^2.0.0",
     "sails-hook-orm": "^2.0.0-16",
     "sails-hook-sockets": "^1.4.0",
-    "sails-stdlib": "^0.8.0-3",
+    "sails-stdlib": "0.8.0-6",
     "socket.io-redis": "4.0.0"
   },
   "devDependencies": {

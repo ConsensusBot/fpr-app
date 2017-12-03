@@ -1,9 +1,6 @@
 /**
  * Module dependencies
  */
-
-var Gitter = require('node-gitter');
-
 var request = require('request');
 var j = request.jar();
 var cheerio = require('cheerio');
@@ -17,7 +14,7 @@ var async = require('async');
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
-module.exports = function GithubHook(sails) {
+var githubHook = function(sails) {
 
   return {
 
@@ -276,3 +273,16 @@ module.exports = function GithubHook(sails) {
     }  };
 
 };
+
+// Only run this hook if the hook if it's specified
+// in the environment configuration
+if (sails.config.hooks.github){
+  console.log('Loading github hook.');
+  module.exports = githubHook;
+}
+else {
+  module.exports = function(){
+    console.log('Skipping github hook.');
+    return {};
+  };
+}

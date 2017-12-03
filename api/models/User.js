@@ -49,31 +49,6 @@ module.exports = {
       type: 'number',
     },
 
-    stripeCustomerId: {
-      type: 'string',
-      protect: true
-    },
-
-    billingCardBrand: {
-      type: 'string',
-      example: 'Visa'
-    },
-
-    billingCardLast4: {
-      type: 'string',
-      example: '4242'
-    },
-
-    billingCardExpMonth: {
-      type: 'number',
-      example: 11
-    },
-
-    billingCardExpYear: {
-      type: 'number',
-      example: 2023
-    },
-
     emailProofToken: {
       type: 'string'
     },

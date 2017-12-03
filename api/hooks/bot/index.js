@@ -18,7 +18,7 @@ var async = require('async');
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
-module.exports = function BotHook(sails) {
+var botHook = function(sails) {
 
   return {
 
@@ -329,3 +329,16 @@ module.exports = function BotHook(sails) {
   };
 
 };
+
+// Only run this hook if the hook if it's specified
+// in the environment configuration
+if (sails.config.hooks.bot){
+  console.log('Loading bot hook.');
+  module.exports = botHook;
+}
+else {
+  module.exports = function(){
+    console.log('Skipping bot hook.');
+    return {};
+  };
+}
