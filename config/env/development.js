@@ -20,13 +20,6 @@
  */
 
 module.exports = {
-
-  gitter: {
-    token: process.env.GITTER_TOKEN,
-    key: process.env.GITTER_KEY,
-    secret: process.env.GITTER_SECRET,
-    redirectUrl: process.env.GITTER_REDIRECTURL
-  },
   github: {
     login:  process.env.GITHUB_LOGIN,
     password:  process.env.GITHUB_PASSWORD,
@@ -37,13 +30,15 @@ module.exports = {
     },
     app: {
       clientId: process.env.GITHUB_APP_CLIENTID,
-      clientSecret: process.env.GITHUB_APP_CLIENTSECRET
+      clientSecret: process.env.GITHUB_APP_CLIENTSECRET,
+      pem: process.env.GITHUB_APP_PEM,
+      userAgent: process.env.GITHUB_APP_USERAGENT
     }
   },
 
   hooks: {
     bot: false,
-    github: false,
+    github: true,
     jobs: false
   },
 

@@ -37,13 +37,16 @@ module.exports = {
     },
     app: {
       clientId: process.env.GITHUB_APP_CLIENTID,
-      clientSecret: process.env.GITHUB_APP_CLIENTSECRET
+      clientSecret: process.env.GITHUB_APP_CLIENTSECRET,
+      redirectUrl: process.env.GITHUB_OAUTH_REDIRECTURL,
+      pem: process.env.GITHUB_APP_PEM,
+      userAgent: process.env.GITHUB_APP_USERAGENT
     }
   },
 
   hooks: {
     bot: false,
-    github: false,
+    github: true,
     jobs: false
   },
 

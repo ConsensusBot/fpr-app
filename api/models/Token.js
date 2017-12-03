@@ -29,10 +29,7 @@ module.exports = {
     tokenExpires: {
       type: 'ref',
       columnType: 'datetime'
-      // defaultsTo: function() {
-      //   return new Date(new Date().getTime()+1000*3600*24*3)
-      // }
-    }
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -42,6 +39,11 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+
+    user: {
+      model: 'User'
+    }
+
 
   }
 

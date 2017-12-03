@@ -39,7 +39,7 @@ Please feel free to submit issues and pull requests.  There's a lot of planning 
 
 + [Bitcoin Cash Fund Homepage](https://thebitcoincash.fund/)
 + [Learn about Bitcoin Cash](https://www.bitcoincash.org/)
-+ [Bitcoin Cash Fund Gitter Community](https://gitter.im/Bitcoin-Cash-Fund/)
-+ [Bitcoin Cash Fund Github Organization](https://github.com/The-Bitcoin-Cash-Fund)
++ [Bitcoin Cash Fund Rocketchat Community](https://chat.thebitcoincash.fund/)
++ [Bitcoin Cash Fund Github Organization](https://github.com/The-Bitcoin-Cash-Fund/)
 + [Bitcoin Cash Fund Trello](https://trello.com/bitcoincashfund)
 + [Sails.js MVC Framework Docs](https://next.sailsjs.com/documentation/reference)
