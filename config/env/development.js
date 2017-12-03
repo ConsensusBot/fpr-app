@@ -271,9 +271,9 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
 
-    onlyAllowOrigins: ['https://gitter-gimp.herokuapp.com', 'http://gitter-gimp.herokuapp.com'],
-    adapter: 'socket.io-redis',
-    url: process.env.REDISTOGO_URL
+    onlyAllowOrigins: ['https://gitter-gimp.herokuapp.com', 'http://gitter-gimp.herokuapp.com', 'http://localhost:1337'],
+    // adapter: 'socket.io-redis',
+    // url: process.env.REDISTOGO_URL
 
     /***************************************************************************
     *                                                                          *
@@ -338,7 +338,7 @@ module.exports = {
     * (https://sailsjs.com/config/http)                                        *
     *                                                                          *
     ***************************************************************************/
-    // trustProxy: true,
+    trustProxy: true,
 
   },
 

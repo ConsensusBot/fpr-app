@@ -270,7 +270,7 @@ module.exports = {
     * > Be sure to use the right protocol!  ("http://" vs. "https://")         *
     *                                                                          *
     ***************************************************************************/
-    onlyAllowOrigins: ['https://gitter-gimp.herokuapp.com', 'http://gitter-gimp.herokuapp.com'],
+    onlyAllowOrigins: ['https://gitter-gimp.herokuapp.com', 'http://gitter-gimp.herokuapp.com', 'http://localhost.com'],
     adapter: 'socket.io-redis',
     url: process.env.REDISTOGO_URL
 
@@ -339,7 +339,7 @@ module.exports = {
     * (https://sailsjs.com/config/http)                                        *
     *                                                                          *
     ***************************************************************************/
-    // trustProxy: true,
+    trustProxy: true,
 
   },
 
