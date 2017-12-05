@@ -20,13 +20,6 @@
  */
 
 module.exports = {
-
-  gitter: {
-    token: process.env.GITTER_TOKEN,
-    key: process.env.GITTER_KEY,
-    secret: process.env.GITTER_SECRET,
-    redirectUrl: process.env.GITTER_REDIRECTURL
-  },
   github: {
     login:  process.env.GITHUB_LOGIN,
     password:  process.env.GITHUB_PASSWORD,
@@ -111,7 +104,7 @@ module.exports = {
     * https://sailsjs.com/docs/concepts/models-and-orm/model-settings#?migrate *
     *                                                                          *
     ***************************************************************************/
-    migrate: 'safe',
+    migrate: 'alter',
 
     /***************************************************************************
     *                                                                          *
@@ -218,8 +211,8 @@ module.exports = {
     //
     //--------------------------------------------------------------------------
 
-    adapter: 'connect-redis',
-    url: process.env.REDISTOGO_URL,
+    // adapter: 'connect-redis',
+    // url: process.env.REDISTOGO_URL,
 
 
     /***************************************************************************
@@ -273,9 +266,10 @@ module.exports = {
     * > Be sure to use the right protocol!  ("http://" vs. "https://")         *
     *                                                                          *
     ***************************************************************************/
-    onlyAllowOrigins: ['https://gitter-gimp.herokuapp.com', 'http://gitter-gimp.herokuapp.com', 'http://localhost.com'],
-    adapter: 'socket.io-redis',
-    url: process.env.REDISTOGO_URL
+
+    onlyAllowOrigins: ['https://gitter-gimp.herokuapp.com', 'http://gitter-gimp.herokuapp.com', 'http://localhost:1337'],
+    // adapter: 'socket.io-redis',
+    // url: process.env.REDISTOGO_URL
 
     /***************************************************************************
     *                                                                          *
@@ -314,8 +308,6 @@ module.exports = {
   log: {
     level: 'debug'
   },
-
-
 
   http: {
 
