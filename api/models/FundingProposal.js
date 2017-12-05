@@ -11,13 +11,13 @@ module.exports = {
 
     projectName: {
       type: 'string',
-      required: true,
+      //required: true,
       description: 'Name of the applicants proposed project'
     },
 
     startDate:  {
       type: 'string',
-      required: true,
+      //required: true,
       description: 'Date that the github repo was created'
     },
 
@@ -33,34 +33,34 @@ module.exports = {
 
     stakeholders: {
       type: 'string',
-      required: true
+      //required: true
     },
 
     projectSummary: {
       type: 'string',
-      required: true
+      //required: true
     },
 
     resources: {
       type: 'string',
-      required: true,
+      //required: true,
       description: 'List of required resources for the project'
     },
 
     budget: {
       type: 'string',
-      required: true
+      //required: true
     },
 
     timeline: {
       type: 'string',
-      required: true,
+      //required: true,
       description: 'What will be happening and when'
     },
 
     goals: {
       type: 'string',
-      required: true
+      //required: true
     },
 
     other: {

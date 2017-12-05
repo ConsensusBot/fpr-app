@@ -46,7 +46,7 @@ parasails.registerPage('form', {
 
     submitButton: function()  {
 
-      window.location = '/form-submit';
+
 
     }
 

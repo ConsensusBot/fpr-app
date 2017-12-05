@@ -6,17 +6,19 @@
   <div class="container">
     <div class="form-width-smaller">
       <div id="form-messages"></div>
-      <form id="ajax-form" method="post" action="mailer.php">
+      <form id="ajax-form">
         <div class="form-group row">
           <div class="col">
             <label for="projectName">Project Name</label>
             <p class="text-muted">Insert a project name here. Make sure it is unique and easy to refer to.</p>
             <input v-model="formObject.projectName" type="text" class="form-control" placeholder="Project Name" required>
+            <!-- <input v-model="formObject.projectName" type="text" class="form-control" placeholder="Project Name"> -->
           </div>
           <div class="col">
             <label for="startDate">Start Date</label>
             <p class="text-muted">Insert the date that the github repo and gitter room was created.</p>
             <input v-model="formObject.startDate" type="text" pattern="^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$" class="form-control" placeholder="DD/MM/YYYY" title="DD/MM/YYYY" required>
+            <!-- <input v-model="formObject.startDate" type="text" class="form-control" placeholder="DD/MM/YYYY" title="DD/MM/YYYY"> -->
           </div>
         </div><!-- END OF FIRST ROW -->
 

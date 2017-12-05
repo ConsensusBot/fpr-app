@@ -11,8 +11,6 @@ module.exports = {
 
   inputs: {
 
-
-
   },
 
   exits: {
@@ -27,7 +25,7 @@ module.exports = {
 
   fn: async function (inputs, exits)  {
 
-    console.log('Working!');
+
 
   }
 
