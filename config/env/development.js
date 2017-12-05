@@ -211,8 +211,8 @@ module.exports = {
     //
     //--------------------------------------------------------------------------
 
-    adapter: 'connect-redis',
-    url: process.env.REDISTOGO_URL,
+    // adapter: 'connect-redis',
+    // url: process.env.REDISTOGO_URL,
 
 
     /***************************************************************************
