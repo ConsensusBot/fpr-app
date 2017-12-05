@@ -1,21 +1,22 @@
-<div id="form">
+<div id="form" v-cloak>
 
   <h1><img class="form-inline" src="https://raw.githubusercontent.com/The-Bitcoin-Cash-Fund/Branding/master/BCF%20Symbol%20Round%20Tiny.png" alt="Bitcoin Cash Fund Logo">BCF Funding Proposal Request Form</h1>
   <hr>
 
   <div class="container">
     <div class="form-width-smaller">
-      <form>
+      <div id="form-messages"></div>
+      <form id="ajax-form" method="post" action="mailer.php">
         <div class="form-group row">
           <div class="col">
             <label for="projectName">Project Name</label>
             <p class="text-muted">Insert a project name here. Make sure it is unique and easy to refer to.</p>
-            <input id="projectName" type="text" class="form-control" placeholder="Project Name">
+            <input v-model="formObject.projectName" type="text" class="form-control" placeholder="Project Name" required>
           </div>
           <div class="col">
             <label for="startDate">Start Date</label>
             <p class="text-muted">Insert the date that the github repo and gitter room was created.</p>
-            <input id="startDate" type="text" pattern="^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$" class="form-control" placeholder="DD/MM/YYYY" title="DD/MM/YYYY">
+            <input v-model="formObject.startDate" type="text" pattern="^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$" class="form-control" placeholder="DD/MM/YYYY" title="DD/MM/YYYY" required>
           </div>
         </div><!-- END OF FIRST ROW -->
 
@@ -23,65 +24,61 @@
           <div class="col">
             <label for="hashtag">Hashtag</label>
             <p class="text-muted">Insert a project hashtag that can used on social media to discuss the project.</p>
-            <input id="hashtag" type="text" class="form-control" placeholder="#Dingdong">
+            <input v-model="formObject.hashtag" type="text" class="form-control" placeholder="#Dingdong">
           </div>
           <div class="col">
             <label for="bcfName">Name of BCF Gitter community room</label>
             <p class="text-muted">Insert the name of the specific BCF Gitter community room created for the project.</p>
-            <input id="bcfName" type="text" class="form-control">
+            <input v-model="formObject.bcfName" type="text" class="form-control">
           </div>
         </div><!-- END OF SECOND ROW -->
 
         <hr>
 
         <div class="form-group">
-          <label for="stakeolders">Stakeholders</label>
+          <label for="stakeholders">Stakeholders</label>
           <p class="text-muted">Insert the list of people initially involved in the project. Pseudonymous identities can be used also.</p>
-          <textarea class="form-control" id="stakeolders" rows="3"></textarea>
+          <textarea class="form-control" v-model="formObject.stakeholders" rows="3"> {{ formObject.stakeholders }} </textarea>
         </div><!-- END THIRD ROW -->
 
         <div class="form-group">
           <label for="projectSummary">Project Summary</label>
           <p class="text-muted">Insert a short summary (a paragraph or two) of the project.</p>
-          <textarea class="form-control" id="projectSummary" rows="8"></textarea>
+          <textarea class="form-control" v-model="formObject.projectSummary" rows="8"> {{ formObject.projectSummary }} </textarea>
         </div><!-- END FOURTH ROW -->
 
         <div class="form-row">
-          <div class="col-7">
-            <label for="resources">Resources</label>
-            <p class="text-muted">Insert a list of resources required including; skills, manpower, knowledge, services, materials, connections.</p>
-            <textarea class="form-control" id="resources" rows="8"></textarea>
-          </div>
+          <label for="resources">Resources</label>
+          <p class="text-muted">Insert a list of resources required including; skills, manpower, knowledge, services, materials, connections.</p>
+          <textarea class="form-control" v-model="formObject.resources" rows="8"> {{ formObject.resources }} </textarea>
         </div><!-- END FIFTH ROW -->
 
         <div class="form-row">
-          <div class="col-7">
-            <label for="budget">Budget</label>
-            <p class="text-muted">Insert an itemised list of the what must be paid for in the budget, a rough schedule when the funding is needed, and a total of the required funding.</p>
-            <textarea class="form-control" id="budget" rows="8"></textarea>
-          </div>
+          <label for="budget">Budget</label>
+          <p class="text-muted">Insert an itemised list of the what must be paid for in the budget, a rough schedule when the funding is needed, and a total of the required funding.</p>
+          <textarea class="form-control" v-model="formObject.budget" rows="8"> {{ formObject.budget }} </textarea>
         </div><!-- END 6th ROW -->
 
         <div class="form-group">
           <label for="timeline">Timeline</label>
           <p class="text-muted">Insert a project timeline here what will be happening when.</p>
-          <textarea class="form-control" id="timeline" rows="6"></textarea>
+          <textarea class="form-control" v-model="formObject.timeline" rows="6"> {{ formObject.timeline }} </textarea>
         </div><!-- END 7th ROW -->
 
         <div class="form-group">
           <label for="goals">Goals</label>
           <p class="text-muted">Insert a list of clearly defined goals including: - who you want to reach, - how many people you want to reach, - where are the people you want to reach, - why you want to reach them.</p>
-          <textarea class="form-control" id="goals" rows="8"></textarea>
+          <textarea class="form-control" v-model="formObject.goals" rows="8"> {{ formObject.goals }} </textarea>
         </div><!-- END 8th ROW -->
 
         <div class="form-group">
           <label for="other">Other</label>
           <p class="text-muted">Insert any other information that should be known about the project.</p>
-          <textarea class="form-control" id="other" rows="6"></textarea>
+          <textarea class="form-control" v-model="formObject.other" rows="6"> {{ formObject.other }} </textarea>
         </div><!-- END 8th ROW -->
 
         <div class="form-group">
-          <input class="btn btn-primary" type="submit" value="Submit">
+          <input class="btn btn-primary" type="submit" v-on:click="submitButton()"></input>
         </div>
 
         <br>

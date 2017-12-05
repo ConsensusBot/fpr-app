@@ -20,6 +20,7 @@
  *     }
  * ```
  */
+
 module.exports = function unauthorized() {
 
   var req = this.req;
