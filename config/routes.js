@@ -19,8 +19,8 @@ module.exports.routes = {
   //   return res.redirect('https://thebitcoincash.fund/')
   // },
 
-  'GET /form':               { view: 'pages/form' },
-  'GET /form-submit':        { action: 'funding-proposal-controller', skipAssets: true }
+  'GET /form':               { view: 'pages/form' }
+  //'GET /fundingproposal':        { action: 'funding-proposal-controller', skipAssets: true }
 
 /*
   'GET /':                   { action: 'view-homepage' },

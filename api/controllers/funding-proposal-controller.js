@@ -11,6 +11,40 @@ module.exports = {
 
   inputs: {
 
+    projectName: {
+      type: 'string'
+    },
+    startDate: {
+      type: 'string'
+    },
+    hashtag: {
+      type: 'string'
+    },
+    bcfName: {
+      type: 'string'
+    },
+    stakeholders: {
+      type: 'string'
+    },
+    projectSummary: {
+      type: 'string'
+    },
+    resources: {
+      type: 'string'
+    },
+    budget: {
+      type: 'string'
+    },
+    timeline: {
+      type: 'string'
+    },
+    goals: {
+      type: 'string'
+    },
+    other: {
+      type: 'string'
+    }
+
   },
 
   exits: {
@@ -25,7 +59,7 @@ module.exports = {
 
   fn: async function (inputs, exits)  {
 
-
+    console.log(projectName);
 
   }
 
