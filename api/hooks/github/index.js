@@ -198,6 +198,7 @@ var githubHook = function(sails) {
                   githubLogin: githubUser.login
                 }).populate('githubOauthToken');
 
+                console.log('Step 6: Redirecting user to app install page after creating user',user);
 
                 // If there is no user in the database associated
                 // with this Github login, create one and associate
@@ -209,6 +210,8 @@ var githubHook = function(sails) {
                     githubUserData: githubUser,
                     githubOauthToken: token.id
                   }).fetch();
+
+                  req.session.userId = user.id;
                 }
 
                 // If the user does exist, just update their
@@ -220,10 +223,11 @@ var githubHook = function(sails) {
                     githubUserData: githubUser,
                     githubOauthToken: token.id
                   }).fetch();
+
+                  req.session.userId = user.id;
+                  // return res.redirect('/form');
+
                 }
-
-                console.log('Step 6: Redirecting user to app install page after creating user',user);
-
                 return res.redirect('https://github.com/apps/'+sails.config.github.app.userAgent);
 
               });
