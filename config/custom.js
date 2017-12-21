@@ -23,7 +23,7 @@ module.exports.custom = {
   *                                                                         *
   **************************************************************************/
   baseUrl: 'http://localhost:1337',
-
+  defaultAdminPassword: process.env.ADMIN_PASS,
   /**************************************************************************
   *                                                                         *
   * The TTL (time-to-live) for various sorts of tokens before they expire.  *
