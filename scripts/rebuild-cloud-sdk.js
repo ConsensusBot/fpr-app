@@ -13,7 +13,7 @@ module.exports = {
     var endpointsByMethodName = {};
     var extraEndpointsOnlyForTestsByMethodName = {};
 
-    _.each(sails.config.routes, function(target){
+    _.each(sails.config.routes, (target)=>{
 
       // If the route target is an array, then only consider
       // the very last sub-target in the array.
@@ -67,7 +67,7 @@ module.exports = {
     `/**
      * cloud.setup.js
      *
-     * Configuration for this Sails app's generated browser SDK ("Cloud").
+     * Configuration for the global SDK ("Cloud").
      *
      * Above all, the purpose of this file is to provide endpoint definitions,
      * each of which corresponds with one particular route+action on the server.
@@ -89,20 +89,20 @@ module.exports = {
     // Dial back the indentation a touch
     jsCode = jsCode.replace(/\n    /g, '\n');
 
-    sails.stdlib('fs').writeSync({
+    await sails.stdlib('fs').write({
       destination: path.resolve(sails.config.appPath, 'assets/js/cloud.setup.js'),
       string: jsCode,
       force: true
-    }).execSync();
+    });
 
 
     // Now also set up a barebones bounce of this data as a JSON file:
     // (for testing purposes)
-    sails.stdlib('fs').writeSync({
+    await sails.stdlib('fs').write({
       destination: path.resolve(sails.config.appPath, 'test/private/CLOUD_SDK_METHODS.json'),
-      string: JSON.stringify(_.extend(endpointsByMethodName, extraEndpointsOnlyForTestsByMethodName)),
+      string: JSON.stringify(_.extend(endpointsByMethodName, extraEndpointsOnlyForTestsByMethodName), null, 4),
       force: true
-    }).execSync();
+    });
 
     sails.log.info('--');
     sails.log.info('Successfully rebuilt Cloud SDK for use in the browser.');

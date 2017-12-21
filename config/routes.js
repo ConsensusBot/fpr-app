@@ -19,9 +19,25 @@ module.exports.routes = {
   //   return res.redirect('https://thebitcoincash.fund/')
   // },
 
-  'GET /form':               { action: 'fpr/load-form', skipAssets: true }
+  'GET /':                   { action: 'view-homepage-or-redirect' },
 
-  'GET /':                   { action: 'view-homepage' },
+  'GET /system':             { action: 'admin/view-system-settings' },
+
+  'GET /system/pending':     { action: 'admin/view-pending-fprs' },
+
+  'POST /system/pending':    { action: 'admin/approve-pending-fpr' },
+
+  // Show all FPRs for the logged in user
+  'GET /forms':              { action: 'fpr/all-fpr-forms', skipAssets: true },
+
+  // Show the FPR submission form
+  'GET /form':               { action: 'fpr/load-form', skipAssets: true },
+
+  // Load an existing FPR form
+  'GET /form/:formId':       { action: 'fpr/load-form', skipAssets: true },
+
+  // Save an FPR submission form
+  'POST /form':              { action: 'fpr/save-form', skipAssets: true },
 
   'GET /faq':                { view:   'pages/faq' },
   'GET /legal/terms':        { view:   'pages/legal/terms' },
@@ -32,7 +48,9 @@ module.exports.routes = {
   'GET /email/confirm':      { action: 'entrance/confirm-email' },
   'GET /email/confirmed':    { view:   'pages/entrance/confirmed-email' },
 
-  'GET /login':              { action: 'entrance/view-login' },
+  'GET /login':              function(req, res, next) {
+    return res.redirect('/git/login');
+  },
   'GET /password/forgot':    { action: 'entrance/view-forgot-password' },
   'GET /password/new':       { action: 'entrance/view-new-password' },
 

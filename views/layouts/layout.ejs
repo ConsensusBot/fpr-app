@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>New Sails App</title>
+    <title>The Bitcoin Cash Fund</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:400,400i,700,900" rel="stylesheet">
 
     <!-- Font Awesome -->
     <script src="https://use.fontawesome.com/96cbd61ead.js"></script>
@@ -43,8 +46,88 @@
   </head>
 
   <body>
+    <div id="page-wrap">
+      <header id="page-header" class="navbar navbar-expand-sm navbar-dark bg-dark justify-content-between">
+        <a class="cashfund-brand text-primary navbar-brand" href="/">The Bitcoin Cash Fund</a>
 
-    <%- body %>
+        <!-- LOGGED-IN NAVIGATION -->
+        <% if(typeof me !== 'undefined' && me) { %>
+        <% } %>
+        <div class="navbar-nav right-nav">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="[navbar-menu]" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" navbar-menu>
+            <!-- LOGGED-IN NAVIGATION -->
+            <% if(typeof me !== 'undefined' && me) { %>
+            <%  if(me && me.isSuperAdmin) { %>
+            <a class="nav-item nav-link" href="/system/pending">Pending Proposals</a>
+            <a class="nav-item nav-link" href="/system/users">See Users</a>
+            <%  } %>
+            <!-- Only in desktop nav -->
+            <div class="nav-item dropdown d-none d-sm-block">
+              <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Proposals</a>
+              <div class="dropdown-menu account-menu" aria-labelledby="header-account-menu-link">
+                <a class="dropdown-item" href="/forms">My Proposals</a>
+                <a class="dropdown-item" href="/form">New Proposal</a>
+              </div>
+            </div>
+            <div class="nav-item dropdown d-none d-sm-block">
+              <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+              <div class="dropdown-menu account-menu" aria-labelledby="header-account-menu-link">
+                <a class="dropdown-item" href="/account">Settings</a>
+                <a class="dropdown-item" href="/logout">Logout</a>
+              </div>
+            </div>
+            <!-- Only in mobile nav -->
+            <a class="nav-item nav-link d-block d-sm-none" href="/account">Account Settings</a>
+            <a class="nav-item nav-link d-block d-sm-none" href="/logout">Logout</a>
+            <% } else { %>
+            <!-- LOGGED-OUT NAVIGATION -->
+            <a class="nav-item nav-link" href="https://github.com/the-bitcoin-cash-fund">Github</a>
+            <a class="nav-item nav-link" href="/chat">Chat</a>
+            <a class="nav-item nav-link" href="/faq">FAQ</a>
+            <a class="nav-item nav-link ml-sm-2 mr-sm-1" href="/login">Log in</a>
+            <!-- Only in desktop nav -->
+            <div class="form-inline ml-2 d-none d-sm-block" >
+              <a class="btn btn-outline-info" href="/signup">Sign up</a>
+            </div>
+            <!-- Only in mobile nav -->
+            <a class="nav-item nav-link d-block d-sm-none" href="/signup">Sign up</a>
+            <% } %>
+          </div>
+        </div>
+      </header>
+
+      <!-- Alert if email has not been confirmed -->
+      <% if(typeof me !== 'undefined' && me.emailChangeCandidate) { %>
+      <div class="container-fluid">
+        <div class="alert alert-secondary mt-2" role="alert">
+        Your updated email address needs verification. Until you click the link sent to <strong><%= me.emailChangeCandidate %></strong>, you'll still need to sign in as <strong><%= me.emailAddress %></strong>.
+        </div>
+      </div>
+      <% } else if(typeof me !== 'undefined' && me.emailStatus === 'pending') { %>
+      <div class="container-fluid">
+        <div class="alert alert-secondary mt-2" role="alert">
+        Your email address still needs verification. Your account access may be limited until you click the link sent to <strong><%= me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress%></strong>.
+        </div>
+      </div>
+      <% } %>
+
+      <%- body %>
+
+      <footer id="page-footer" class="navbar navbar-light justify-content-between">
+        <small>Copyright &copy; The Bitcoin Cash Fund . All rights reserved.</small>
+        <div class="nav">
+          <small class="nav-item"><a class="nav-link text-muted" href="/contact">Contact us</a></small>
+          <small class="nav-item"><a class="nav-link text-muted" href="/legal/terms">Terms of Use</a></small>
+          <small class="nav-item"><a class="nav-link text-muted" href="/legal/privacy">Privacy policy</a></small>
+          <% if(typeof me !== 'undefined' && me) { %>
+          <small class="nav-item"><a class="nav-link text-muted" href="/logout">Sign out</a></small>
+          <% } %>
+        </div>
+      </footer>
+    </div>
 
 
     <!--
@@ -70,7 +153,7 @@
 
     -->
 
-    <!-- Stripe Checkout -->
+    <% // Stripe Checkout %>
     <script src="https://checkout.stripe.com/checkout.js"></script>
 
     <!--SCRIPTS-->
@@ -86,10 +169,15 @@
     <script src="/js/components/ajax-button.component.js"></script>
     <script src="/js/components/ajax-form.component.js"></script>
     <script src="/js/utilities/is-valid-email-address.js"></script>
+    <script src="/js/utilities/pause.js"></script>
     <script src="/js/pages/498.page.js"></script>
     <script src="/js/pages/account/account-overview.page.js"></script>
+    <script src="/js/pages/account/all-forms.page.js"></script>
     <script src="/js/pages/account/change-password.page.js"></script>
     <script src="/js/pages/account/edit-profile.page.js"></script>
+    <script src="/js/pages/account/form.page.js"></script>
+    <script src="/js/pages/admin/pending-fpr-forms.js"></script>
+    <script src="/js/pages/admin/system-settings.page.js"></script>
     <script src="/js/pages/contact.page.js"></script>
     <script src="/js/pages/dashboard/welcome.page.js"></script>
     <script src="/js/pages/entrance/confirmed-email.page.js"></script>
@@ -98,7 +186,6 @@
     <script src="/js/pages/entrance/new-password.page.js"></script>
     <script src="/js/pages/entrance/signup.page.js"></script>
     <script src="/js/pages/faq.page.js"></script>
-    <script src="/js/pages/form.page.js"></script>
     <script src="/js/pages/github/install.page.js"></script>
     <script src="/js/pages/homepage.page.js"></script>
     <script src="/js/pages/legal/privacy.page.js"></script>
