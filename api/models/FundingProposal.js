@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  // migrate:'alter',
   attributes: {
 
     projectName: {
@@ -26,9 +26,9 @@ module.exports = {
       description: 'A hashtag for the project'
     },
 
-    bcfName: {
+    chatName: {
       type: 'string',
-      description: 'Name of the BCF Gitter community room'
+      description: 'Name of the BCF Rocketchat community room'
     },
 
     stakeholders: {
@@ -65,7 +65,19 @@ module.exports = {
 
     other: {
       type: 'string'
-    }
+    },
+
+    readyForSubmission: {
+      type: 'boolean'
+    },
+
+    listedOnGithub: {
+      type: 'boolean'
+    },
+
+    fprId: {
+      type: 'number'
+    },
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
@@ -80,6 +92,11 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+
+    user: {
+      model: 'User'
+    }
+
 
   },
 

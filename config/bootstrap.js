@@ -5,7 +5,6 @@ var path = require('path');
 var fs = require('fs');
 
 var flaverr = require('flaverr');
-var stdlib = require('sails-stdlib');
 
 var FAKE_DATA = {
 };
@@ -33,9 +32,6 @@ module.exports.bootstrap = async function(done) {
   // This path indicates where to store/look for the JSON file that tracks the "last run bootstrap info"
   // locally on this development computer (if we happen to be on a development computer).
   var bootstrapLastRunInfoPath = path.resolve(sails.config.appPath, '.tmp/bootstrap-version.json');
-
-  // Attach the `sails-stdlib` dependency on the app instance (`sails`), for convenience.
-  sails.stdlib = stdlib;
 
   // Attach `sails.error`, for convenience.
   sails.error = flaverr;
@@ -124,20 +120,118 @@ module.exports.bootstrap = async function(done) {
   //  ╠═╣ ││ ││   ││├┤ └┐┌┘   ││├─┤ │ ├─┤
   //  ╩ ╩─┴┘─┴┘  ─┴┘└─┘ └┘   ─┴┘┴ ┴ ┴ ┴ ┴
 
-  await User.create({
-    fullName: 'Rick Deckard',
-    emailAddress: 'admin@example.com',
-    phoneNumber: '15552223232',
-    isSuperAdmin: true,
-    password: await sails.stdlib('passwords').hashPassword({password:'abc123'})
-  });
 
-  let userJFS = await User.create({
-    fullName: 'J.F. Sebastian',
-    emailAddress: 'jfs@example.com',
-    phoneNumber: '15553488384',
-    password: await sails.stdlib('passwords').hashPassword({password:'abc123'})
+  let admins = await User.createEach([{
+      fullName: 'Sean',
+      githubLogin: 'seanwarman',
+      isSuperAdmin: true,
+      password: await sails.stdlib('passwords').hashPassword({password:sails.config.defaultAdminPassword})
+    }, {
+      fullName: 'singularity87',
+      githubLogin: 'singularity87',
+      isSuperAdmin: true,
+      password: await sails.stdlib('passwords').hashPassword({password:sails.config.defaultAdminPassword})
+    }, {
+      fullName: 'checksum0',
+      githubLogin: 'checksum0',
+      isSuperAdmin: true,
+      password: await sails.stdlib('passwords').hashPassword({password:sails.config.defaultAdminPassword})
+    }, {
+      fullName: 'alwaysAn0n',
+      githubLogin: 'alwaysAn0n',
+      isSuperAdmin: true,
+      password: await sails.stdlib('passwords').hashPassword({password:sails.config.defaultAdminPassword})
+    }
+  ]);
+
+  let someUser = await User.create({
+    id: 20,
+    emailAddress: 'bch@2fat.co',
+    password: await sails.stdlib('passwords').hashPassword({password:sails.config.defaultAdminPassword}),
+    isSuperAdmin: false,
+    emailStatus: 'confirmed',
+    lastSeenAt: 1513213768648,
+    signupComplete: false,
+    githubLogin: 'ConsensusBot',
+    githubUserData: {
+       login: 'ConsensusBot',
+       id: 34073033,
+       avatar_url: 'https://avatars2.githubusercontent.com/u/34073033?v=4',
+       url: 'https://api.github.com/users/ConsensusBot',
+       html_url: 'https://github.com/ConsensusBot',
+       followers_url: 'https://api.github.com/users/ConsensusBot/followers',
+       following_url: 'https://api.github.com/users/ConsensusBot/following{/other_user}',
+       gists_url: 'https://api.github.com/users/ConsensusBot/gists{/gist_id}',
+       starred_url: 'https://api.github.com/users/ConsensusBot/starred{/owner}{/repo}',
+       subscriptions_url: 'https://api.github.com/users/ConsensusBot/subscriptions',
+       organizations_url: 'https://api.github.com/users/ConsensusBot/orgs',
+       repos_url: 'https://api.github.com/users/ConsensusBot/repos',
+       events_url: 'https://api.github.com/users/ConsensusBot/events{/privacy}',
+       received_events_url: 'https://api.github.com/users/ConsensusBot/received_events',
+       type: 'User',
+       site_admin: false,
+       name: 'Consensus Bot',
+       public_repos: 20,
+       disk_usage: 200,
+       two_factor_authentication: true
+    }
   }).fetch();
+
+  var fprs = await FundingProposal.createEach([{
+    projectName: 'Seatac BCH Acceptance Initiative',
+    startDate: '27:11:2017',
+    hashtag: '#SeatacBCH',
+    chatName: 'SeatacBCH',
+    stakeholders: '- Will Carrick\n- Slack: Wecx-\n- Twitter: @Wecx_\n- Reddit: Wecx-\n',
+    projectSummary: 'The goal of the Seatac BCAI will be to prepare, deploy, and build a ground-based grassroots movement in the Seatac area of the U.S.A. to promote the acceptance of Bitcoin Cash at local businesses.',
+    resources: '- Manpower: As many people in the Seatac area who wish to help out.\n- Materials: I still need an infographic and maybe a 3-fold.\n- Skills: I am going to need somebody who can advise me on how to add BCH support to websites.\n- Services: Merchant PoS system Fiat/BCH.\n- Knowledge: I need information on how to accept deposits and escrow using BCH.\n- Connections: Anybody interested in the project\n',
+    budget: 'Total: $730.00 USD\n\nBCH Accepted Window Decal: 100 @5 Total $500\n\nKawaiicrypto.com\n\nBCH Accepted Here Vinyl 2000 @ .0875 Shipping $55.00\n\nTotal $230\n\nhttps://dirhx.en.alibaba.com/\n\n',
+    timeline: 'Preparation Phase\n\n11/19/2017 - 01/01/2017\n\nProof of Concept Phase\n\n01/02/2017 - 03/01/2017',
+    goals: '- I want to reach small businesses, local non-profits, and community-driven municipality organizations.\n- I want to reach millions of people.\n- I want to reach people in the Seattle-Tacoma Area.\n- To create a Bitcoin Cash Local Economy.\n',
+    other: 'Facebook:https://www.facebook.com/SeatacBCH/\nTwitter: @SeatacBCH\nPlease read this for a more detailed description of my plan:\nhttps://www.dropbox.com/s/cpu8tfnd2b3iukx/Seatac%20BCAI%20Proposal.pdf?dl=0\n',
+    status: 'approved',
+    readyForSubmission: true,
+    listedOnGithub: true,
+    fprId: 876,
+    user: 20
+  },
+  {
+    projectName: 'Rick Todds badass project',
+    startDate: '27:11:2018',
+    hashtag: '#badassBCH',
+    chatName: 'badassBCH',
+    stakeholders: 'Rick Todd!',
+    projectSummary: 'Walk around down town and hand out bitcoin wallets to hot chicks!',
+    resources: 'The only things we need are me (Rick Todd) and some friends',
+    budget: '40 BCH',
+    timeline: 'Some time next week',
+    goals: 'Meet hot chicks and spread the word about Bitcoin Cash',
+    other: 'I might need some extra money for a hair cut too...',
+    status: 'pending',
+    readyForSubmission: true,
+    listedOnGithub: false,
+    user: 20
+  },
+  {
+    projectName: 'Rick Todds kinda okay project',
+    startDate: '27:11:2018',
+    hashtag: '#rickToddOkay',
+    chatName: 'RickToddOkayBCH',
+    stakeholders: 'Roger Ver prolly',
+    projectSummary: 'TODO',
+    resources: 'TODO',
+    budget: 'about 3 pounds fitty',
+    timeline: 'It will probably take like a year or so',
+    goals: 'Global Domination',
+    other: 'TODO',
+    status: 'draft',
+    readyForSubmission: false,
+    listedOnGithub: false,
+    user: 20
+  }]).fetch();
+
+  // Associate the FPRs with our user
+  await User.update({ id: someUser.id }, { fprs: _.map(fprs, 'id') });
 
   //  ╔═╗┬┌┐┌┬┌─┐┬ ┬  ┌┐ ┌─┐┌─┐┌┬┐┌─┐┌┬┐┬─┐┌─┐┌─┐
   //  ╠╣ │││││└─┐├─┤  ├┴┐│ ││ │ │ └─┐ │ ├┬┘├─┤├─┘

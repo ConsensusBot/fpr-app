@@ -1,9 +1,10 @@
 <div id="login" v-cloak>
   <div class="container">
-    <h1 class="text-center">Sign in to your account</h1>
+    <h1 class="text-center">Sign in with Github</h1>
+    <h4 class="text-center">To submit a Fund Proposal Request</h4>
     <div class="login-form-container">
       <hr/>
-      <ajax-form action="login" :syncing.sync="syncing" :cloud-error.sync="cloudError" @after-submitting="afterSubmittingForm()" :handle-parsing="handleParsingForm">
+      <!-- <ajax-form action="login" :syncing.sync="syncing" :cloud-error.sync="cloudError" @after-submitting="afterSubmittingForm()" :handle-parsing="handleParsingForm">
         <div class="form-group">
           <input type="email" class="form-control" autofocus placeholder="Email Address" :class="[formErrors.emailAddress ? 'is-invalid' : '']" v-model.trim="formData.emailAddress">
           <div class="invalid-feedback" v-if="formErrors.emailAddress">Please provide a valid email address.</div>
@@ -21,8 +22,11 @@
         <div class="form-group">
           <ajax-button :syncing="syncing" class="btn-dark btn-lg btn-block">Sign in</ajax-button>
         </div>
-      </ajax-form>
-      <p class="text-center"><a href="/password/forgot">Forgot your password?</a></p>
+      </ajax-form> -->
+      <div class="form-group">
+        <button class="btn-dark btn-lg btn-block" onClick="window.location.href='/git/login'">Sign in with Github</button>
+      </div>
+      <!-- <p class="text-center"><a href="/password/forgot">Forgot your password?</a></p> -->
     </div>
   </div>
 </div>

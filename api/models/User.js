@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+migrate:'alter',
 
   attributes: {
 
@@ -121,6 +122,9 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     githubOauthToken: {
       model: 'Token'
+    },
+    fprs: {
+      collection: 'FundingProposal'
     }
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
@@ -128,10 +132,6 @@ module.exports = {
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
     // n/a
 
-    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    // n/a
 
   },
 
