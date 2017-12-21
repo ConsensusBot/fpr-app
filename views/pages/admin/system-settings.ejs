@@ -1,0 +1,34 @@
+<div id="system-settings" v-cloak>
+  <div class="container">
+    <div class="page-header">
+      <h1>System Settings</h1>
+      <!-- <h2 v-if="!exchange">Set global administrative options for The Bitcoin Cash Fund stuffs</h2> -->
+      <!-- <h2 v-else>Set administrative options.</h2> -->
+      <h2>Super Admin Settings</h2>
+      TODO: Add Admin by Github username
+    </div>
+
+  </div>
+
+  <% /* Confirm Delete Window Modal*/%>
+  <!-- <modal v-if="deleteWindowModalOpen" @close="closeDeleteWindowModal()" v-cloak>
+    <div class="modal-header">
+      <h5 class="modal-title">Remove Trade Window</h5>
+      <button @click.prevent type="button" data-dismiss="modal" aria-hidden="true" class="modal-close-button"><image alt="X" src="/images/icon-close.png"/></button>
+    </div>
+    <div class="modal-body text-center">
+      <p>Are you sure you want to remove the <strong>{{selectedWindow.name}}</strong> window?</p>
+      <p>This may cause problems for anyone who has chosen this period length in their exchange preferences. Proceed with caution.</p>
+      <ajax-form action="destroyOneWindow" :syncing.sync="syncing" :cloud-error.sync="cloudError" :handle-parsing="handleParsingDeleteWindowForm" @after-submitting="afterSubmittingDeleteWindowForm()">
+        <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.</small></p>
+        <div class="confirm-modal-buttons">
+          <button data-dismiss="modal" class="btn btn-outline-secondary mr-1">Nevermind</button>
+          <ajax-button type="submit" :syncing="syncing" class="btn btn-danger ml-1">Remove</ajax-button>
+        </div>
+      </ajax-form>
+    </div>
+  </modal> -->
+
+</div>
+
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
