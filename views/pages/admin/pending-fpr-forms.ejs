@@ -1,0 +1,18 @@
+<div id="pending-fpr-forms" v-cloak>
+  <div class="container">
+    <h1>Pending Proposal Requests</h1>
+    <div class="row mb-3">
+      <div class="col-sm-12">
+        <h4>Saved Drafts</h4>
+      </div>
+      <div class="col-sm-12">
+        <ul>
+          <li v-for="item in forms">
+            <a v-bind:href="'/form/'+item.id">{{ item.projectName }} by user {{ item.user && item.user.githubLogin }}</a> <button v-on:click="approveListing(item)">Approve FPR Listing</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
