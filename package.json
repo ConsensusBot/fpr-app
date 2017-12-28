@@ -31,7 +31,13 @@
     "socket.io-redis": "4.0.0"
   },
   "devDependencies": {
-    "eslint": "3.19.0"
+    "@sailshq/lodash": "^3.10.2",
+    "mocha": "3.0.2",
+    "debug": "3.1.0",
+    "eslint": "4.11.0",
+    "htmlhint": "0.9.13",
+    "grunt": "1.0.1",
+    "sails-hook-grunt": "^2.0.0"
   },
   "scripts": {
     "start": "./web",
