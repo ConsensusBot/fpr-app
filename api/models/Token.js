@@ -28,7 +28,7 @@ module.exports = {
     // specified, force it to expire in 3 days
     tokenExpires: {
       type: 'ref',
-      columnType: 'datetime'
+      columnType: 'integer'
     },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
