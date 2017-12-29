@@ -254,8 +254,8 @@ var githubHook = function(sails) {
               console.log('Step 5: Create user record in database', body);
               var token = await Token.create({
                 serviceName: 'githubUserOauth',
-                tokenValue: githubOauthToken.access_token,
-                tokenExpires: new Date(new Date().getTime()+1000*3600*24*10).getTime(),
+                tokenValue: githubOauthToken.access_token
+                // tokenExpires: new Date(new Date().getTime()+1000*3600*24*10).getTime(),
               }).fetch();
 
               console.log('Created token for user:',token);
