@@ -103,9 +103,10 @@ module.exports = {
     // you can find with "Example Project" as the title.  
     if (!formToReturn) {
 
-      formToReturn = await FundingProposal.find({
-        projectName: 'Example Project'
-      }).limit(1);
+      formToReturn = await FundingProposal.findOne({
+        projectName: 'Example Project',
+        user: this.req.session.userId
+      });
 
     }
 
