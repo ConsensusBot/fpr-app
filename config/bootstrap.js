@@ -54,10 +54,10 @@ module.exports.bootstrap = async function(done) {
   else {
 
     // If this is _actually_ a production environment (real or simulated), prevent accidentally removing all data!
-    if (process.env.NODE_ENV==='production') {
-      sails.log.warn('Since we are running with NODE_ENV=production (& with the "'+sails.config.environment+'" Sails environment, to be precise), skipping the rest of the bootstrap to avoid data loss...');
-      return done();
-    }//•
+    // if (process.env.NODE_ENV==='production') {
+    //   sails.log.warn('Since we are running with NODE_ENV=production (& with the "'+sails.config.environment+'" Sails environment, to be precise), skipping the rest of the bootstrap to avoid data loss...');
+    //   return done();
+    // }//•
 
     // Compare bootstrap version from code base to the version that was last run
     var lastRunBootstrapInfo;
