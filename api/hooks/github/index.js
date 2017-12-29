@@ -255,7 +255,7 @@ var githubHook = function(sails) {
               var token = await Token.create({
                 serviceName: 'githubUserOauth',
                 tokenValue: githubOauthToken.access_token,
-                tokenExpires: new Date(new Date().getTime()+1000*3600*24*10),
+                tokenExpires: new Date(new Date().getTime()+1000*3600*24*10).getTime(),
               }).fetch();
 
               console.log('Created token for user:',token);
