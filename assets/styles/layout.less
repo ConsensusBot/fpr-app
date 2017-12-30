@@ -3,17 +3,26 @@
 
 [v-cloak] { display: none }
 
-html, body {
+html {
   height: 100%;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+  padding: 0;
   margin: 0;
+}
+
+body {
+  position: relative;
+  padding-bottom: @footer-height;
+  min-height: 100%;
 }
 
 #page-wrap {
   height: 100%;
-  height: auto!important;
-  min-height: 100%;
-  position: relative;
-  padding-bottom: @footer-height;
+  // height: auto!important;
 
   header {
     a {
@@ -31,7 +40,7 @@ html, body {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   height: @footer-height;
   width: 100%;
-  //position: absolute;
+  position: absolute;
   left: 0px;
   bottom: 0px;
 }
