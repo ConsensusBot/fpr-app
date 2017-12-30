@@ -1,5 +1,4 @@
-<div id="form" v-cloak>
-
+<div id="form-review" v-cloak>
   <h1><img :src="me.githubUserData.avatar_url" width="100" height="100">BCF Funding Proposal Request Form</h1>
   <hr>
 
@@ -95,15 +94,17 @@
           <button 
             class="btn btn-primary"
             type="button"
-            v-if="formObject.status === 'draft' && !syncing.status"
-            v-on:click="toggleSubmission('pending')">Submit proposal for review
+            v-if="formObject.status === 'pending' && !syncing.status"
+            v-on:click="toggleSubmission('draft')">Withdraw from review pool
           </button>
+
+          <!-- TODO: Delete functionality -->
 
           <button 
             class="btn btn-primary"
             type="button"
             v-if="formObject.status === 'pending' && !syncing.status"
-            v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
+            v-on:click="adminApprove(formObject)">List FPR on Github
           </button>
 
           <button
@@ -114,60 +115,6 @@
 
         </div>
 
-        <br>
-
-        <h2>Use S.M.A.R.T Principles When writing the BCF FPR</h2>
-        <hr>
-        <p>
-          S - Specific - Well defined. Clear to anyone that has a basic knowledge of the project.
-        </p>
-        <p>
-          M - Measurable - Know if the goal is obtainable. Find out when you have achieved your goal<
-        </p>
-        <p>
-          A - Agreed Upon - Agreement with all the stakeholders what the goals should be.
-        </p>
-        <p>
-          R - Realistic - Within the availability of resources, knowledge and time.
-        </p>
-        <p>
-          T - Time-bound - Enough time to achieve the goal. Not too much time, which can affect project performance
-        </p>
-
-        <br>
-
-        <h2>BCF FPR Requirements</h2>
-        <hr>
-        <ul>
-          <li>A completed FPR must be included as to a project's github repo as the first commit/PR as an md file. This will help guide the project, and anyone who joins it can quickly find out the most important information.
-          </li>
-          <li>Any print media the BCF funds with either dimension over 40mm must have the BCF round logo on it somewhere.
-          </li>
-          <li>Any print media the BCF funds with either dimension over 100mm must have the logos of our Tier 3 sponsors on it somewhere.</li>
-          <li>Any video projects the BCF funds must include the BCF Bitcoin Cash animation at the beginning or end of the video.
-          </li>
-          <li>Any video projects the BCF funds must include our tier 2 and tier 3 sponsors at the end of the video.
-          </li>
-          <li>The BCF reserves the right to not fund any project at it's own discretion.
-          </li>
-        </ul>
-
-        <br>
-
-        <h2>What isn't the Bitcoin Cash Fund for.</h2>
-        <hr>
-        <ul>
-          <li>
-            Funds will not be given to companies just to further their business. Companies are welcome to submit an FPR as long as it is for a specific project that attempts to directly increase awareness and adoption of Bitcoin Cash.
-          </li>
-          <li>
-            Funds will not be paid to individuals or businesses simply because they want money.
-          </li>
-          <li>
-            Funds will not be paid for BCH protocol development (at this time).
-          </li>
-        </ul>
-        </div>
       </form>
     </div>
   </div>

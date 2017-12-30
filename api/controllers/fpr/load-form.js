@@ -44,11 +44,8 @@ module.exports = {
     other: {
       type: 'string'
     },
-    readyForSubmission: {
-      type: 'boolean'
-    },
-    listedOnGithub: {
-      type: 'boolean'
+    status: {
+      type: 'string'
     },
     formId: {
       type: 'number'
@@ -85,7 +82,7 @@ module.exports = {
 
       // If the user isnt an admin, add their user id
       // to the search query.  This will keep people from
-      // modifying proposals that don't belong to them.
+      // seeing unfinished proposals that don't belong to them.
       if (!user.isSuperAdmin) {
         findProposalQuery.user = this.req.session.userId
       }
@@ -127,8 +124,6 @@ module.exports = {
         goals: 'TODO',
         other: 'TODO',
         status: 'draft',
-        readyForSubmission: false,
-        listedOnGithub: false,
         user: this.req.session.userId
       }).fetch();
 

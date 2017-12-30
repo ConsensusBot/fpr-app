@@ -41,11 +41,8 @@ module.exports = {
     other: {
       type: 'string'
     },
-    readyForSubmission: {
-      type: 'boolean'
-    },
-    listedOnGithub: {
-      type: 'boolean'
+    status: {
+      type: 'string'
     },
     id: {
       type: 'number'
@@ -53,14 +50,6 @@ module.exports = {
   },
 
   exits: {
-
-    success: {
-      outputLabel: 'The new trade window',
-      outputExample: {
-        name: '30 seconds',
-        duration: 30
-      }
-    },
 
     badProposalId: {
       description: 'There exists no proposal with that id for the logged in user.'
@@ -70,14 +59,23 @@ module.exports = {
 
   fn: async function (inputs, exits)  {
 
-    console.log('saving form:', inputs);
+    // Grab the user so we can check if they are an admin
+    var user = await User.findOne(this.req.session.userId);
+
+    var findProposalQuery = {
+      id: inputs.id
+    };
+
+    // If the user isn't an admin, add their user id
+    // to the search query.  This will keep people from
+    // modifying proposals that don't belong to them.
+    if (!this.req.me.isSuperAdmin) {
+      findProposalQuery.user = this.req.me.id
+    }
 
     // Fetch the existing FundingProposal to make sure the id provided is
     // valid and that it it belongs to the logged in user.
-    var formObject = await FundingProposal.findOne({
-      user: this.req.me.id,
-      id: inputs.id
-    });
+    var formObject = await FundingProposal.findOne(findProposalQuery);
 
     // If this fails, return an error alerting the user .
     if (!formObject) {
@@ -87,17 +85,7 @@ module.exports = {
 
     var updatedObject = _.pick(inputs, _.without(_.keys(inputs), 'id') );
 
-    // If the user is toggling the submit button, set the FormProposal's 
-    // status field to "pending" (for submit) or "draft" (for unsubmit)
-    if (inputs.readyForSubmission === true) {
-      updatedObject.status = 'pending';
-    }
-    
-    if (inputs.readyForSubmission === false) {
-      updatedObject.status = 'draft';
-    }
-
-    // Otherwise, update the FundingProposal then return
+    // Update the FundingProposal then return
     // a fresh copy to the client.  Don't update the `id`
     // attribute.
     formObject = await FundingProposal.update({ id: formObject.id }, updatedObject ).fetch();

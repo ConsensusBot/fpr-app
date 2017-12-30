@@ -67,12 +67,12 @@ module.exports = {
       type: 'string'
     },
 
-    readyForSubmission: {
-      type: 'boolean'
-    },
-
-    listedOnGithub: {
-      type: 'boolean'
+    // How far along is this FPR through the process of getting
+    // administrator approval to be officially considered and
+    // listed on the Github repo?
+    // ENUM: 'draft', 'pending', 'listed'
+    status: {
+      type: 'string'
     },
 
     fprId: {

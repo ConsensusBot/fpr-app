@@ -3,14 +3,15 @@
     <h1>Pending Proposal Requests</h1>
     <div class="row mb-3">
       <div class="col-sm-12">
-        <h4>Saved Drafts</h4>
+        <!-- <h4></h4> -->
       </div>
       <div class="col-sm-12">
-        <ul>
+        <ul v-if="forms.length">
           <li v-for="item in forms">
-            <a v-bind:href="'/form/'+item.id">{{ item.projectName }} by user {{ item.user && item.user.githubLogin }}</a> <button v-on:click="approveListing(item)">Approve FPR Listing</button>
+            <a v-bind:href="'/system/pending/'+item.id">{{ item.projectName }} by user {{ item.user && item.user.githubLogin }}</a>
           </li>
         </ul>
+        <p v-if="!forms.length">There are no FPRs to approve.  You're all caught up!</p>
       </div>
     </div>
   </div>

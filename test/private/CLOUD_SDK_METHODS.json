@@ -7,9 +7,13 @@
         "verb": "GET",
         "url": "/system/pending"
     },
+    "formReview": {
+        "verb": "GET",
+        "url": "/system/pending/:formId"
+    },
     "approvePendingFpr": {
         "verb": "POST",
-        "url": "/system/pending"
+        "url": "/system/pending/:formId"
     },
     "allFprForms": {
         "verb": "GET",

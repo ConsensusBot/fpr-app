@@ -30,15 +30,103 @@ var githubHook = function(sails) {
   // }, sails.config.github.app.pem, { algorithm: 'RS256'});
 
   return {
-    testTing: async function(options) {
+    testTing: async function(userOptions, fprObject) {
 
-      var client = await sails.hooks.github.buildClientFromUser({id: 10});
+      userOptions = await User.findOne(userOptions.id);
 
-      var userInfo = await client.users.get({});
-      var userEmails = await client.users.getEmails({});
+      var proposalMarkdown = `
+        # ![BCF Logo Round Tiny](https://raw.githubusercontent.com/The-Bitcoin-Cash-Fund/Branding/master/BCF%20Symbol%20Round%20Tiny.png) BCF Funding Proposal Request Template
 
-      console.log('User Info',userInfo);
-      console.log('User Emails:',userEmails);
+        **Project Name:**
+        ${fprObject.projectName}
+
+        **FPR Id:**
+        ${fprObject.fprId}
+
+        **Start Date:**
+        ${fprObject.startDate}
+
+        **Hashtag:**
+        ${fprObject.hashtag}
+
+        **Name of BCF Gitter community room:**
+        ${fprObject.chatName}
+
+        **Stakeholders:**
+        ${fprObject.stakeholders}
+
+        **Project Summary:**
+        ${fprObject.projectSummary}
+
+        **Resources:**
+        ${fprObject.resources}
+
+        **Budget:**
+        ${fprObject.budget}
+
+        **Timeline:** 
+        ${fprObject.timeline}
+
+        **Goals:**
+        ${fprObject.goals}
+
+        **Other:**
+        ${fprObject.other}
+      `;
+
+      var client = await sails.hooks.github.buildClientFromUser({id: userOptions&&userOptions.id});
+
+      // Fork The-Bitcoin-Cash-Fund/FPR
+
+      var forkedRepo;
+      try {
+        forkedRepo = await client.repos.fork({ owner:'The-Bitcoin-Cash-Fund', repo:'FPR' });
+      }
+      catch (forkError) {
+        console.log('Error forking repo:',forkError);
+        throw('Fork error');
+      }
+
+      console.log('Forking results:',forkedRepo);
+
+      proposalMarkdown = JSON.stringify(_.escape(proposalMarkdown));
+
+      console.log('Markdown:',proposalMarkdown);
+      // process.exit();
+
+      // Now upload the template file to our new forked repo
+      var uploadedFile;
+
+      var fileToCreate = {
+        owner: userOptions.githubLogin,
+        repo: 'FPR',
+        path: 'fpr-'+fprObject.fprId+'.md',
+        message: 'Completed FPR for '+(fprObject.projectName.replace(/[^\d\w ]/ig,'')),
+        // content: Buffer.from(proposalMarkdown).toString('base64')
+        content: Buffer.from('cats!').toString('base64')
+      };
+
+      console.log('Creating file:',fileToCreate);
+
+      try {
+        uploadedFile = await client.repos.createFile(fileToCreate);
+      }
+      catch (uploadError) {
+        console.log('Error uploading file:',uploadError);
+        console.log('uploaded file:',)
+        throw('Upload error');
+      }
+
+      console.log('Upload Results:',uploadedFile);
+
+      // var userInfo = await client.users.get({});
+      // var userEmails = await client.users.getEmails({});
+      // console.log('User Info',userInfo);
+      // console.log('User Emails:',userEmails);
+
+      return {
+        status: 'done'
+      };
 
     },
     buildClientFromUser: async function (options) {
@@ -63,6 +151,8 @@ var githubHook = function(sails) {
         type: 'oauth',
         token: user.githubOauthToken.tokenValue
       });
+
+
 
       return client;
 
@@ -225,8 +315,8 @@ var githubHook = function(sails) {
                 console.log('fourth err:',err);
                 return done(err);
               }
-              console.log('Step 3: We exchanged the code for a token ',body);
 
+              // Step 3: We exchanged the code for a token
               var githubOauthToken = body || {};
 
               // Create an instance of our Github API client.
@@ -243,72 +333,97 @@ var githubHook = function(sails) {
                 token: githubOauthToken.access_token
               });
 
+              // Step 4: Using access token to get Github User info!
+              // 
               // Get the user's Github information so we can 
               // bootstrap their profile with it
-              console.log('Step 4: Using access token to get Github User info!');
               var githubUser = await client.users.get({}) || {};
               var githubUserEmails = await client.users.getEmails({}) || {};
+              var primaryGithubEmail = _.find(githubUserEmails.data, {primary: true});
 
-              console.log('Github User and emails:',githubUser, githubUserEmails);
-              // Create a token record
-              console.log('Step 5: Create user record in database', body);
-              var token = await Token.create({
-                serviceName: 'githubUserOauth',
-                tokenValue: githubOauthToken.access_token
-                // tokenExpires: new Date(new Date().getTime()+1000*3600*24*10).getTime(),
-              }).fetch();
+              // console.log('Github User and emails:',githubUser, githubUserEmails, primaryGithubEmail);
 
-              console.log('Created token for user:',token);
+              // Step 5: Create user record in database
 
+              var token;
+
+              // Do we already have a user?
               var user = await User.findOne({
                 githubLogin: githubUser.data && githubUser.data.login
               }).populate('githubOauthToken');
 
-              var githubEmail = _.find(githubUserEmails.data, {primary: true});
-
               // If there is no user in the database associated
-              // with this Github login, create one and associate
-              // the oauth token with it.
+              // with this Github login, create one along with a new
+              // oauth token then associate them both ways.
               if (!user) {
+
+                token = await Token.create({
+                  serviceName: 'githubUserOauth',
+                  tokenValue: githubOauthToken.access_token
+                }).fetch();
+
                 user = await User.create({
-                  emailAddress: githubEmail.email || 'noemail@example.com',
+                  emailAddress: primaryGithubEmail.email || 'noemail@example.com',
                   githubLogin: githubUser.data && githubUser.data.login,
                   signupComplete: false,
                   githubUserData: githubUser.data,
                   githubOauthToken: token.id
                 }).fetch();
 
+                await token.update(user.id, { user: user.id});
+
                 req.session.userId = user.id;
                 req.session.save();
 
-                console.log('Step 6: Redirecting new user to home page');
+                // Step 6: Redirecting new user to home page
                 return res.redirect('/');
               }
 
-              // If the user does exist, just update their
-              // token and github information then move on.
+              // If the user DOES exist, update their old
+              // token and their user profile.
               else {
 
-                // Destroy the old oauth token
-                if (user.githubOauthToken && user.githubOauthToken.id) {
-                  await Token.destroy({
-                    id: user.githubOauthToken.id
-                  });
+                if (user.githubOauthToken) {
+
+                  try {
+                    token = await Token.update(user.githubOauthToken.id, {
+                      tokenValue: githubOauthToken.access_token
+                    }).fetch();
+                  }
+                  catch (error) {
+                    console.log('There be a bloody error mate:',error,user);
+                  }
+
+                  token = token[0];
+
+                }
+                else {
+
+                  token = await Token.create({
+                    serviceName: 'githubUserOauth',
+                    tokenValue: githubOauthToken.access_token,
+                    user: user.id
+                  }).fetch();
+
+                }
+                try {
+                  user = await User.update({id: user.id}, {
+                    emailAddress: primaryGithubEmail.email || 'noemail@example.com',
+                    githubLogin: githubUser.data && githubUser.data.login,
+                    signupComplete: false,
+                    githubUserData: githubUser.data,
+                    githubOauthToken: token.id
+                  }).fetch();
+                }
+                catch (error) {
+                  console.log('There be a bloody error mate:',error,user);
                 }
 
-                user = await User.update({id: user.id}, {
-                  emailAddress: githubEmail.email || 'noemail@example.com',
-                  githubLogin: githubUser.data && githubUser.data.login,
-                  signupComplete: false,
-                  githubUserData: githubUser.data,
-                  githubOauthToken: token.id
-                }).fetch();
-
                 user = user[0];
-
                 req.session.userId = user.id;
                 req.session.save();
-                console.log('Step 6: Redirecting existing user to home page');
+
+                // Step 6: Redirecting existing user to home page
                 return res.redirect('/');
               }
 

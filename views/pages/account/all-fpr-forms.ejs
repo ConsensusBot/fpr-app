@@ -6,7 +6,8 @@
         <h4>Saved Drafts</h4>
       </div>
       <div class="col-sm-12">
-        <ul>
+        <p v-if="!(forms.draft&&forms.draft.length)"><a href="/form">Start a new proposal</p>
+        <ul v-if="forms.draft&&forms.draft.length">
           <li v-for="item in forms.draft">
             <a v-bind:href="'/form/'+item.id">{{ item.projectName }}</a>
           </li>
@@ -27,11 +28,11 @@
     </div>
     <div class="row mb-3">
       <div class="col-sm-12">
-        <h4>Approved Proposals</h4>
+        <h4>Listed Proposals</h4>
       </div>
       <div class="col-sm-12">
         <ul>
-          <li v-for="item in forms.approved">
+          <li v-for="item in forms.listed">
             <a v-bind:href="'/form/'+item.id">{{ item.projectName }}</a>
           </li>
         </ul>

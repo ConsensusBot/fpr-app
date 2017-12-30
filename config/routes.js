@@ -25,7 +25,10 @@ module.exports.routes = {
 
   'GET /system/pending':     { action: 'admin/view-pending-fprs' },
 
-  'POST /system/pending':    { action: 'admin/approve-pending-fpr' },
+  // Admin review page for existing FPR form
+  'GET /system/pending/:formId':     { action: 'admin/form-review', skipAssets: true },
+
+  'POST /system/pending/:formId':    { action: 'admin/approve-pending-fpr' },
 
   // Show all FPRs for the logged in user
   'GET /forms':              { action: 'fpr/all-fpr-forms', skipAssets: true },
@@ -35,6 +38,7 @@ module.exports.routes = {
 
   // Load an existing FPR form
   'GET /form/:formId':       { action: 'fpr/load-form', skipAssets: true },
+
 
   // Save an FPR submission form
   'POST /form':              { action: 'fpr/save-form', skipAssets: true },

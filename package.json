@@ -8,7 +8,7 @@
     "async": "2.0.1",
     "cheerio": "1.0.0-rc.2",
     "connect-redis": "3.3.2",
-    "ejs": "2.3.4",
+    "ejs": "2.5.5",
     "flaverr": "^1.5.1",
     "github": "13.0.1",
     "grunt": "1.0.1",

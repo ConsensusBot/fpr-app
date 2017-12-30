@@ -62,7 +62,7 @@
             <% if(typeof me !== 'undefined' && me) { %>
             <%  if(me && me.isSuperAdmin) { %>
             <a class="nav-item nav-link" href="/system/pending">Pending Proposals</a>
-            <a class="nav-item nav-link" href="/system/users">See Users</a>
+            <a class="nav-item nav-link" href="/system/users">Users</a>
             <%  } %>
             <!-- Only in desktop nav -->
             <div class="nav-item dropdown d-none d-sm-block">
@@ -87,13 +87,13 @@
             <a class="nav-item nav-link" href="https://github.com/the-bitcoin-cash-fund">Github</a>
             <a class="nav-item nav-link" href="/chat">Chat</a>
             <a class="nav-item nav-link" href="/faq">FAQ</a>
-            <a class="nav-item nav-link ml-sm-2 mr-sm-1" href="/login">Log in</a>
+            <!-- <a class="nav-item nav-link ml-sm-2 mr-sm-1" href="/login">Log in</a> -->
             <!-- Only in desktop nav -->
             <div class="form-inline ml-2 d-none d-sm-block" >
-              <a class="btn btn-outline-info" href="/signup">Sign up</a>
+              <!-- <a class="btn btn-outline-info" href="/signup">Sign up</a> -->
             </div>
             <!-- Only in mobile nav -->
-            <a class="nav-item nav-link d-block d-sm-none" href="/signup">Sign up</a>
+            <!-- <a class="nav-item nav-link d-block d-sm-none" href="/signup">Sign up</a> -->
             <% } %>
           </div>
         </div>
@@ -116,7 +116,7 @@
 
       <%- body %>
 
-      <footer id="page-footer" class="navbar navbar-light justify-content-between">
+      <!-- <footer id="page-footer" class="navbar navbar-light justify-content-between">
         <small>Copyright &copy; The Bitcoin Cash Fund . All rights reserved.</small>
         <div class="nav">
           <small class="nav-item"><a class="nav-link text-muted" href="/contact">Contact us</a></small>
@@ -126,7 +126,7 @@
           <small class="nav-item"><a class="nav-link text-muted" href="/logout">Sign out</a></small>
           <% } %>
         </div>
-      </footer>
+      </footer> -->
     </div>
 
 
@@ -176,6 +176,7 @@
     <script src="/js/pages/account/change-password.page.js"></script>
     <script src="/js/pages/account/edit-profile.page.js"></script>
     <script src="/js/pages/account/form.page.js"></script>
+    <script src="/js/pages/admin/form.review.js"></script>
     <script src="/js/pages/admin/pending-fpr-forms.js"></script>
     <script src="/js/pages/admin/system-settings.page.js"></script>
     <script src="/js/pages/contact.page.js"></script>
