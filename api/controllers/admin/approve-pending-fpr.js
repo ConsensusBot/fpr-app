@@ -48,9 +48,8 @@ module.exports = {
 
     // Grab the FPR with the highest fprId.  We will increment that number
     // by one and use it for this new FPR when we list it on Github.
-    var mostRecentFPR = FundingProposal.find({}).sort('fprId DESC').limit(1);
+    var mostRecentFPR = await FundingProposal.find({}).sort('fprId DESC').limit(1);
     mostRecentFPR = mostRecentFPR[0];
-
     if (mostRecentFPR) {
       updatedObject.fprId = mostRecentFPR.fprId + 1;
     }
@@ -70,7 +69,7 @@ module.exports = {
     // it will parse it and upload it to the official BCF Github repo
     // then submit a pull request on the user's behalf
     //
-    var githubActionResults = await sails.hooks.github.testTing({ id: formObject.user }, formObject); 
+    var githubActionResults = await sails.hooks.github.submitUserFPR({ id: formObject.user }, { id: formObject.id }); 
 
     // Since the `update` method always returns an array,
     // return the only element in that array to our user.

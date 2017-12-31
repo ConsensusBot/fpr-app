@@ -30,107 +30,142 @@ var githubHook = function(sails) {
   // }, sails.config.github.app.pem, { algorithm: 'RS256'});
 
   return {
-    testTing: async function(userOptions, fprObject) {
+    submitUserFPR: async function(userQuery, fprQuery) {
 
-      userOptions = await User.findOne(userOptions.id);
+      var userOptions = await User.findOne({ id: userQuery.id }).populate('githubOauthToken');
+      var fprObject = await FundingProposal.findOne({ id: fprQuery.id });
 
       var proposalMarkdown = `
-        # ![BCF Logo Round Tiny](https://raw.githubusercontent.com/The-Bitcoin-Cash-Fund/Branding/master/BCF%20Symbol%20Round%20Tiny.png) BCF Funding Proposal Request Template
+        # ![BCF Logo Round Tiny](https://raw.githubusercontent.com/The-Bitcoin-Cash-Fund/Branding/master/BCF%20Symbol%20Round%20Tiny.png)
+        BCF Funding Proposal Request Template
 
         **Project Name:**
-        ${fprObject.projectName}
+        <%= projectName %>
 
         **FPR Id:**
-        ${fprObject.fprId}
+        <%= fprId %>
 
         **Start Date:**
-        ${fprObject.startDate}
+        <%= startDate %>
 
         **Hashtag:**
-        ${fprObject.hashtag}
+        <%= hashtag %>
 
         **Name of BCF Gitter community room:**
-        ${fprObject.chatName}
+        <%= chatName %>
 
         **Stakeholders:**
-        ${fprObject.stakeholders}
+        <%= stakeholders %>
 
         **Project Summary:**
-        ${fprObject.projectSummary}
+        <%= projectSummary %>
 
         **Resources:**
-        ${fprObject.resources}
+        <%= resources %>
 
         **Budget:**
-        ${fprObject.budget}
+        <%= budget %>
 
         **Timeline:** 
-        ${fprObject.timeline}
+        <%= timeline %>
 
         **Goals:**
-        ${fprObject.goals}
+        <%= goals %>
 
         **Other:**
-        ${fprObject.other}
+        <%= other %>
       `;
 
-      var client = await sails.hooks.github.buildClientFromUser({id: userOptions&&userOptions.id});
+      // Remove leading whitespace at the beginning of each line,
+      // escape characters that might break during templating, 
+      // then inject the formObject variables into the template.
+      proposalMarkdown = _.map(proposalMarkdown.split('\n'), _.trim).join('\n');
+      proposalMarkdown = _.escape(_.template(proposalMarkdown)(fprObject));
 
-      // Fork The-Bitcoin-Cash-Fund/FPR
+      var client, repoDeletion, forkedRepo, uploadedFile;
 
-      var forkedRepo;
+      // Fetch an instance of the object with which we will
+      // interface with the Github API.
       try {
-        forkedRepo = await client.repos.fork({ owner:'The-Bitcoin-Cash-Fund', repo:'FPR' });
+        client = await sails.hooks.github.buildClientFromUser({id: userOptions.id});
       }
-      catch (forkError) {
-        console.log('Error forking repo:',forkError);
-        throw('Fork error');
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
       }
 
-      console.log('Forking results:',forkedRepo);
+      // Check and see if the user has already forked the FPR repo.
+      try {
+        userRepos = await client.repos.getAll({visibility:'public'});
+        userRepos = userRepos.data;
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
 
-      proposalMarkdown = JSON.stringify(_.escape(proposalMarkdown));
+      if (!_.find(userRepos, { name: 'FPR' })) {
+        try {
+          forkedRepo = await client.repos.fork({ owner:'The-Bitcoin-Cash-Fund', repo:'FPR' });
+        }
+        catch (someError) {
+          console.log('There was an error',someError);
+          throw (someError);
+        }
+        
+        // Since the repo form is asyncronous, enter a loop
+        // that keeps us from proceeding until the repo 
+        // shows up on the user's account.
+        var delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-      console.log('Markdown:',proposalMarkdown);
-      // process.exit();
+        // If the repo doesn't show up after 20 seconds,
+        // we will give up and throw an error.
+        var giveUp = new Date().getTime()+(1000*30);
 
-      // Now upload the template file to our new forked repo
-      var uploadedFile;
+        await async function something() {
 
-      var fileToCreate = {
+            while ( !_.find(userRepos,{ name: 'FPR' }) ){
+
+              try {
+                userRepos = await client.repos.getAll({visibility:'public'});
+                userRepos = userRepos.data;
+              }
+              catch (someError) {
+                console.log('There was an error',someError);
+              }
+              await delay(2000);
+            }
+
+        }();
+
+      }
+
+      // Upload the completed FPR to the user's newly forked repo
+
+      var fileObject = {
         owner: userOptions.githubLogin,
         repo: 'FPR',
         path: 'fpr-'+fprObject.fprId+'.md',
         message: 'Completed FPR for '+(fprObject.projectName.replace(/[^\d\w ]/ig,'')),
-        // content: Buffer.from(proposalMarkdown).toString('base64')
-        content: Buffer.from('cats!').toString('base64')
+        content: Buffer.from(proposalMarkdown).toString('base64')
       };
 
-      console.log('Creating file:',fileToCreate);
+      // console.log('Uploading fileObject:',fileObject);
 
       try {
-        uploadedFile = await client.repos.createFile(fileToCreate);
+        uploadedFile = await client.repos.createFile(fileObject);
       }
-      catch (uploadError) {
-        console.log('Error uploading file:',uploadError);
-        console.log('uploaded file:',)
-        throw('Upload error');
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
       }
-
-      console.log('Upload Results:',uploadedFile);
-
-      // var userInfo = await client.users.get({});
-      // var userEmails = await client.users.getEmails({});
-      // console.log('User Info',userInfo);
-      // console.log('User Emails:',userEmails);
 
       return {
         status: 'done'
       };
 
     },
-    buildClientFromUser: async function (options) {
-      console.log('Building client!');
+    buildClientFromUser: async function(options) {
       var user = await User.findOne(options).populate('githubOauthToken');
 
       if (!user.githubOauthToken) {
@@ -143,7 +178,6 @@ var githubHook = function(sails) {
           'Authorization': 'Bearer '+user.githubOauthToken.tokenValue,
           'Accept': 'application/vnd.github.machine-man-preview+json',
           'User-Agent': sails.config.github.oauth.userAgent
-          // 'User-Agent': sails.config.github.app.userAgent
         }
       });
 
@@ -151,8 +185,6 @@ var githubHook = function(sails) {
         type: 'oauth',
         token: user.githubOauthToken.tokenValue
       });
-
-
 
       return client;
 
@@ -290,7 +322,7 @@ var githubHook = function(sails) {
             console.log('Step 1: User initiates app authorization!');
 
             return res.view('pages/github/login', {
-              beginInstallLink: 'http://github.com/login/oauth/authorize?scope=user,repo&client_id='+sails.config.github.oauth.clientId+'&redirect_uri='+sails.config.github.oauth.redirectUrl
+              beginInstallLink: 'http://github.com/login/oauth/authorize?scope=user,repo,delete_repo&client_id='+sails.config.github.oauth.clientId+'&redirect_uri='+sails.config.github.oauth.redirectUrl
             });
 
           }
