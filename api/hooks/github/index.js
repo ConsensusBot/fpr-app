@@ -30,10 +30,9 @@ var githubHook = function(sails) {
   // }, sails.config.github.app.pem, { algorithm: 'RS256'});
 
   return {
-    submitUserFPR: async function(userQuery, fprQuery) {
-
-      var userOptions = await User.findOne({ id: userQuery.id }).populate('githubOauthToken');
-      var fprObject = await FundingProposal.findOne({ id: fprQuery.id });
+    // Synchronous function for creating the FPR template markdown files
+    // from the user's information and their web form submission.
+    performMarkdownTemplating: function(userOptions, fprObject) {
 
       var proposalMarkdown = `
         # ![BCF Logo Round Tiny](https://raw.githubusercontent.com/The-Bitcoin-Cash-Fund/Branding/master/BCF%20Symbol%20Round%20Tiny.png)
@@ -81,6 +80,98 @@ var githubHook = function(sails) {
       // then inject the formObject variables into the template.
       proposalMarkdown = _.map(proposalMarkdown.split('\n'), _.trim).join('\n');
       proposalMarkdown = _.escape(_.template(proposalMarkdown)(fprObject));
+
+      return proposalMarkdown;
+
+    },
+    updateListedFPR: async function(ownerQuery, fprQuery, userChangedByQuery) {
+      // Grab the FPR being changed, the user making the change, and the user
+      // who originally submitted the FPR.  If that user isn't also the one
+      // making the change then an admin must be doing it and we'll cite them.
+      var ownerOptions = await User.findOne({ id: ownerQuery.id }).populate('githubOauthToken');
+      var fprObject = await FundingProposal.findOne({ id: fprQuery.id });
+
+      var userChangedByOptions;
+      if (userChangedByQuery && userChangedByQuery.id) {
+        userChangedByOptions = await User.findOne({ id: userChangedByQuery.id });
+      }
+
+      // If `userChangedByQuery` wasn't included, we'll assume the user making
+      // the change is the one who originally submitted the PR.
+      else {
+        userChangedByOptions = ownerOptions;
+      }
+
+      // Compile the markdown.  Here we assume the changes have already
+      // been written to our database but haven't yet hit Github.
+      var proposalMarkdown = sails.hooks.github.performMarkdownTemplating(ownerOptions, fprObject);
+
+      // Get the contents of the FPR we are updating.  We need the file's
+      // "sha" otherwise the API won't let us update it.
+      var getFileToUpdate;
+      try {
+
+        getFileToUpdate = await sails.hooks.github.masterClient.repos.getContent({
+          owner: 'ConsensusBot',
+          repo: 'FPR',
+          path: 'FPR-'+fprObject.fprId+'.md',
+        });
+        getFileToUpdate = getFileToUpdate.data;
+
+      }
+      catch (someError) {
+        console.log('There was an error', someError);
+        throw (someError);
+      }
+
+      var updatedFile = {
+        owner: 'ConsensusBot',
+        repo: 'FPR',
+        path: 'FPR-'+fprObject.fprId+'.md',
+        content: Buffer.from(proposalMarkdown).toString('base64'),
+        sha: getFileToUpdate.sha,
+        branch: 'master'
+      };
+
+      // If the owner of the FPR is making the change, use
+      // their information.  Otherwise, cite the admin who
+      // is updating the FPR on behalf of the user.
+      if (userChangedByOptions.id === ownerOptions.id) {
+        updatedFile.message = 'User update';
+        updatedFile.author = {
+          name: ownerOptions.githubLogin,
+          email: ownerOptions.emailAddress || ownerOptions.githubLogin+'@bcf.org'
+        };
+      }
+      else {
+        updatedFile.message = 'Admin update';
+        updatedFile.author = {
+          name: userChangedByOptions.githubLogin,
+          email: userChangedByOptions.emailAddress || userChangedByOptions.githubLogin+'@bcf.org'
+        };
+      }
+
+      var updateFileResults;
+      try {
+        updateFileResults = await sails.hooks.github.masterClient.repos.updateFile(updatedFile);
+        updateFileResults = updateFileResults.data;
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
+
+      return {
+        results: updateFileResults
+      };
+
+    },
+    submitUserFPR: async function(userQuery, fprQuery) {
+
+      var userOptions = await User.findOne({ id: userQuery.id }).populate('githubOauthToken');
+      var fprObject = await FundingProposal.findOne({ id: fprQuery.id });
+
+      var proposalMarkdown = sails.hooks.github.performMarkdownTemplating(userOptions, fprObject);
 
       var client, repoDeletion, forkedRepo, uploadedFile;
 
@@ -145,15 +236,113 @@ var githubHook = function(sails) {
       var fileObject = {
         owner: userOptions.githubLogin,
         repo: 'FPR',
-        path: 'fpr-'+fprObject.fprId+'.md',
+        path: 'FPR-'+fprObject.fprId+'.md',
         message: 'Completed FPR for '+(fprObject.projectName.replace(/[^\d\w ]/ig,'')),
         content: Buffer.from(proposalMarkdown).toString('base64')
       };
 
-      // console.log('Uploading fileObject:',fileObject);
-
       try {
         uploadedFile = await client.repos.createFile(fileObject);
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
+
+      // Submit a pull request to the master repo on behalf of the user.
+      var userPullRequestResults;
+
+      try {
+        userPullRequestResults = await client.pullRequests.create({
+          owner: 'ConsensusBot',
+          repo: 'FPR',
+          title: 'Listing fPR-'+fprObject.fprId+': '+fprObject.chatName,
+          head: userOptions.githubLogin+':master',
+          base: 'master',
+          // body: '',
+          maintainer_can_modify: true
+        });
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
+
+      // Get all pull requests on the administrative Github `FPR` repo so we can
+      // make sure the user's new PR has been posted before we attempt to merge
+      // that PR.  We have to do this since the "create pull request" endpoint
+      // is synchronous.
+      var grabMastersPullRequests;
+
+      try {
+        grabMastersPullRequests = await sails.hooks.github.masterClient.pullRequests.getAll({
+          owner: 'ConsensusBot',
+          repo: 'FPR',
+          state: 'open'
+        });
+        grabMastersPullRequests = grabMastersPullRequests.data;
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
+
+      // If the repo doesn't show up after 20 seconds,
+      // we will give up and throw an error.
+      giveUp = new Date().getTime()+(1000*20);
+
+      await async function something() {
+
+          while ( !_.find(grabMastersPullRequests, { number: userPullRequestResults.data.number }) ){
+
+            if (new Date().getTime() > giveUp) {
+              console.log('Error merging users FPR pull request into master due to PR not showing up');
+            }
+            else {
+              try {
+                grabMastersPullRequests = await sails.hooks.github.masterClient.pullRequests.getAll({
+                  owner: 'ConsensusBot',
+                  repo: 'FPR',
+                  state: 'open'
+                });
+                grabMastersPullRequests = grabMastersPullRequests.data;
+              }
+              catch (someError) {
+                console.log('There was an error',someError);
+              }
+              await delay(2000);
+            }
+          }
+
+      }();
+
+      // Using the client representing the master administrative Github
+      // account, automatically merge the users pull request.
+
+      var masterMergeResults;
+
+      try {
+        masterMergeResults = await sails.hooks.github.masterClient.pullRequests.merge({
+          owner: 'ConsensusBot',
+          repo: 'FPR',
+          number: userPullRequestResults.data.number,
+          commit_title: userPullRequestResults.data.title,
+          merge_method: 'merge'
+        });
+        masterMergeResults = masterMergeResults.data;
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
+
+      // Finally, delete the user's fork of the FPR repo since they
+      // won't be needing it anymore.  Future updates will only happen
+      // through the web app and they will be done for the user by the 
+      // FSR repo's administrative client.
+      var repoDeletionResults;
+      try {
+        repoDeletionResults = await client.repos.delete({owner:userOptions.githubLogin, repo:'FPR'});
       }
       catch (someError) {
         console.log('There was an error',someError);
@@ -166,7 +355,20 @@ var githubHook = function(sails) {
 
     },
     buildClientFromUser: async function(options) {
-      var user = await User.findOne(options).populate('githubOauthToken');
+
+      var user;
+      if (options.isMasterClient) {
+
+        user = {
+          githubOauthToken: {
+            tokenValue: sails.config.github.personalAccessToken
+          }
+        };
+
+      }
+      else {
+        user = await User.findOne(options).populate('githubOauthToken');
+      }
 
       if (!user.githubOauthToken) {
         console.log('No token associated with user!',options,user);
@@ -195,25 +397,18 @@ var githubHook = function(sails) {
      * @param {Function} done
      */
      initialize: async function (done) {
-      /*sails.after(['lifted'], async ()=>{
+      sails.after(['lifted'], async ()=>{
 
-        var user = await User.findOne({githubLogin: 'ConsensusBot'}).populate('githubOauthToken');
-        console.log('Authorizing with consensusBot oauth token:',user);
-
-        console.log('using token with length',(token&&token.length), (sails.config.github.app.pem&&sails.config.github.app.pem.length));
-
+        // Get a node-github client instance for the master administrative
+        // account so we can interact with the Github API on it's behalf.
         try {
-          sails.client.authenticate({
-            type: 'integration',
-            token: token
-          });
-          console.log('Sucessfully authorized as an app!');
+          sails.hooks.github.masterClient = await sails.hooks.github.buildClientFromUser({ isMasterClient: true });
         }
         catch(authError) {
           console.log('Error authorizing:',authError);
         }
-
-      });*/
+        // process.exit(0);
+      });
 
       done();
 
@@ -294,6 +489,14 @@ var githubHook = function(sails) {
       });
 
     },
+
+    // This is where the node-github instance representing the client
+    // for the administrative Github account lives.  This account houses
+    // the master repo containing all the FPRs approved for listing.
+    // 
+    // It is populated using the `initialize` function that runs after 
+    // the app has successfully lifted.
+    masterClient: undefined,
 
     // Github Authentication Steps 
     // 
@@ -460,7 +663,6 @@ var githubHook = function(sails) {
               }
 
             });
-
           }
         }
       }

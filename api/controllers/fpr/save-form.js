@@ -83,16 +83,41 @@ module.exports = {
       throw ('badProposalId');
     }
 
-    var updatedObject = _.pick(inputs, _.without(_.keys(inputs), 'id') );
+    // Don't allow the user to change the 'status' or 'id' and
+    // if the document has already been listed on Github, call
+    // the Github Hook to submit a PR for the change.
+    var allowedParams = ['projectName','startDate','hashtag','stakeholders','projectSummary','resources','budget','timeline','goals','other'];
+    var updatedObject = _.extend(_.pick(inputs, allowedParams), {});
 
     // Update the FundingProposal then return
-    // a fresh copy to the client.  Don't update the `id`
-    // attribute.
+    // a fresh copy to the client.
     formObject = await FundingProposal.update({ id: formObject.id }, updatedObject ).fetch();
+    formObject = formObject[0];
+
+    // If the user is editing an FPR that has already been listed
+    // on Github, have the Github hook submit a PR for the change
+    // then automatically merge it.
+    var githubUpdateResults;
+    if (formObject.status === 'listed') {
+      try {
+        pullRequestResults = await sails.hooks.github.updateListedFPR(
+          // Waterline Query to fetch the FPR's owner
+          { id: formObject.user },
+          // Waterline Query to fetch the updated form object
+          { id: formObject.id },
+          // Waterline query to fetch the admin that's making the change
+          (this.req.me.isSuperAdmin ? { id: this.req.me.id } : undefined)
+        );
+      }
+      catch (someError) {
+        console.log('There was an error', someError);
+        throw (someError);
+      }
+    }
 
     // Since the `update` method always returns an array,
     // return the only element in that array to our user.
-    return exits.success(formObject[0]);
+    return exits.success(formObject);
 
   }
 
