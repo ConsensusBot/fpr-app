@@ -83,10 +83,15 @@ module.exports = {
       throw ('badProposalId');
     }
 
-    // Don't allow the user to change the 'status' or 'id' and
-    // if the document has already been listed on Github, call
-    // the Github Hook to submit a PR for the change.
-    var allowedParams = ['projectName','startDate','hashtag','stakeholders','projectSummary','resources','budget','timeline','goals','other'];
+    // Don't allow the user to change the 'status' to "listed". 
+    // Also don't let them change the 'id'. If the document has
+    // already been listed on Github, call the Github Hook to 
+    // submit a PR for the change.
+    if (inputs.status && inputs.status === 'listed' && formObject.status !== 'listed') {
+      delete inputs.status;
+    }
+
+    var allowedParams = ['projectName','startDate','hashtag','stakeholders','projectSummary','resources','budget','timeline','goals','other','status'];
     var updatedObject = _.extend(_.pick(inputs, allowedParams), {});
 
     // Update the FundingProposal then return
