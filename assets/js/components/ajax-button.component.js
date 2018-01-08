@@ -26,10 +26,7 @@ parasails.registerComponent('ajaxButton', {
     <span class="button-text" v-if="!syncing"><slot name="default">Submit</slot></span>
     <span class="button-loader clearfix" v-if="syncing">
       <slot name="syncing-state">
-        <div class="loading-dot dot1"></div>
-        <div class="loading-dot dot2"></div>
-        <div class="loading-dot dot3"></div>
-        <div class="loading-dot dot4"></div>
+        <div>Saving...</div>
       </slot>
     </span>
   </button>
