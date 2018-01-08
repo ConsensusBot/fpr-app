@@ -82,7 +82,7 @@ parasails.registerPage('form', {
       } else if (this.formObject.status === 'draft' && !this.syncing.status) {
 
         this.hidden = true;
-        this.submitMessage = '<center>How could you? :(</center>';
+        this.submitMessage = 'Your submission has been withdrawn.';
         await parasails.require('pause')(2000);
         this.submitMessage = '';
         this.hidden = false;
