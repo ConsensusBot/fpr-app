@@ -272,41 +272,58 @@ var githubHook = function(sails) {
         throw (someError);
       }
 
-      if (!_.find(userRepos, { name: 'FPR' })) {
+
+      // If the user already has the FPR repo forked, delete it
+      if (_.find(userRepos, { name: 'FPR' })) {
+        var repoDeletionResults;
         try {
-          forkedRepo = await client.repos.fork({ owner:'The-Bitcoin-Cash-Fund', repo:'FPR' });
+          repoDeletionResults = await client.repos.delete({owner:userOptions.githubLogin, repo:'FPR'});
         }
         catch (someError) {
           console.log('There was an error',someError);
           throw (someError);
         }
-        
-        // Since the repo form is asyncronous, enter a loop
-        // that keeps us from proceeding until the repo 
-        // shows up on the user's account.
-        var delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-        // If the repo doesn't show up after 20 seconds,
-        // we will give up and throw an error.
-        var giveUp = new Date().getTime()+(1000*30);
-
-        await async function something() {
-
-            while ( !_.find(userRepos,{ name: 'FPR' }) ){
-
-              try {
-                userRepos = await client.repos.getAll({visibility:'public'});
-                userRepos = userRepos.data;
-              }
-              catch (someError) {
-                console.log('There was an error',someError);
-              }
-              await delay(2000);
-            }
-
-        }();
-
+        return {
+          status: 'done'
+        };
       }
+
+
+      // Now fork a fresh copy!
+      try {
+        forkedRepo = await client.repos.fork({ owner:'The-Bitcoin-Cash-Fund', repo:'FPR' });
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
+      
+      // Since the repo form is asyncronous, enter a loop
+      // that keeps us from proceeding until the repo 
+      // shows up on the user's account.
+      var delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+      // If the repo doesn't show up after 20 seconds,
+      // we will give up and throw an error.
+      var giveUp = new Date().getTime()+(1000*30);
+
+      await async function something() {
+
+          while ( !_.find(userRepos,{ name: 'FPR' }) ){
+
+            try {
+              userRepos = await client.repos.getAll({visibility:'public'});
+              userRepos = userRepos.data;
+            }
+            catch (someError) {
+              console.log('There was an error',someError);
+            }
+            await delay(2000);
+          }
+
+      }();
+
 
       // Upload the evaluation template and create a new project folder
 
