@@ -32,7 +32,7 @@ var githubHook = function(sails) {
   return {
     // Synchronous function for creating the FPR template markdown files
     // from the user's information and their web form submission.
-    performMarkdownTemplating: function(userOptions, fprObject) {
+    templateProposalMarkdown: function(userOptions, fprObject) {
 
       var proposalMarkdown = `
         # ![BCF Logo Round Tiny](https://raw.githubusercontent.com/The-Bitcoin-Cash-Fund/Branding/master/BCF%20Symbol%20Round%20Tiny.png)
@@ -84,6 +84,76 @@ var githubHook = function(sails) {
       return proposalMarkdown;
 
     },
+    templateEvaluationMarkdown: function(userOptions, evalOptions) {
+
+      var evaluationMarkdown = `
+        # FPR Evaluation of FPR-<%= fprId %>
+
+              Status - Partially Accepted - Changes required
+
+        - [ ] **1. Has the FPR been submitted correctly?**  
+        ⋅⋅⋅- [ ] A. Correctly titled?
+        ⋅⋅⋅- [ ] B. Used the full FPR template?
+        ⋅⋅⋅- [ ] C. Pull request correctly made to the BCF FPR repo?
+          
+        - [ ] **2. Have all sections of the template been completed?**  
+        ⋅⋅⋅- [ ] A. Project Name
+        ⋅⋅⋅- [ ] B. Start Date
+        ⋅⋅⋅- [ ] C. Hashtag
+        ⋅⋅⋅- [ ] D. Name of BCF Chat room
+        ⋅⋅⋅- [ ] E. Stakeholders
+        ⋅⋅⋅- [ ] F. Project Summary
+        ⋅⋅⋅- [ ] G. Resources
+        ⋅⋅⋅- [ ] H. Budget
+        ⋅⋅⋅- [ ] I. Timeline
+        ⋅⋅⋅- [ ] J. Goals
+        ⋅⋅⋅- [ ] K. Other
+          
+        - [ ] **3. Is it well formatted for legibility?**
+
+        - [ ] **4. Does the project have a non-profit purpose?**
+          
+        - [ ] **5. Has it been completed with enough detail for the scale of the project?**
+
+        - [ ] **6. Is the team trustworthy enough for the funding requirement?**
+
+        - [ ] **7. Are the objectives S.M.A.R.T?**  
+        ⋅⋅⋅- [ ] A. Specific
+        ⋅⋅⋅- [ ] B. Measurable
+        ⋅⋅⋅- [ ] C. Agreed Upon
+        ⋅⋅⋅- [ ] D. Realistic
+        ⋅⋅⋅- [ ] E. Time-bound 
+
+        - [ ] **8. Are the stakeholders realistically providing volunteered time?**
+          
+        - [ ] **9. Is the cost vs impact satisfactory?**
+          
+        Cost = TODO
+
+        Impact
+
+        - TODO
+          
+        - [ ] **10. Has the FPR been accepted or denied?**  
+        ⋅⋅⋅- [ ] Accepted.
+        ⋅⋅⋅- [ ] Accepted with Comments.
+        ⋅⋅⋅- [ ] Partially Accepted - See Comments. 
+        ⋅⋅⋅- [ ] Denied - See Comments.  
+        ⋅⋅⋅- [ ] Denied.
+          
+        **11. Comments and, if denied, reasons for denial.**  
+        ⋅⋅⋅- TODO
+      `;
+
+      // Remove leading whitespace at the beginning of each line,
+      // escape characters that might break during templating, 
+      // then inject the formObject variables into the template.
+      evaluationMarkdown = _.map(evaluationMarkdown.split('\n'), _.trim).join('\n').replace(/⋅⋅⋅/ig,'   ');
+      evaluationMarkdown = _.escape(_.template(evaluationMarkdown)(evalOptions));
+
+      return evaluationMarkdown;
+
+    },
     updateListedFPR: async function(ownerQuery, fprQuery, userChangedByQuery) {
       // Grab the FPR being changed, the user making the change, and the user
       // who originally submitted the FPR.  If that user isn't also the one
@@ -104,7 +174,7 @@ var githubHook = function(sails) {
 
       // Compile the markdown.  Here we assume the changes have already
       // been written to our database but haven't yet hit Github.
-      var proposalMarkdown = sails.hooks.github.performMarkdownTemplating(ownerOptions, fprObject);
+      var proposalMarkdown = sails.hooks.github.templateProposalMarkdown(ownerOptions, fprObject);
 
       // Get the contents of the FPR we are updating.  We need the file's
       // "sha" otherwise the API won't let us update it.
@@ -112,7 +182,7 @@ var githubHook = function(sails) {
       try {
 
         getFileToUpdate = await sails.hooks.github.masterClient.repos.getContent({
-          owner: 'ConsensusBot',
+          owner: sails.config.github.githubAdminAccount,
           repo: 'FPR',
           path: 'FPR-'+fprObject.fprId+'.md',
         });
@@ -125,7 +195,7 @@ var githubHook = function(sails) {
       }
 
       var updatedFile = {
-        owner: 'ConsensusBot',
+        owner: sails.config.github.githubAdminAccount,
         repo: 'FPR',
         path: 'FPR-'+fprObject.fprId+'.md',
         content: Buffer.from(proposalMarkdown).toString('base64'),
@@ -171,9 +241,16 @@ var githubHook = function(sails) {
       var userOptions = await User.findOne({ id: userQuery.id }).populate('githubOauthToken');
       var fprObject = await FundingProposal.findOne({ id: fprQuery.id });
 
-      var proposalMarkdown = sails.hooks.github.performMarkdownTemplating(userOptions, fprObject);
+      // Turn the fprId into a 4 digit string representing a number
+      fprObject.fprId = ''+fprObject.fprId;
+      while (fprObject.fprId.length < 4) {
+        fprObject.fprId = '0'+fprObject.fprId;
+      }
 
-      var client, repoDeletion, forkedRepo, uploadedFile;
+      var evaluationMarkdown = sails.hooks.github.templateEvaluationMarkdown({}, fprObject);
+      var proposalMarkdown = sails.hooks.github.templateProposalMarkdown(userOptions, fprObject);
+
+      var client, repoDeletion, forkedRepo, uploadedEval, uploadedFile;
 
       // Fetch an instance of the object with which we will
       // interface with the Github API.
@@ -231,6 +308,24 @@ var githubHook = function(sails) {
 
       }
 
+      // Upload the evaluation template and create a new project folder
+
+      var fileObject = {
+        owner: userOptions.githubLogin,
+        repo: 'FPR',
+        path: 'FPR-'+fprObject.fprId+'/EVAL-'+fprObject.fprId+'.md',
+        message: 'Evaluation form for '+(fprObject.projectName.replace(/[^\d\w ]/ig,'')),
+        content: Buffer.from(evaluationMarkdown).toString('base64')
+      };
+
+      try {
+        uploadedEval = await client.repos.createFile(fileObject);
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
+
       // Upload the completed FPR to the user's newly forked repo
 
       var fileObject = {
@@ -254,9 +349,9 @@ var githubHook = function(sails) {
 
       try {
         userPullRequestResults = await client.pullRequests.create({
-          owner: 'ConsensusBot',
+          owner: sails.config.github.githubAdminAccount,
           repo: 'FPR',
-          title: 'Listing fPR-'+fprObject.fprId+': '+fprObject.chatName,
+          title: 'Listing FPR-'+fprObject.fprId+': '+fprObject.chatName,
           head: userOptions.githubLogin+':master',
           base: 'master',
           // body: '',
@@ -276,7 +371,7 @@ var githubHook = function(sails) {
 
       try {
         grabMastersPullRequests = await sails.hooks.github.masterClient.pullRequests.getAll({
-          owner: 'ConsensusBot',
+          owner: sails.config.github.githubAdminAccount,
           repo: 'FPR',
           state: 'open'
         });
@@ -301,7 +396,7 @@ var githubHook = function(sails) {
             else {
               try {
                 grabMastersPullRequests = await sails.hooks.github.masterClient.pullRequests.getAll({
-                  owner: 'ConsensusBot',
+                  owner: sails.config.github.githubAdminAccount,
                   repo: 'FPR',
                   state: 'open'
                 });
@@ -323,7 +418,7 @@ var githubHook = function(sails) {
 
       try {
         masterMergeResults = await sails.hooks.github.masterClient.pullRequests.merge({
-          owner: 'ConsensusBot',
+          owner: sails.config.github.githubAdminAccount,
           repo: 'FPR',
           number: userPullRequestResults.data.number,
           commit_title: userPullRequestResults.data.title,
