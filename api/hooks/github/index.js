@@ -384,7 +384,7 @@ var githubHook = function(sails) {
 
       // If the repo doesn't show up after 20 seconds,
       // we will give up and throw an error.
-      giveUp = new Date().getTime()+(1000*20);
+      giveUp = new Date().getTime()+(1000*30);
 
       await async function something() {
 
@@ -405,7 +405,7 @@ var githubHook = function(sails) {
               catch (someError) {
                 console.log('There was an error',someError);
               }
-              await delay(2000);
+              await delay(3000);
             }
           }
 

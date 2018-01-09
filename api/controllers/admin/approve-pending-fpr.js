@@ -54,7 +54,7 @@ module.exports = {
       updatedObject.fprId = mostRecentFPR.fprId + 1;
     }
     else {
-      updatedObject.fprId = 100;
+      updatedObject.fprId = 20;
     }
 
     // Update the Funding Proposal
