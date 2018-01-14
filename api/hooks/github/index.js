@@ -625,9 +625,9 @@ var githubHook = function(sails) {
         '/git/webhook': {
           skipAssets: true,
           fn: function(req, res, next){
-            console.log('Got a webhook!');
+            // console.log('Got a webhook!');
 
-            console.log('req.allParams()',req.body);
+            // console.log('req.allParams()',req.body);
             return res.sendStatus(200);
           }
         },
@@ -717,7 +717,7 @@ var githubHook = function(sails) {
                   githubOauthToken: token.id
                 }).fetch();
 
-                await token.update(user.id, { user: user.id});
+                await Token.update(token.id, { user: user.id});
 
                 req.session.userId = user.id;
                 req.session.save();

@@ -50,7 +50,8 @@ module.exports = {
     // by one and use it for this new FPR when we list it on Github.
     var mostRecentFPR = await FundingProposal.find({}).sort('fprId DESC').limit(1);
     mostRecentFPR = mostRecentFPR[0];
-    if (mostRecentFPR) {
+
+    if (mostRecentFPR && mostRecentFPR.fprId) {
       updatedObject.fprId = mostRecentFPR.fprId + 1;
     }
     else {

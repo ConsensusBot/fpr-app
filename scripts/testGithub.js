@@ -19,52 +19,16 @@ module.exports = {
     var fprObject = await FundingProposal.find({ status: 'pending' }).limit(1);
     fprObject = fprObject[0];
 
-    fprObject.goals = 'TOTAL WORLD DOMINATION!';
+    // Turn the fprId into a 4 digit string representing a number
+    fprObject.fprId = ''+fprObject.fprId;
+    while (fprObject.fprId.length < 4) {
+      fprObject.fprId = '0'+fprObject.fprId;
+    }
 
-    var proposalMarkdown = `
-      # ![BCF Logo Round Tiny](https://raw.githubusercontent.com/The-Bitcoin-Cash-Fund/Branding/master/BCF%20Symbol%20Round%20Tiny.png)
-      BCF Funding Proposal Request Template
+    var evaluationMarkdown = sails.hooks.github.templateEvaluationMarkdown({}, fprObject);
+    var proposalMarkdown = sails.hooks.github.templateProposalMarkdown(userOptions, fprObject);
 
-      **Project Name:**
-      <%= projectName %>
-
-      **FPR Id:**
-      <%= fprId %>
-
-      **Start Date:**
-      <%= startDate %>
-
-      **Hashtag:**
-      <%= hashtag %>
-
-      **Name of BCF Gitter community room:**
-      <%= chatName %>
-
-      **Stakeholders:**
-      <%= stakeholders %>
-
-      **Project Summary:**
-      <%= projectSummary %>
-
-      **Resources:**
-      <%= resources %>
-
-      **Budget:**
-      <%= budget %>
-
-      **Timeline:** 
-      <%= timeline %>
-
-      **Goals:**
-      <%= goals %>
-
-      **Other:**
-      <%= other %>
-    `;
-
-    var proposalMarkdown = sails.hooks.github.performMarkdownTemplating(userOptions, fprObject);
-
-    var client, repoDeletion, forkedRepo, uploadedFile;
+    var client, repoDeletion, forkedRepo, uploadedEval, uploadedFile;
 
     // Fetch an instance of the object with which we will
     // interface with the Github API.
@@ -76,7 +40,6 @@ module.exports = {
       throw (someError);
     }
 
-    /*
     // Check and see if the user has already forked the FPR repo.
     try {
       userRepos = await client.repos.getAll({visibility:'public'});
@@ -87,53 +50,89 @@ module.exports = {
       throw (someError);
     }
 
-    if (!_.find(userRepos, { name: 'FPR' })) {
+
+    // If the user already has the FPR repo forked, delete it
+    if (_.find(userRepos, { name: 'FPR' })) {
+      var repoDeletionResults;
       try {
-        forkedRepo = await client.repos.fork({ owner:'The-Bitcoin-Cash-Fund', repo:'FPR' });
+        repoDeletionResults = await client.repos.delete({owner:userOptions.githubLogin, repo:'FPR'});
       }
       catch (someError) {
         console.log('There was an error',someError);
         throw (someError);
       }
-      
-      // Since the repo form is asyncronous, enter a loop
-      // that keeps us from proceeding until the repo 
-      // shows up on the user's account.
-      var delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-      // If the repo doesn't show up after 20 seconds,
-      // we will give up and throw an error.
-      var giveUp = new Date().getTime()+(1000*30);
-
-      await async function something() {
-
-          while ( !_.find(userRepos,{ name: 'FPR' }) ){
-
-            try {
-              userRepos = await client.repos.getAll({visibility:'public'});
-              userRepos = userRepos.data;
-            }
-            catch (someError) {
-              console.log('There was an error',someError);
-            }
-            await delay(2000);
-          }
-
-      }();
-
+      return {
+        status: 'done'
+      };
     }
+console.log('Ready to fork');
+    // Now fork a fresh copy!
+    try {
+      forkedRepo = await client.repos.fork({ owner:'The-Bitcoin-Cash-Fund', repo:'FPR' });
+    }
+    catch (someError) {
+      console.log('There was an error',someError);
+      throw (someError);
+    }
+    
+    // Since the repo form is asyncronous, enter a loop
+    // that keeps us from proceeding until the repo 
+    // shows up on the user's account.
+    var delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    // If the repo doesn't show up after 20 seconds,
+    // we will give up and throw an error.
+    var giveUp = new Date().getTime()+(1000*30);
+
+    await async function something() {
+
+        while ( !_.find(userRepos,{ name: 'FPR' }) ){
+
+          try {
+            userRepos = await client.repos.getAll({visibility:'public'});
+            userRepos = userRepos.data;
+          }
+          catch (someError) {
+            console.log('There was an error',someError);
+          }
+          await delay(2000);
+        }
+
+    }();
+console.log('Forked! Ready to upload Eval');
+
+
+    // Upload the evaluation template and create a new project folder
+
+    var fileObject = {
+      owner: userOptions.githubLogin,
+      repo: 'FPR',
+      path: 'FPR-'+fprObject.fprId+'/EVAL-'+fprObject.fprId+'.md',
+      message: 'Evaluation form for '+(fprObject.projectName.replace(/[^\d\w ]/ig,'')),
+      content: Buffer.from(evaluationMarkdown).toString('base64')
+    };
+
+    try {
+      uploadedEval = await client.repos.createFile(fileObject);
+    }
+    catch (someError) {
+      console.log('There was an error',someError);
+      throw (someError);
+    }
+
+console.log('Eval uploaded! Ready to upload FPR');
+
 
     // Upload the completed FPR to the user's newly forked repo
 
     var fileObject = {
       owner: userOptions.githubLogin,
       repo: 'FPR',
-      path: 'fpr-'+fprObject.fprId+'.md',
+      path: 'FPR-'+fprObject.fprId+'.md',
       message: 'Completed FPR for '+(fprObject.projectName.replace(/[^\d\w ]/ig,'')),
       content: Buffer.from(proposalMarkdown).toString('base64')
     };
-
-    // console.log('Uploading fileObject:',fileObject);
 
     try {
       uploadedFile = await client.repos.createFile(fileObject);
@@ -148,9 +147,9 @@ module.exports = {
 
     try {
       userPullRequestResults = await client.pullRequests.create({
-        owner: 'ConsensusBot',
+        owner: sails.config.github.githubAdminAccount,
         repo: 'FPR',
-        title: 'Listing fpr-'+fprObject.fprId+' : '+fprObject.chatName,
+        title: 'Listing FPR-'+fprObject.fprId+': '+fprObject.chatName,
         head: userOptions.githubLogin+':master',
         base: 'master',
         // body: '',
@@ -161,9 +160,7 @@ module.exports = {
       console.log('There was an error',someError);
       throw (someError);
     }
-
-    // console.log('Done with PR:',userPullRequestResults);
-
+console.log('FPR uploaded! Ready to get PRs');
 
     // Get all pull requests on the administrative Github `FPR` repo so we can
     // make sure the user's new PR has been posted before we attempt to merge
@@ -173,7 +170,7 @@ module.exports = {
 
     try {
       grabMastersPullRequests = await sails.hooks.github.masterClient.pullRequests.getAll({
-        owner: 'ConsensusBot',
+        owner: sails.config.github.githubAdminAccount,
         repo: 'FPR',
         state: 'open'
       });
@@ -186,7 +183,7 @@ module.exports = {
 
     // If the repo doesn't show up after 20 seconds,
     // we will give up and throw an error.
-    giveUp = new Date().getTime()+(1000*20);
+    giveUp = new Date().getTime()+(1000*30);
 
     await async function something() {
 
@@ -198,7 +195,7 @@ module.exports = {
           else {
             try {
               grabMastersPullRequests = await sails.hooks.github.masterClient.pullRequests.getAll({
-                owner: 'ConsensusBot',
+                owner: sails.config.github.githubAdminAccount,
                 repo: 'FPR',
                 state: 'open'
               });
@@ -207,88 +204,55 @@ module.exports = {
             catch (someError) {
               console.log('There was an error',someError);
             }
-            await delay(2000);
+            await delay(3000);
           }
         }
 
     }();
+console.log('PRs fetched.  Ready to submit PR');
 
     // Using the client representing the master administrative Github
     // account, automatically merge the users pull request.
 
     var masterMergeResults;
 
+    var mergeObject = {
+      owner: sails.config.github.githubAdminAccount,
+      repo: 'FPR',
+      number: userPullRequestResults.data.number,
+      commit_title: userPullRequestResults.data.title,
+      merge_method: 'merge'
+    };
+
+    console.log('MergeObject:',mergeObject);
+
     try {
-      masterMergeResults = await sails.hooks.github.masterClient.pullRequests.merge({
-        owner: 'ConsensusBot',
-        repo: 'FPR',
-        number: userPullRequestResults.data.number,
-        commit_title: userPullRequestResults.data.title,
-        merge_method: 'merge'
-      });
+      masterMergeResults = await sails.hooks.github.masterClient.pullRequests.merge(mergeObject);
       masterMergeResults = masterMergeResults.data;
     }
     catch (someError) {
       console.log('There was an error',someError);
       throw (someError);
     }
-    */
-
-    // Response looks like below
-    // { sha: 'b7633c6c4d061af05690e112acf4aef11aca5198',
-      // merged: true,
-      // message: 'Pull Request successfully merged' }
-
-    // console.log('Done with master merge!!!', masterMergeResults);
-
-    var getFileToUpdate;
+console.log('Done submitting PR.  Ready to delete!');
+    // Finally, delete the user's fork of the FPR repo since they
+    // won't be needing it anymore.  Future updates will only happen
+    // through the web app and they will be done for the user by the 
+    // FSR repo's administrative client.
+    var repoDeletionResults;
     try {
-      getFileToUpdate = await sails.hooks.github.masterClient.repos.getContent({
-        owner: 'ConsensusBot',
-        repo: 'FPR',
-        path: 'FPR-'+fprObject.fprId+'.md',
-      });
-      getFileToUpdate = getFileToUpdate.data;
-
+      repoDeletionResults = await client.repos.delete({owner:userOptions.githubLogin, repo:'FPR'});
     }
     catch (someError) {
       console.log('There was an error',someError);
       throw (someError);
     }
-
-    console.log('Got file to update',getFileToUpdate);
-
-    var updatedFile = {
-      owner: 'ConsensusBot',
-      repo: 'FPR',
-      path: 'FPR-'+fprObject.fprId+'.md',
-      message: 'User update',
-      content: Buffer.from(proposalMarkdown).toString('base64'),
-      sha: getFileToUpdate.sha,
-      branch: 'master',
-      author: {
-        name: userOptions.githubLogin,
-        email: userOptions.githubLogin+'@bcf.org'
-      }
-    };
-
-    console.log('Updating file:',updatedFile);
-
-    var updateFileResults;
-    try {
-      updateFileResults = await sails.hooks.github.masterClient.repos.updateFile(updatedFile);
-      updateFileResults = updateFileResults.data;
-    }
-    catch (someError) {
-      console.log('There was an error',someError);
-      throw (someError);
-    }
-
-    console.log('Got file update results',updateFileResults);
-
+console.log('Done deleting!');
+    // return {
+    //   status: 'done'
+    // };
 
     process.exit(0);
-
 
   }
 
