@@ -1,0 +1,26 @@
+#install {
+
+  .big-image {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  @media (min-width: 575px) {
+    .sm-image {
+      display: none;
+    }
+  }
+
+  @media (max-width: 575px) {
+    .big-image {
+      display: none;
+    }
+
+    .sm-image {
+      width: 200px;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+
+}
