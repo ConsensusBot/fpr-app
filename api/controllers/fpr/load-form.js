@@ -96,34 +96,40 @@ module.exports = {
 
     }
 
-    // If a form `id` wasn't included, fetch the first draft of theirs that 
-    // you can find with "Example Project" as the title.  
-    if (!formToReturn) {
+    // If a form `id` wasn't included, fetch the first draft of theirs that
+    // you can find with "Example Project" as the title.
+    //
+    // NOTE. Sean's change: I've commented this out for now, is it needed? If the user doesn't choose a form then maybe better to just
+    // give them a blank template.
+    //
+    // if (!formToReturn) {
 
-      formToReturn = await FundingProposal.findOne({
-        projectName: 'Example Project',
-        user: this.req.session.userId
-      });
+    //   formToReturn = await FundingProposal.findOne({
+    //     projectName: 'Example Project',
+    //     user: this.req.session.userId
+    //   });
 
-    }
+    // }
 
     // Otherwise, create an example project for them and
     // return it.
+    //
+    // NOTE. Sean's change: I've made these blank so that the placeholders will go in the boxes instead.
     if (!formToReturn) {
 
       formToReturn = await FundingProposal.create({
-        projectName: 'Example Project',
-        startDate: '27/11/2018',
-        hashtag: '#myNewProject',
-        chatName: '#proj-myNewProject',
-        stakeholders: 'myself',
-        projectSummary: 'TODO',
-        resources: 'TODO',
-        budget: 'TODO',
-        timeline: 'TODO',
-        goals: 'TODO',
-        other: 'TODO',
-        status: 'draft',
+        projectName: '',
+        startDate: '',
+        hashtag: '',
+        chatName: '',
+        stakeholders: '',
+        projectSummary: '',
+        resources: '',
+        budget: '',
+        timeline: '',
+        goals: '',
+        other: '',
+        status: '',
         user: this.req.session.userId
       }).fetch();
 
