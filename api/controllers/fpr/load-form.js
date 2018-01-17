@@ -129,7 +129,7 @@ module.exports = {
         timeline: '',
         goals: '',
         other: '',
-        status: '',
+        status: 'draft',
         user: this.req.session.userId
       }).fetch();
 
