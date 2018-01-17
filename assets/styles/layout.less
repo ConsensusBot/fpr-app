@@ -6,10 +6,17 @@
 html, body {
   height: 100%;
   margin: 0;
+  font-size: 1em;
 }
 
 img {
   margin: 15px;
+}
+
+@media (max-width: 576px) {
+  html {
+    font-size: 0.8em;
+  }
 }
 
 #page-wrap {
@@ -23,7 +30,15 @@ img {
     a {
       cursor: pointer;
     }
+
+    margin-bottom: 65px;
+
+    @media (max-width: 576px) {
+    padding-top: 20px;
+    }
   }
+
+
 
   // App-wide styles for our ajax buttons
   .ajax-button {
