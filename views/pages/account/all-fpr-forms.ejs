@@ -11,7 +11,8 @@
         <p v-if="!(forms.draft&&forms.draft.length)"><a href="/form">Start a new proposal</p>
         <ul v-if="forms.draft&&forms.draft.length">
           <li v-for="item in forms.draft">
-            <a v-bind:href="'/form/'+item.id">{{ item.projectName }}</a>
+             <a v-if="item.projectName" v-bind:href="'/form/'+item.id">{{ item.projectName }}</a>
+             <a v-else v-bind:href="'/form/'+item.id">Draft Proposal {{ item.id }}</a>
           </li>
         </ul>
       </div>
