@@ -47,58 +47,69 @@
 
   <body>
     <div id="page-wrap">
-      <header id="page-header" class="navbar navbar-expand-sm navbar-dark bg-dark justify-content-sm-between">
-        <a class="cashfund-brand text-secondary navbar-brand" href="/">The Bitcoin Cash Fund</a>
 
-        <!-- LOGGED-IN NAVIGATION -->
-        <% if(typeof me !== 'undefined' && me) { %>
-        <% } %>
-        <div class="navbar-nav right-nav">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="[navbar-menu]" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" navbar-menu>
-            <!-- LOGGED-IN NAVIGATION -->
-            <% if(typeof me !== 'undefined' && me) { %>
+
+    <header id="page-header" class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <a class="cashfund-brand navbar-brand text-secondary" href="#">The Bitcoin Cash Fund</a>
+
+        <!---NAV COLLAPSE BUTTON-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="[navbar-menu]" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button> <!---NAV COLLAPSE BUTTON END-->
+
+        <div class="collapse navbar-collapse flex-row-reverse" navbar-menu>
+
+          <% if(typeof me !== 'undefined' && me) { %>
             <%  if(me && me.isSuperAdmin) { %>
-            <a class="nav-item nav-link" href="/system/pending">Pending Proposals</a>
-            <a class="nav-item nav-link" href="/system/users">Users</a>
-            <a class="nav-item nav-link" href="/faqs">FAQs</a>
-            <%  } %>
-            <!-- Only in desktop nav -->
-            <div class="nav-item dropdown d-none d-sm-block">
-              <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Proposals</a>
-              <div class="dropdown-menu account-menu" aria-labelledby="header-account-menu-link">
-                <a class="dropdown-item" href="/forms">My Proposals</a>
-                <a class="dropdown-item" href="/form">New Proposal</a>
-              </div>
-            </div>
-            <div class="nav-item dropdown d-none d-sm-block">
-              <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
-              <div class="dropdown-menu account-menu" aria-labelledby="header-account-menu-link">
-                <a class="dropdown-item" href="/account">Settings</a>
-                <a class="dropdown-item" href="/logout">Logout</a>
-              </div>
-            </div>
+            <!-- ****************************** LOGGED IN ****************************** -->
+            <!-- ****************************** SUPER ADMIN ONLY ****************************** -->
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-item nav-link" href="/system/pending">Pending Proposals</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-item nav-link" href="/system/users">Users</a>
+                </li>
+            <%}%> <!-- ****************************** SUPER ADMIN ONLY END****************************** -->
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="header-account-menu-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Proposals
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="header-account-menu-link">
+                    <a class="dropdown-item" href="/forms">My Proposals</a>
+                    <a class="dropdown-item" href="/form">New Proposal</a>
+                  </div>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" id="header-account-menu-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Account
+                  </a>
+                    <div class="dropdown-menu" aria-labelledby="header-account-menu-link">
+                      <a class="dropdown-item" href="/account">Settings</a>
+                      <a class="dropdown-item" href="/logout">Logout</a>
+                    </div>
+                </li>
+              </ul> <!-- ****************************** LOGGED IN END ****************************** -->
+
             <!-- Only in mobile nav -->
-            <a class="nav-item nav-link d-block d-sm-none" href="/account">Account Settings</a>
-            <a class="nav-item nav-link d-block d-sm-none" href="/logout">Logout</a>
-            <% } else { %>
-            <!-- LOGGED-OUT NAVIGATION -->
-            <a class="nav-item nav-link" href="https://github.com/the-bitcoin-cash-fund">Github</a>
-            <a class="nav-item nav-link" href="/chat">Chat</a>
-            <a class="nav-item nav-link" href="/faq">FAQ</a>
-            <!-- <a class="nav-item nav-link ml-sm-2 mr-sm-1" href="/login">Log in</a> -->
-            <!-- Only in desktop nav -->
-            <div class="form-inline ml-2 d-none d-sm-block" >
-              <!-- <a class="btn btn-outline-info" href="/signup">Sign up</a> -->
-            </div>
-            <!-- Only in mobile nav -->
-            <!-- <a class="nav-item nav-link d-block d-sm-none" href="/signup">Sign up</a> -->
-            <% } %>
-          </div>
+<!--        <a class="nav-item nav-link d-block d-sm-none" href="/account">Account Settings</a>
+            <a class="nav-item nav-link d-block d-sm-none" href="/logout">Logout</a> -->
+
+          <%} else {%> <!-- ****************************** LOGGED OUT ****************************** -->
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-item nav-link" href="https://github.com/the-bitcoin-cash-fund">Github</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-item nav-link" href="/chat">Chat</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-item nav-link" href="/faq">FAQ</a>
+              </li>
+            </ul>
+          <%}%> <!-- ****************************** LOGGED OUT END ****************************** -->
         </div>
-      </header>
+      </header> <!-- ****************************** END NAVBAR ****************************** -->
 
       <!-- Alert if email has not been confirmed -->
       <% if(typeof me !== 'undefined' && me.emailChangeCandidate) { %>
@@ -117,17 +128,18 @@
 
       <%- body %>
 
-      <!-- <footer id="page-footer" class="navbar navbar-light justify-content-between">
+<!--       <footer id="page-footer" class="navbar navbar-light justify-content-between">
         <small>Copyright &copy; The Bitcoin Cash Fund . All rights reserved.</small>
         <div class="nav">
           <small class="nav-item"><a class="nav-link text-muted" href="/contact">Contact us</a></small>
           <small class="nav-item"><a class="nav-link text-muted" href="/legal/terms">Terms of Use</a></small>
           <small class="nav-item"><a class="nav-link text-muted" href="/legal/privacy">Privacy policy</a></small>
-          <% if(typeof me !== 'undefined' && me) { %>
-          <small class="nav-item"><a class="nav-link text-muted" href="/logout">Sign out</a></small>
-          <% } %>
-        </div>
+ -->          <% //if(typeof me !== 'undefined' && me) { %>
+          <!-- <small class="nav-item"><a class="nav-link text-muted" href="/logout">Sign out</a></small> -->
+          <% //} %>
+       <!--  </div>
       </footer> -->
+
     </div>
 
 
