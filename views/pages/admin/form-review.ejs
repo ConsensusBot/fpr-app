@@ -9,81 +9,66 @@
         <div class="form-group row">
           <div class="col">
             <label for="projectName">Project Name</label>
-            <p class="text-muted" v-if="!syncing.projectName">Insert a project name here. Make sure it is unique and easy to refer to.</p>
-             <p class="text-muted" v-if="syncing.projectName">... Saving ...</p>
-           <input v-model.lazy="formObject.projectName" type="text" class="form-control" placeholder="Project Name" @change="syncRemote('projectName',formObject,oldFormObject)">
+            <p class="text-muted">Insert a project name here. Make sure it is unique and easy to refer to.</p>
+           <input v-model="formObject.projectName" type="text" class="form-control" placeholder="Project Name" @change="syncRemote('projectName',formObject,oldFormObject)">
           </div>
           <div class="col">
             <label for="startDate">Start Date</label>
-            <p class="text-muted" v-if="!syncing.startDate">Insert the date that the github repo and gitter room was created.</p>
-            <p class="text-muted" v-if="syncing.startDate">... Saving ...</p>
-            <input v-model.lazy="formObject.startDate" type="text" class="form-control" placeholder="DD/MM/YYYY" title="DD/MM/YYYY" @change="syncRemote('startDate',formObject,oldFormObject)">
+            <p class="text-muted">Insert the date that the github repo and gitter room was created.</p>
+            <input v-model="formObject.startDate" type="text" class="form-control" placeholder="DD/MM/YYYY" title="DD/MM/YYYY" @change="syncRemote('startDate',formObject,oldFormObject)">
           </div>
-        </div><!-- END OF FIRST ROW -->
+        </div><!-- END OF 1st ROW -->
 
         <div class="form-group row">
           <div class="col">
             <label for="hashtag">Hashtag</label>
-            <p class="text-muted" v-if="!syncing.hashtag">Insert a project hashtag that can used on social media to discuss the project.</p>
-            <p class="text-muted" v-if="syncing.hashtag">... Saving ...</p>
-            <input v-model.lazy="formObject.hashtag" type="text" class="form-control" placeholder="#Dingdong" @change="syncRemote('hashtag',formObject,oldFormObject)">
+            <p class="text-muted">Insert a project hashtag that can used on social media to discuss the project.</p>
+            <input v-model="formObject.hashtag" type="text" class="form-control" placeholder="#Dingdong" @change="syncRemote('hashtag',formObject,oldFormObject)">
           </div>
-          <!-- <div class="col">
-            <label for="bcfName">Name of BCF Gitter community room</label>
-            <p class="text-muted">Insert the name of the specific BCF Gitter community room created for the project.</p>
-            <input v-model.lazy="formObject.bcfName" type="text" class="form-control">
-          </div> -->
-        </div><!-- END OF SECOND ROW -->
+        </div><!-- END OF 2nd ROW -->
 
         <hr>
 
         <div class="form-group">
           <label for="stakeholders">Stakeholders</label>
-          <p class="text-muted" v-if="!syncing.stakeholders">Insert the list of people initially involved in the project. Pseudonymous identities can be used also.</p>
-          <p class="text-muted" v-if="syncing.stakeholders">... Saving ...</p>
-          <textarea class="form-control" v-model.lazy="formObject.stakeholders" @change="syncRemote('stakeholders',formObject,oldFormObject)" rows="3"> {{ formObject.stakeholders }} </textarea>
-        </div><!-- END THIRD ROW -->
+          <p class="text-muted">Insert the list of people initially involved in the project. Pseudonymous identities can be used also.</p>
+          <textarea class="form-control" v-model="formObject.stakeholders" @change="syncRemote('stakeholders',formObject,oldFormObject)" rows="3"> {{ formObject.stakeholders }} </textarea>
+        </div><!-- END 3rd ROW -->
 
         <div class="form-group">
           <label for="projectSummary">Project Summary</label>
-          <p class="text-muted" v-if="!syncing.projectSummary">Insert a short summary (a paragraph or two) of the project.</p>
-          <p class="text-muted" v-if="syncing.projectSummary">... Saving ...</p>
-          <textarea class="form-control" v-model.lazy="formObject.projectSummary" @change="syncRemote('projectSummary',formObject,oldFormObject)" rows="8"> {{ formObject.projectSummary }} </textarea>
-        </div><!-- END FOURTH ROW -->
+          <p class="text-muted">Insert a short summary (a paragraph or two) of the project.</p>
+          <textarea class="form-control" v-model="formObject.projectSummary" @change="syncRemote('projectSummary',formObject,oldFormObject)" rows="8"> {{ formObject.projectSummary }} </textarea>
+        </div><!-- END 4th ROW -->
 
         <div class="form-row">
           <label for="resources">Resources</label>
-          <p class="text-muted" v-if="!syncing.resources">Insert a list of resources required including; skills, manpower, knowledge, services, materials, connections.</p>
-          <p class="text-muted" v-if="syncing.resources">... Saving ...</p>
-          <textarea class="form-control" v-model.lazy="formObject.resources" @change="syncRemote('resources',formObject,oldFormObject)" rows="8"> {{ formObject.resources }} </textarea>
-        </div><!-- END FIFTH ROW -->
+          <p class="text-muted">Insert a list of resources required including; skills, manpower, knowledge, services, materials, connections.</p>
+          <textarea class="form-control" v-model="formObject.resources" @change="syncRemote('resources',formObject,oldFormObject)" rows="8"> {{ formObject.resources }} </textarea>
+        </div><!-- END 5th ROW -->
 
         <div class="form-row">
           <label for="budget">Budget</label>
-          <p class="text-muted" v-if="!syncing.budget">Insert an itemised list of the what must be paid for in the budget, a rough schedule when the funding is needed, and a total of the required funding.</p>
-          <p class="text-muted" v-if="syncing.budget">... Saving ...</p>
-          <textarea class="form-control" v-model.lazy="formObject.budget" @change="syncRemote('budget',formObject,oldFormObject)" rows="8"> {{ formObject.budget }} </textarea>
+          <p class="text-muted">Insert an itemised list of the what must be paid for in the budget, a rough schedule when the funding is needed, and a total of the required funding.</p>
+          <textarea class="form-control" v-model="formObject.budget" @change="syncRemote('budget',formObject,oldFormObject)" rows="8"> {{ formObject.budget }} </textarea>
         </div><!-- END 6th ROW -->
 
         <div class="form-group">
           <label for="timeline">Timeline</label>
-          <p class="text-muted" v-if="!syncing.timeline">Insert a project timeline here what will be happening when.</p>
-          <p class="text-muted" v-if="syncing.timeline">... Saving ...</p>
-          <textarea class="form-control" v-model.lazy="formObject.timeline" @change="syncRemote('timeline',formObject,oldFormObject)" rows="6"> {{ formObject.timeline }} </textarea>
+          <p class="text-muted">Insert a project timeline here what will be happening when.</p>
+          <textarea class="form-control" v-model="formObject.timeline" @change="syncRemote('timeline',formObject,oldFormObject)" rows="6"> {{ formObject.timeline }} </textarea>
         </div><!-- END 7th ROW -->
 
         <div class="form-group">
           <label for="goals">Goals</label>
-          <p class="text-muted" v-if="!syncing.goals">Insert a list of clearly defined goals including: - who you want to reach, - how many people you want to reach, - where are the people you want to reach, - why you want to reach them.</p>
-          <p class="text-muted" v-if="syncing.goals">... Saving ...</p>
-          <textarea class="form-control" v-model.lazy="formObject.goals" @change="syncRemote('goals',formObject,oldFormObject)" rows="8"> {{ formObject.goals }} </textarea>
+          <p class="text-muted">Insert a list of clearly defined goals including: - who you want to reach, - how many people you want to reach, - where are the people you want to reach, - why you want to reach them.</p>
+          <textarea class="form-control" v-model="formObject.goals" @change="syncRemote('goals',formObject,oldFormObject)" rows="8"> {{ formObject.goals }} </textarea>
         </div><!-- END 8th ROW -->
 
         <div class="form-group">
           <label for="other">Other</label>
-          <p class="text-muted" v-if="!syncing.other">Insert any other information that should be known about the project.</p>
-          <p class="text-muted" v-if="syncing.other">... Saving ...</p>
-          <textarea class="form-control" v-model.lazy="formObject.other" @change="syncRemote('other',formObject,oldFormObject)" rows="6"> {{ formObject.other }} </textarea>
+          <p class="text-muted">Insert any other information that should be known about the project.</p>
+          <textarea class="form-control" v-model="formObject.other" @change="syncRemote('other',formObject,oldFormObject)" rows="6"> {{ formObject.other }} </textarea>
         </div><!-- END 8th ROW -->
 
         <div class="form-group">
@@ -91,7 +76,7 @@
           <p class="text-muted" v-if="submitMessage">{{ submitMessage }}</p>
           <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</p>
 
-          <button 
+          <button
             class="btn btn-primary"
             type="button"
             v-if="formObject.status === 'pending' && !syncing.status"
@@ -100,7 +85,7 @@
 
           <!-- TODO: Delete functionality -->
 
-          <button 
+          <button
             class="btn btn-primary"
             type="button"
             v-if="formObject.status === 'pending' && !syncing.status"
