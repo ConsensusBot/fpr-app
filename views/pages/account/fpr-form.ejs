@@ -1,34 +1,50 @@
 
 <div id="form" v-cloak>
 
-  <h1 v-if="hidden">
-  <img :src="me.githubUserData.avatar_url" width="100" height="100">{{ me.fullName }}</h1>
+  <div v-if="hidden" class="row mb-4 justify-content-center">
+    <div class="col-md-2">
+      <img :src="me.githubUserData.avatar_url" width="100" height="100">
+    </div>
 
-  <h3 v-html="submitMessage"></h3>
-
-  <br>
-
-  <div class="form-group">
-
-    <input type="hidden" name="status" v-model="formObject.status">
-    <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</p>
-
-    <button
-      class="btn btn-primary"
-      type="button"
-      v-if="formObject.status === 'pending' && !syncing.status && hidden"
-      v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
-    </button>
-
+    <div class="col-md-6 align-self-center">
+      <h1>{{ me.fullName }}</h1>
+    </div>
   </div>
+
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8 offset-md-2">
+      <p class="text-secondary font-weight-light" v-html="submitMessage"></p>
+    </div>
+  </div>
+
+
+  <div class="row justify-content-center">
+    <div class="offset-md-2 col-md-8">
+      <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</button>
+
+      <button
+        class="btn btn-primary"
+        type="button"
+        v-if="formObject.status === 'pending' && !syncing.status && hidden"
+        v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
+      </button>
+    </div>
+  </div>
+
 
   <div v-bind:hidden="hidden">
 
-    <h1><img :src="me.githubUserData.avatar_url" width="100" height="100">BCF Funding Proposal Request Form</h1>
-    <hr>
-
     <div class="container">
       <div class="form-width-smaller">
+        <div class="row">
+          <div class="col-md-auto">
+            <img :src="me.githubUserData.avatar_url" width="100" height="100">
+          </div>
+          <div class="col-md-auto align-self-center">
+            <h1 class="mb-0">BCF Funding Proposal Request Form</h1>
+          </div>
+        </div>
+        <hr>
         <div id="form-messages"></div>
         <form id="ajax-form">
           <div class="form-group row">
