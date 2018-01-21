@@ -51,16 +51,21 @@
             <div class="col">
               <label for="projectName">Project Name</label>
               <p class="text-muted" v-if="!syncing.projectName">Insert a project name here. Make sure it is unique and easy to refer to.</p>
-<!--                <p class="text-muted" v-if="syncing.projectName">... Saving ...</p>
- -->
-              <input v-model="formObject.projectName" type="text" class="form-control" placeholder="Project Name" @change="syncRemote('projectName',formObject,oldFormObject)">
             </div>
-
             <div class="col">
               <label for="startDate">Start Date</label>
               <p class="text-muted" v-if="!syncing.startDate">Insert the date that the github repo and gitter room was created.</p>
-<!--               <p class="text-muted" v-if="syncing.startDate">... Saving ...</p>
- -->
+            </div>
+          </div>
+
+          <div class="form-group row align-self-end">
+
+            <div class="col">
+              <input v-model="formObject.projectName" type="text" class="form-control" placeholder="Project Name" @change="syncRemote('projectName',formObject,oldFormObject)">
+            </div>
+
+
+            <div class="col">
                <input v-model="formObject.startDate" type="text" class="form-control" placeholder="DD/MM/YYYY" title="DD/MM/YYYY" @change="syncRemote('startDate',formObject,oldFormObject)">
             </div>
           </div><!-- END OF FIRST ROW -->
