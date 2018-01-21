@@ -6,6 +6,7 @@
     <div class="row mb-3">
       <div class="col-sm-12">
         <h4>Saved Drafts</h4>
+        <h4>{{ forms.listed }}</h4>
       </div>
       <div class="col-sm-12">
         <p v-if="!(forms.draft&&forms.draft.length)"><a href="/form">Start a new proposal</p>
@@ -28,7 +29,7 @@
         </ul>
       </div>
     </div>
-    <div class="row mb-3">
+    <div v-if="forms.listed" class="row mb-3">
       <div class="col-sm-12">
         <h4>Listed Proposals</h4>
       </div>
