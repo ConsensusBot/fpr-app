@@ -1,33 +1,34 @@
 
 <div id="form" v-cloak>
+  <div class="container">
+    <div v-if="hidden" class="row mb-4 justify-content-center">
+      <div class="col-md-2 ">
+        <img class="m-0" :src="me.githubUserData.avatar_url" width="100" height="100">
+      </div>
 
-  <div v-if="hidden" class="row mb-4 justify-content-center">
-    <div class="col-md-2">
-      <img :src="me.githubUserData.avatar_url" width="100" height="100">
+      <div class="col-md-6 align-self-center">
+        <h1>{{ me.fullName }}</h1>
+      </div>
     </div>
 
-    <div class="col-md-6 align-self-center">
-      <h1>{{ me.fullName }}</h1>
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-8 offset-md-2">
+        <p class="text-secondary font-weight-light" v-html="submitMessage"></p>
+      </div>
     </div>
-  </div>
-
-  <div class="row justify-content-center mb-4">
-    <div class="col-md-8 offset-md-2">
-      <p class="text-secondary font-weight-light" v-html="submitMessage"></p>
-    </div>
-  </div>
 
 
-  <div class="row justify-content-center">
-    <div class="offset-md-2 col-md-8">
-      <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</button>
+    <div class="row justify-content-center">
+      <div class="offset-md-2 col-md-8">
+        <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</button>
 
-      <button
-        class="btn btn-primary"
-        type="button"
-        v-if="formObject.status === 'pending' && !syncing.status && hidden"
-        v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
-      </button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          v-if="formObject.status === 'pending' && !syncing.status && hidden"
+          v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
+        </button>
+      </div>
     </div>
   </div>
 
