@@ -46,13 +46,13 @@ module.exports = {
     }//•
 
     // Get the user with the matching email token.
-    var user = await User.findOne({ emailProofToken: inputs.token });
+    var user = await User.findOne({ emailProofToken: inputs.token }).decrypt();
 
     // If no such user exists, or their token is expired, bail.
     if (!user || parseInt(user.emailProofTokenExpiresAt) <= Date.now()) { return exits.invalidOrExpiredToken(); }
 
     // Last line of defense -- make sure no one else has this email (this should never happen).
-    if (await User.findOne({ emailAddress: user.emailChangeCandidate })) {
+    if (await User.findOne({ emailAddress: user.emailChangeCandidate }).decrypt()) {
       return exits.alreadyInUse();
     }
 

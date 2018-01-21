@@ -22,9 +22,10 @@ module.exports = {
     tokenValue: {
       type: 'string',
       required: true,
-      description: 'Token value'
+      description: 'Token value',
+      encrypt: true
     },
-    // Expiration date of token.  If not 
+    // Expiration date of token.  If not
     // specified, force it to expire in 3 days
     tokenExpires: {
       type: 'ref',

@@ -52,7 +52,7 @@ module.exports = {
     // --•
 
     // Find the record for this user.
-    var userRecord = await User.findOne({ emailAddress: inputs.emailAddress });
+    var userRecord = await User.findOne({ emailAddress: inputs.emailAddress }).decrypt();
     if (!userRecord) {
       // Pretend it worked.
       return exits.success();

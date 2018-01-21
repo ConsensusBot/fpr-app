@@ -158,12 +158,12 @@ var githubHook = function(sails) {
       // Grab the FPR being changed, the user making the change, and the user
       // who originally submitted the FPR.  If that user isn't also the one
       // making the change then an admin must be doing it and we'll cite them.
-      var ownerOptions = await User.findOne({ id: ownerQuery.id }).populate('githubOauthToken');
+      var ownerOptions = await User.findOne({ id: ownerQuery.id }).decrypt().populate('githubOauthToken');
       var fprObject = await FundingProposal.findOne({ id: fprQuery.id });
 
       var userChangedByOptions;
       if (userChangedByQuery && userChangedByQuery.id) {
-        userChangedByOptions = await User.findOne({ id: userChangedByQuery.id });
+        userChangedByOptions = await User.findOne({ id: userChangedByQuery.id }).decrypt();
       }
 
       // If `userChangedByQuery` wasn't included, we'll assume the user making
@@ -238,7 +238,7 @@ var githubHook = function(sails) {
     },
     submitUserFPR: async function(userQuery, fprQuery) {
 
-      var userOptions = await User.findOne({ id: userQuery.id }).populate('githubOauthToken');
+      var userOptions = await User.findOne({ id: userQuery.id }).decrypt().populate('githubOauthToken');
       var fprObject = await FundingProposal.findOne({ id: fprQuery.id });
 
       // Turn the fprId into a 4 digit string representing a number
@@ -697,7 +697,7 @@ var githubHook = function(sails) {
               // Do we already have a user?
               var user = await User.findOne({
                 githubLogin: githubUser.data && githubUser.data.login
-              }).populate('githubOauthToken');
+              }).decrypt().populate('githubOauthToken');
 
               // If there is no user in the database associated
               // with this Github login, create one along with a new

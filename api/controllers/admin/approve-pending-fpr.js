@@ -64,7 +64,7 @@ module.exports = {
     // Now Grab the users and populate their Github token
     var approvedUser = await User.findOne({
       id: formObject.user
-    }).populate('githubOauthToken');
+    }).decrypt().populate('githubOauthToken');
 
     // Pass the `FormProposal` object to the Github hook where
     // it will parse it and upload it to the official BCF Github repo

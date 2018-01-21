@@ -33,7 +33,7 @@ var botHook = function(sails) {
 
         // Check for existing tokens in the database before we fetch new ones
 
-        var gitterOauthToken = await Token.findOne({ serviceName: 'gitter' });
+        var gitterOauthToken = await Token.findOne({ serviceName: 'gitter' }).decrypt();
 
         if (gitterOauthToken && gitterOauthToken.tokenExpires > new Date() ) {
           console.log('We have a token',gitterOauthToken);
@@ -247,11 +247,11 @@ var botHook = function(sails) {
 
               // Update the Oauth token in the database
               // then have the Gitter Bot connect!
-              var token = await Token.findOne({ serviceName: 'gitter' })
+              var token = await Token.findOne({ serviceName: 'gitter' }).decrypt();
 
               if (!token) {
                 console.log('since no token, making one:');
-                token = await Token.create({ serviceName: 'gitter', tokenValue: body&&body.access_token, tokenExpires: new Date(new Date().getTime()+1000*3600*24*3) }).fetch();
+                token = await Token.create({ serviceName: 'gitter', tokenValue: body&&body.access_token, tokenExpires: new Date(new Date().getTime()+1000*3600*24*3) }).decrypt().fetch();
               }
 
               console.log('We have a token for sure.  Connecting to Gitter:',token);
@@ -280,7 +280,7 @@ var botHook = function(sails) {
     },
     sendMessage: async function(options){
 
-      var oauthToken = await Token.findOne({ serviceName: 'gitter' });
+      var oauthToken = await Token.findOne({ serviceName: 'gitter' }).decrypt();
 
       var messageInfo = {
         url: 'https://api.gitter.im/v1/rooms/'+options.roomId+'/chatMessages',
@@ -303,7 +303,7 @@ var botHook = function(sails) {
     },
     connectGitter: async function() {
 
-      var oauthToken = await Token.findOne({ serviceName: 'gitter' });
+      var oauthToken = await Token.findOne({ serviceName: 'gitter' }).decrypt();
 
       console.log('Gitter bot signing in with token',oauthToken);
 

@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-migrate:'alter',
+  migrate: 'alter',
 
   attributes: {
 
@@ -18,6 +18,7 @@ migrate:'alter',
       type: 'string',
       // required: true,
       // unique: true,
+      encrypt: true,
       isEmail: true,
       maxLength: 200
       // e.g. "carol.reyna@microsoft.com"
@@ -35,7 +36,7 @@ migrate:'alter',
       // required: true,
       description: 'Full representation of the user\'s name',
       maxLength: 120
-     // e.g. 'Microwave Jenny',
+      // e.g. 'Microwave Jenny',
     },
 
     isSuperAdmin: {
@@ -131,8 +132,6 @@ migrate:'alter',
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
     // n/a
-
-
   },
 
 

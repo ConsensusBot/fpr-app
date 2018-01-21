@@ -78,7 +78,7 @@ and exposed as \`req.me\`.)`
     // (note that we lowercase it, so the lookup is somewhat case-insensitive)
     var userRecord = await User.findOne({
       emailAddress: inputs.emailAddress.toLowerCase(),
-    });
+    }).decrypt();
 
     // If there was no user, exit thru "badCombo".
     if(!userRecord) {
