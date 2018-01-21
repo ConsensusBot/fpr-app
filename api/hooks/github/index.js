@@ -435,26 +435,48 @@ var githubHook = function(sails) {
       // Using the client representing the master administrative Github
       // account, automatically merge the users pull request.
 
-      var masterMergeResults;
+      var tryMerge = async function() {
+        var masterMergeResults;
 
-      var prObjectToMerge = {
-        owner: sails.config.github.githubAdminAccount,
-        repo: 'FPR',
-        number: userPullRequestResults.data.number,
-        commit_title: userPullRequestResults.data.title,
-        merge_method: 'merge'
+        var mergePrData = {
+          owner: sails.config.github.githubAdminAccount,
+          repo: 'FPR',
+          number: userPullRequestResults.data.number,
+          commit_title: userPullRequestResults.data.title,
+          merge_method: 'merge'
+        };
+
+        try {
+          masterMergeResults = await sails.hooks.github.masterClient.pullRequests.merge(mergePrData);
+          masterMergeResults = masterMergeResults.data || {};
+          console.log('Tried to merge:',mergePrData);
+          console.log('Resulted in:',masterMergeResults);
+
+          if (masterMergeResults.merged === true) {
+            return true;
+          }
+
+        }
+        catch (someError) {
+          console.log('There was an error',someError);
+
+          return false
+
+        }
+
       };
 
-      console.log('Trying to merge pr:',prObjectToMerge);
+      var isMergedYet = false;
 
-      try {
-        masterMergeResults = await sails.hooks.github.masterClient.pullRequests.merge(prObjectToMerge);
-        masterMergeResults = masterMergeResults.data;
+      for (let i = 4; i > 0; i--) {
+
+        if (!isMergedYet) {
+          await delay(3000);
+          isMergedYet = await tryMerge();
+        }
+        
       }
-      catch (someError) {
-        console.log('There was an error',someError);
-        // throw (someError);
-      }
+
 
       // Finally, delete the user's fork of the FPR repo since they
       // won't be needing it anymore.  Future updates will only happen
