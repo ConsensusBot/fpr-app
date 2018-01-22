@@ -36,15 +36,15 @@ parasails.registerPage('form', {
       goals: 'Goals'
     },
     formTrueOrFalse: {
-      projectName: undefined,
-      startDate: undefined,
-      hashtag: undefined,
-      stakeholders: undefined,
-      projectSummary: undefined,
-      resources: undefined,
-      budget: undefined,
-      timeline: undefined,
-      goals: undefined
+      projectName: '',
+      startDate: '',
+      hashtag: '',
+      stakeholders: '',
+      projectSummary: '',
+      resources: '',
+      budget: '',
+      timeline: '',
+      goals: ''
       }
 
   },
