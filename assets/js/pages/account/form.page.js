@@ -35,6 +35,17 @@ parasails.registerPage('form', {
       timeline: 'Timeline',
       goals: 'Goals'
     },
+    formTrueOrFalse: {
+      projectName: undefined,
+      startDate: undefined,
+      hashtag: undefined,
+      stakeholders: undefined,
+      projectSummary: undefined,
+      resources: undefined,
+      budget: undefined,
+      timeline: undefined,
+      goals: undefined
+      }
 
   },
 
@@ -81,8 +92,13 @@ parasails.registerPage('form', {
 
         for (var i = 3; i < 12; i++) { //check only the fields we're looking for (so between 3 and 11),
           lookupString = arr[i];
-          if (this.formObject[lookupString] === '') { //find the unfilled bits and put them into var unfilled
+          if (!this.formObject[lookupString]) { //find the unfilled bits and put them into var unfilled
             unfilled.push(lookupString);
+            this.formTrueOrFalse[lookupString] = 'is-invalid';
+          }
+
+          if (this.formObject[lookupString]) {
+            this.formTrueOrFalse[lookupString] = 'is-valid';
           }
         }
 
@@ -95,7 +111,8 @@ parasails.registerPage('form', {
           var addFirstArr = [];
 
           for (var i = 0; i < unfilled.length; i++) {
-            addFirstArr.push(this.formFriendlyNames[unfilled[i]]); //think i need to first put each property into an array then convert it into it's friendly name
+            addFirstArr.push(this.formFriendlyNames[unfilled[i]]);
+
           }
 
           var addFirstStr = addFirstArr.join('</span>, <span class="text-danger">');
@@ -176,8 +193,14 @@ parasails.registerPage('form', {
       }
     },
 
-    syncRemote: async function(attributeName, newFormObject, oldFormObject) {
+    syncRemote: async function(attributeName, newFormObject, oldFormObject, formTrueOrFalse) {
       console.log(attributeName,'has changed from', oldFormObject[attributeName], 'to', newFormObject[attributeName]);
+
+      if (this.formObject[attributeName]) {
+        this.formTrueOrFalse[attributeName] = 'is-valid';
+      } else if (!this.formObject[attributeName]) {
+        this.formTrueOrFalse[attributeName] = 'is-invalid';
+      }
 
       var changes = {
         id: this.oldFormObject.id
