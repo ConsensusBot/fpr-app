@@ -117,10 +117,10 @@ parasails.registerPage('form', {
 
           var addFirstStr = addFirstArr.join('</span>, <span class="text-danger">');
 
-          this.filledOrNot = 'You must fill in the following text-boxes before the form can be submitted: <span class="text-danger">' + addFirstStr + '</span> and ' + '<span class="text-danger">' + this.formFriendlyNames[addLast] + '</span>.';
+          this.filledOrNot = 'You must fill in the following fields before the form can be submitted: <span class="text-danger">' + addFirstStr + '</span> and ' + '<span class="text-danger">' + this.formFriendlyNames[addLast] + '</span>.';
 
         } else if (unfilled.length === 1){ //check how many fields are unfilled and put them into a message for the user
-          this.filledOrNot = 'You must fill in the <span class="text-danger">' + this.formFriendlyNames[unfilled] + '</span> text-box before the form can be submitted';
+          this.filledOrNot = 'You must fill in the <span class="text-danger">' + this.formFriendlyNames[unfilled] + '</span> field before the form can be submitted';
 
         }
 
