@@ -123,27 +123,32 @@
              <textarea class="form-control" v-model="formObject.other" @change="syncRemote('other',formObject,oldFormObject)" rows="6"> {{ formObject.other }} </textarea>
           </div><!-- END 9th ROW -->
 
-           <div class="form-group">
-            <input type="hidden" name="status" v-model="formObject.status">
-            <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</button>
+          <div class="row">
+            <div class="col-4">
+              <input type="hidden" name="status" v-model="formObject.status">
+              <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</button>
+
+              <button
+                class="btn btn-primary"
+                type="button"
+                v-if="formObject.status === 'draft' && !syncing.status"
+                v-on:click="toggleSubmission('pending')">Submit proposal for review
+              </button>
+
+              <button
+                class="btn btn-primary"
+                type="button"
+                v-if="formObject.status === 'pending' && !syncing.status"
+                v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
+              </button>
+            </div>
+             <div class="col-8">
+              <p class="text-muted" v-if="!filledStatus" v-html="filledOrNot"></p>
+              <!-- <p class="text-secondary"
+                put the vue thing for innerhtml here to print the form names in a red format to stand out>{{formFriendlyNames.projectName}}</p> -->
+              <!-- <p>{{formObject}}</p> -->
+            </div>
           </div>
-
-          <button
-            class="btn btn-primary"
-            type="button"
-            v-if="formObject.status === 'draft' && !syncing.status"
-            v-on:click="toggleSubmission('pending')">Submit proposal for review
-          </button>
-
-          <button
-            class="btn btn-primary"
-            type="button"
-            v-if="formObject.status === 'pending' && !syncing.status"
-            v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
-          </button>
-
-          <br>
-          <p class="text-muted" v-if="!filledStatus">{{ filledOrNot }}</p>
 
         </form>
       </div>
