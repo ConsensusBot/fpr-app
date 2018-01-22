@@ -25,15 +25,15 @@ parasails.registerPage('form', {
     filledStatus: undefined,
 
     formFriendlyNames: {
-      projectName: '<span class="text-danger">Project Name</span>',
-      startDate: '<span class="text-danger">Start Date</span>',
-      hashtag: '<span class="text-danger">Hashtag</span>',
-      stakeholders: '<span class="text-danger">Stake Holders</span>',
-      projectSummary: '<span class="text-danger">Project Summery</span>',
-      resources: '<span class="text-danger">Resources</span>',
-      budget: '<span class="text-danger">Budget</span>',
-      timeline: '<span class="text-danger">Timeline</span>',
-      goals: '<span class="text-danger">Goals</span>'
+      projectName: 'Project Name',
+      startDate: 'Start Date',
+      hashtag: 'Hashtag',
+      stakeholders: 'Stakeholders',
+      projectSummary: 'Project Summery',
+      resources: 'Resources',
+      budget: 'Budget',
+      timeline: 'Timeline',
+      goals: 'Goals'
     },
 
   },
@@ -98,12 +98,12 @@ parasails.registerPage('form', {
             addFirstArr.push(this.formFriendlyNames[unfilled[i]]); //think i need to first put each property into an array then convert it into it's friendly name
           }
 
-          var addFirstStr = addFirstArr.join(', ');
+          var addFirstStr = addFirstArr.join('</span>, <span class="text-danger">');
 
-          this.filledOrNot = 'You must fill in ' + addFirstStr + ' and ' + this.formFriendlyNames[addLast] + ' before the form can be submitted.';
+          this.filledOrNot = 'You must fill in the following text-boxes before the form can be submitted: <span class="text-danger">' + addFirstStr + '</span> and ' + '<span class="text-danger">' + this.formFriendlyNames[addLast] + '</span>.';
 
         } else if (unfilled.length === 1){ //check how many fields are unfilled and put them into a message for the user
-          this.filledOrNot = 'You must fill in ' + unfilled + ' before the form can be submitted';
+          this.filledOrNot = 'You must fill in the <span class="text-danger">' + this.formFriendlyNames[unfilled] + '</span> text-box before the form can be submitted';
 
         }
 
