@@ -88,12 +88,14 @@ parasails.registerPage('form', {
 
         if (unfilled.length > 1) {
 
+          console.log(unfilled);
+
           var addLast = unfilled.pop();
 
           var addFirstArr = [];
 
           for (var i = 0; i < unfilled.length; i++) {
-            addFirstArr.push(this.formFriendlyNames[unfilled.shift()]);
+            addFirstArr.push(this.formFriendlyNames[unfilled[i]]); //think i need to first put each property into an array then convert it into it's friendly name
           }
 
           var addFirstStr = addFirstArr.join(', ');
