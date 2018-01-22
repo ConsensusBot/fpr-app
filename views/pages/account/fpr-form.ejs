@@ -1,7 +1,9 @@
 
 <div id="form" v-cloak>
-  <div class="container">
-    <div v-if="hidden" class="row mb-4 justify-content-center">
+
+
+  <div v-if="hidden" class="container">
+    <div class="row mb-4 justify-content-center">
       <div class="col-md-2 ">
         <img class="m-0" :src="me.githubUserData.avatar_url" width="100" height="100">
       </div>
@@ -128,7 +130,7 @@
           </div><!-- END 9th ROW -->
 
           <div class="row">
-            <div class="col-4">
+            <div class="col-4 form-group">
               <input type="hidden" name="status" v-model="formObject.status">
               <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</button>
 
@@ -146,7 +148,7 @@
                 v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
               </button>
             </div>
-             <div class="col-8">
+             <div class="col-md-8">
               <p class="text-muted" v-if="!filledStatus" v-html="filledOrNot"></p>
             </div>
           </div>
