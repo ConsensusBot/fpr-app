@@ -57,7 +57,6 @@ parasails.registerPage('form', {
 
   beforeMount: function (){
     _.extend(this, window.SAILS_LOCALS);
-    delete this.formObject.chatName;
   },
   mounted: function(){
     this.oldFormObject = _.clone(this.formObject);
@@ -70,7 +69,7 @@ parasails.registerPage('form', {
 
     toggleSubmission: async function(newValue) {
 
-
+      delete this.formObject.chatName;
 
       if (this.formObject.projectName && this.formObject.startDate && this.formObject.hashtag && this.formObject.stakeholders && this.formObject.projectSummary && this.formObject.resources && this.formObject.budget && this.formObject.timeline && this.formObject.goals) {
         // console.log('filled in!');
@@ -155,9 +154,9 @@ parasails.registerPage('form', {
 
         this.hidden = true;
         this.submitMessage = 'Thank you for submitting your proposal to the Bitcoin Cash Fund. We aim to provide a response within 48 hours. You can track your proposal here... <br><br> <a href="https://github.com/The-Bitcoin-Cash-Fund/FPR/pulls">https://github.com/The-Bitcoin-Cash-Fund/FPR/pulls</a><br><br>In the meantime, join us in our live chat at <a href="https://chat.thebitcoincash.fund">https://chat.thebitcoincash.fund</a> to discuss your project and all things Bitcoin Cash.<br><br>See you in there!';
-        await parasails.require('pause')(12000);
-        this.submitMessage = '';
-        this.hidden = false;
+        // await parasails.require('pause')(12000);
+        // this.submitMessage = '';
+        // this.hidden = false;
 
       } else if (this.formObject.status === 'pending')  {
 
