@@ -47,8 +47,6 @@ parasails.registerPage('form', {
 
     toggleSubmission: async function(newValue) {
 
-
-
       if (this.formObject.projectName && this.formObject.startDate && this.formObject.hashtag && this.formObject.stakeholders && this.formObject.projectSummary && this.formObject.resources && this.formObject.budget && this.formObject.timeline && this.formObject.goals) {
         // console.log('filled in!');
         this.filledStatus = true;
@@ -58,9 +56,40 @@ parasails.registerPage('form', {
       }
 
 
+
+
+
+
       if (this.formObject.status === 'draft' && (!this.filledStatus)) {
         console.log('the form may NOT be submitted');
-        this.filledOrNot = 'You must fill all required sections of the form to submit';
+
+
+        var arr = Object.keys(this.formObject); //store names of formObject
+
+        var lookupString = '';
+
+        var unfilled = [];
+
+        for (var i = 3; i < 12; i++) { //check only the fields we're looking for (so between 3 and 11),
+          lookupString = arr[i];
+          if (this.formObject[lookupString] === '') { //find the unfilled bits and put them into var unfilled
+            unfilled.push(lookupString);
+          }
+        }
+
+        if (unfilled.length > 1) {
+
+          var addLast = unfilled.pop();
+
+          var addFirst = unfilled.join(', ');
+
+          this.filledOrNot = 'You must fill in ' + addFirst + ' and ' + addLast + ' before the form can be submitted';
+
+        } else if (unfilled.length === 1){ //check how many fields are unfilled and put them into a message for the user
+          this.filledOrNot = 'You must fill in ' + unfilled + ' before the form can be submitted';
+
+        }
+
       } else if (this.formObject.status === 'draft' && (this.filledStatus)) {
         console.log('it is filled');
 
