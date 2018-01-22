@@ -269,7 +269,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
 
-    onlyAllowOrigins: ['https://gitter-gimp.herokuapp.com', 'http://gitter-gimp.herokuapp.com', 'http://localhost:1337'],
+    onlyAllowOrigins: ['https://fpr-app.herokuapp.com', 'http://fpr-app.herokuapp.com', 'http://localhost:1337'],
     // adapter: 'socket.io-redis',
     // url: process.env.REDISTOGO_URL
 

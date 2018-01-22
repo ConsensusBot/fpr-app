@@ -1,4 +1,4 @@
-# gitter-gimp
+# fpr-app
 
 A web application built to serve the needs of The Bitcoin Cash Fund and it's community
 
@@ -28,7 +28,7 @@ A web application built to serve the needs of The Bitcoin Cash Fund and it's com
 ### Running the App
 1. Must be running npm and at least version 8 of node.js
 2. Clone the project locally
-3. `CD` into gitter-gimp and install it's dependencies using `npm install`
+3. `CD` into fpr-app and install it's dependencies using `npm install`
 4. Start the app with `sails lift`
 5. Navigate to `http://localhost:1337/form`
 

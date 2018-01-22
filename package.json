@@ -1,5 +1,5 @@
 {
-  "name": "gitter-gimp",
+  "name": "fpr-app",
   "private": true,
   "version": "0.0.1",
   "description": "A chat bot for the Bitcoin Cash Fund Gitter Community",
@@ -51,7 +51,7 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ConsensusBot/gitter-gimp"
+    "url": "https://github.com/ConsensusBot/fpr-app"
   },
   "author": "alwaysAn0n",
   "license": "",
