@@ -132,14 +132,14 @@
             class="btn btn-primary"
             type="button"
             v-if="formObject.status === 'draft' && !syncing.status"
-            v-on:click="toggleSubmission('pending')">Submit proposal for review
+            v-on:click="formChecker('pending')">Submit proposal for review
           </button>
 
           <button
             class="btn btn-primary"
             type="button"
             v-if="formObject.status === 'pending' && !syncing.status"
-            v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
+            v-on:click="formChecker('draft')">Withdraw proposal from review pool
           </button>
 
           <br>
