@@ -1,25 +1,29 @@
 
 <div id="form" v-cloak>
-  <div class="container">
-    <div v-if="hidden" class="row mb-4 justify-content-center">
-      <div class="col-md-2 ">
-        <img class="m-0" :src="me.githubUserData.avatar_url" width="100" height="100">
-      </div>
 
-      <div class="col-md-6 align-self-center">
+
+  <div v-if="hidden" class="container">
+    <div class="row mb-4 justify-content-center">
+
+        <img class="m-0" :src="me.githubUserData.avatar_url" width="100" height="100">
+
+    </div>
+    <div class="row mb-4 justify-content-center">
+
         <h1>{{ me.fullName }}</h1>
-      </div>
     </div>
 
+
+
     <div class="row justify-content-center mb-4">
-      <div class="col-md-8 offset-md-2">
-        <p class="text-secondary font-weight-light" v-html="submitMessage"></p>
+      <div class="col-md-6">
+        <p class="text-secondary text-center font-weight-light" v-html="submitMessage"></p>
       </div>
     </div>
 
 
     <div class="row justify-content-center">
-      <div class="offset-md-2 col-md-8">
+
         <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</button>
 
         <button
@@ -28,7 +32,7 @@
           v-if="formObject.status === 'pending' && !syncing.status && hidden"
           v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
         </button>
-      </div>
+
     </div>
   </div>
 
@@ -48,7 +52,7 @@
         <hr>
         <div id="form-messages"></div>
         <form id="ajax-form">
-          <div class="form-group row">
+          <div class="row">
             <div class="col">
               <label for="projectName">Project Name</label>
               <p class="text-muted">Insert a project name here. Make sure it is unique and easy to refer to.</p>
@@ -59,23 +63,25 @@
             </div>
           </div>
 
-          <div class="form-group row align-self-end">
+          <div class="row align-self-end form-group">
 
-            <div class="col">
-              <input v-model="formObject.projectName" type="text" class="form-control" placeholder="Project Name" @change="syncRemote('projectName',formObject,oldFormObject)">
+            <div class="col-6">
+              <input :class="formTrueOrFalse.projectName" v-model="formObject.projectName" type="text" class="form-control" placeholder="Project Name" @change="syncRemote('projectName',formObject,oldFormObject)">
             </div>
 
 
-            <div class="col">
-               <input v-model="formObject.startDate" type="text" class="form-control" placeholder="DD/MM/YYYY" title="DD/MM/YYYY" @change="syncRemote('startDate',formObject,oldFormObject)">
+            <div class="col-6">
+              <input :class="formTrueOrFalse.startDate" v-model="formObject.startDate" type="text" class="form-control" placeholder="DD/MM/YYYY" title="DD/MM/YYYY" @change="syncRemote('startDate',formObject,oldFormObject)">
             </div>
-          </div><!-- END 1st ROW -->
+          </div>
+          <!-- END 1st ROW -->
+
 
           <div class="form-group row">
             <div class="col">
               <label for="hashtag">Hashtag</label>
               <p class="text-muted">Insert a project hashtag that can used on social media to discuss the project.</p>
-               <input v-model="formObject.hashtag" type="text" class="form-control" placeholder="#Dingdong" @change="syncRemote('hashtag',formObject,oldFormObject)">
+              <input :class="formTrueOrFalse.hashtag" v-model="formObject.hashtag" type="text" class="form-control" placeholder="#Dingdong" @change="syncRemote('hashtag',formObject,oldFormObject)">
             </div>
           </div><!-- END 2nd ROW -->
 
@@ -84,60 +90,71 @@
           <div class="form-group">
             <label for="stakeholders">Stakeholders</label>
             <p class="text-muted">Insert the list of people initially involved in the project. Pseudonymous identities can be used also.</p>
-             <textarea class="form-control" v-model="formObject.stakeholders" @change="syncRemote('stakeholders',formObject,oldFormObject)" rows="3"> {{ formObject.stakeholders }} </textarea>
+            <textarea :class="formTrueOrFalse.stakeholders" class="form-control" v-model="formObject.stakeholders" @change="syncRemote('stakeholders',formObject,oldFormObject)" rows="3"> {{ formObject.stakeholders }} </textarea>
           </div><!-- END 3rd ROW -->
 
           <div class="form-group">
             <label for="projectSummary">Project Summary</label>
             <p class="text-muted">Insert a short summary (a paragraph or two) of the project.</p>
-             <textarea class="form-control" v-model="formObject.projectSummary" @change="syncRemote('projectSummary',formObject,oldFormObject)" rows="8"> {{ formObject.projectSummary }} </textarea>
+             <textarea :class="formTrueOrFalse.projectSummary" class="form-control" v-model="formObject.projectSummary" @change="syncRemote('projectSummary',formObject,oldFormObject)" rows="8"> {{ formObject.projectSummary }} </textarea>
+
           </div><!-- END 4th ROW -->
 
-          <div class="form-row">
+          <div class="form-group">
             <label for="resources">Resources</label>
             <p class="text-muted">Insert a list of resources required including; skills, manpower, knowledge, services, materials, connections.</p>
-             <textarea class="form-control" v-model="formObject.resources" @change="syncRemote('resources',formObject,oldFormObject)" rows="8"> {{ formObject.resources }} </textarea>
+            <textarea :class="formTrueOrFalse.resources" class="form-control" v-model="formObject.resources" @change="syncRemote('resources',formObject,oldFormObject)" rows="8"> {{ formObject.resources }} </textarea>
           </div><!-- END 5th ROW -->
 
-          <div class="form-row">
+          <div class="form-group">
             <label for="budget">Budget</label>
             <p class="text-muted">Insert an itemised list of the what must be paid for in the budget, a rough schedule when the funding is needed, and a total of the required funding.</p>
-             <textarea class="form-control" v-model="formObject.budget" @change="syncRemote('budget',formObject,oldFormObject)" rows="8"> {{ formObject.budget }} </textarea>
+            <textarea :class="formTrueOrFalse.budget" class="form-control" v-model="formObject.budget" @change="syncRemote('budget',formObject,oldFormObject)" rows="8"> {{ formObject.budget }} </textarea>
           </div><!-- END 6th ROW -->
 
           <div class="form-group">
             <label for="timeline">Timeline</label>
             <p class="text-muted">Insert a project timeline here what will be happening when.</p>
-             <textarea class="form-control" v-model="formObject.timeline" @change="syncRemote('timeline',formObject,oldFormObject)" rows="6"> {{ formObject.timeline }} </textarea>
+             <textarea :class="formTrueOrFalse.timeline" class="form-control" v-model="formObject.timeline" @change="syncRemote('timeline',formObject,oldFormObject)" rows="6"> {{ formObject.timeline }} </textarea>
           </div><!-- END 7th ROW -->
 
           <div class="form-group">
             <label for="goals">Goals</label>
             <p class="text-muted">Insert a list of clearly defined goals including: - who you want to reach, - how many people you want to reach, - where are the people you want to reach, - why you want to reach them.</p>
-             <textarea class="form-control" v-model="formObject.goals" @change="syncRemote('goals',formObject,oldFormObject)" rows="8"> {{ formObject.goals }} </textarea>
+            <textarea :class="formTrueOrFalse.goals" class="form-control" v-model="formObject.goals" @change="syncRemote('goals',formObject,oldFormObject)" rows="8"> {{ formObject.goals }} </textarea>
           </div><!-- END 8th ROW -->
 
           <div class="form-group">
             <label for="other">Other</label>
             <p class="text-muted">Insert any other information that should be known about the project.</p>
              <textarea class="form-control" v-model="formObject.other" @change="syncRemote('other',formObject,oldFormObject)" rows="6"> {{ formObject.other }} </textarea>
+
           </div><!-- END 9th ROW -->
 
-          <div class="form-group">
-            <input type="hidden" name="status" v-model="formObject.status">
-            <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</button>
+          <div class="row">
+            <div class="col-4 form-group">
+              <input type="hidden" name="status" v-model="formObject.status">
+              <button class="btn btn-primary" type="button" v-if="syncing.status">... Saving ...</button>
+
+              <button
+                class="btn btn-primary"
+                type="button"
+                v-if="formObject.status === 'draft' && !syncing.status"
+                v-on:click="toggleSubmission('pending')">Submit proposal for review
+              </button>
+
+              <button
+                class="btn btn-primary"
+                type="button"
+                v-if="formObject.status === 'pending' && !syncing.status"
+                v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
+              </button>
+            </div>
+             <div class="col-md-8">
+              <p class="text-muted" v-if="!filledStatus" v-html="filledOrNot"></p>
+            </div>
           </div>
 
-          <button
-            class="btn btn-primary"
-            type="button"
-            v-if="formObject.status === 'draft' && !syncing.status"
-            v-on:click="toggleSubmission('pending')">Submit proposal for review
-          </button>
-
-<!--           instead i could make a button that is greyed out with the message all fields must be filled to submit
-          which is then replaced by the submit button once all fields are filled
- -->
           <button
             class="btn btn-primary"
             type="button"
