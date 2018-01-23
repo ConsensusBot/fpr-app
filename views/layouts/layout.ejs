@@ -38,7 +38,10 @@
     -->
 
     <!--STYLES-->
-    <link rel="stylesheet" href="/min/production.min.css">
+    <link rel="stylesheet" href="/dependencies/bootstrap-4/bootstrap-grid.css">
+    <link rel="stylesheet" href="/dependencies/bootstrap-4/bootstrap-reboot.css">
+    <link rel="stylesheet" href="/dependencies/bootstrap-4/bootstrap.css">
+    <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
   </head>
 
@@ -55,12 +58,11 @@
         </button> <!---NAV COLLAPSE BUTTON END-->
 
         <div class="collapse navbar-collapse flex-row-reverse" navbar-menu>
-
+          <ul class="navbar-nav">
           <% if(typeof me !== 'undefined' && me) { %>
             <%  if(me && me.isSuperAdmin) { %>
             <!-- ****************************** LOGGED IN ****************************** -->
             <!-- ****************************** SUPER ADMIN ONLY ****************************** -->
-              <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="header-account-menu-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Admin
@@ -170,7 +172,40 @@
     <script src="https://checkout.stripe.com/checkout.js"></script>
 
     <!--SCRIPTS-->
-    <script src="/min/production.min.js"></script>
+    <script src="/dependencies/sails.io.js"></script>
+    <script src="/dependencies/lodash.js"></script>
+    <script src="/dependencies/jquery.min.js"></script>
+    <script src="/dependencies/vue.js"></script>
+    <script src="/dependencies/bootstrap-4/popper.js"></script>
+    <script src="/dependencies/bootstrap-4/bootstrap.js"></script>
+    <script src="/dependencies/cloud.js"></script>
+    <script src="/dependencies/parasails.js"></script>
+    <script src="/js/cloud.setup.js"></script>
+    <script src="/js/components/ajax-button.component.js"></script>
+    <script src="/js/components/ajax-form.component.js"></script>
+    <script src="/js/utilities/is-valid-email-address.js"></script>
+    <script src="/js/utilities/pause.js"></script>
+    <script src="/js/pages/498.page.js"></script>
+    <script src="/js/pages/account/account-overview.page.js"></script>
+    <script src="/js/pages/account/all-forms.page.js"></script>
+    <script src="/js/pages/account/change-password.page.js"></script>
+    <script src="/js/pages/account/edit-profile.page.js"></script>
+    <script src="/js/pages/account/form.page.js"></script>
+    <script src="/js/pages/admin/form.review.js"></script>
+    <script src="/js/pages/admin/pending-fpr-forms.js"></script>
+    <script src="/js/pages/admin/system-settings.page.js"></script>
+    <script src="/js/pages/contact.page.js"></script>
+    <script src="/js/pages/dashboard/welcome.page.js"></script>
+    <script src="/js/pages/entrance/confirmed-email.page.js"></script>
+    <script src="/js/pages/entrance/forgot-password.page.js"></script>
+    <script src="/js/pages/entrance/login.page.js"></script>
+    <script src="/js/pages/entrance/new-password.page.js"></script>
+    <script src="/js/pages/entrance/signup.page.js"></script>
+    <script src="/js/pages/faq.page.js"></script>
+    <script src="/js/pages/github/install.page.js"></script>
+    <script src="/js/pages/homepage.page.js"></script>
+    <script src="/js/pages/legal/privacy.page.js"></script>
+    <script src="/js/pages/legal/terms.page.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>
