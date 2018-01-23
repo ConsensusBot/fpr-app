@@ -22,7 +22,7 @@ var jwt = require('jsonwebtoken');
 var githubHook = function(sails) {
 
   // TODO: remove this and all it's dependencies
-  // 
+  //
   // var token = jwt.sign({
   //   iat: require('moment')().unix(),
   //   exp: require('moment')().unix()+60*9,
@@ -65,7 +65,7 @@ var githubHook = function(sails) {
         **Budget:**
         <%= budget %>
 
-        **Timeline:** 
+        **Timeline:**
         <%= timeline %>
 
         **Goals:**
@@ -76,7 +76,7 @@ var githubHook = function(sails) {
       `;
 
       // Remove leading whitespace at the beginning of each line,
-      // escape characters that might break during templating, 
+      // escape characters that might break during templating,
       // then inject the formObject variables into the template.
       proposalMarkdown = _.map(proposalMarkdown.split('\n'), _.trim).join('\n');
       proposalMarkdown = _.escape(_.template(proposalMarkdown)(fprObject));
@@ -91,12 +91,12 @@ var githubHook = function(sails) {
 
               Status - Partially Accepted - Changes required
 
-        - [ ] **1. Has the FPR been submitted correctly?**  
+        - [ ] **1. Has the FPR been submitted correctly?**
         ⋅⋅⋅- [ ] A. Correctly titled?
         ⋅⋅⋅- [ ] B. Used the full FPR template?
         ⋅⋅⋅- [ ] C. Pull request correctly made to the BCF FPR repo?
-          
-        - [ ] **2. Have all sections of the template been completed?**  
+
+        - [ ] **2. Have all sections of the template been completed?**
         ⋅⋅⋅- [ ] A. Project Name
         ⋅⋅⋅- [ ] B. Start Date
         ⋅⋅⋅- [ ] C. Hashtag
@@ -108,45 +108,45 @@ var githubHook = function(sails) {
         ⋅⋅⋅- [ ] I. Timeline
         ⋅⋅⋅- [ ] J. Goals
         ⋅⋅⋅- [ ] K. Other
-          
+
         - [ ] **3. Is it well formatted for legibility?**
 
         - [ ] **4. Does the project have a non-profit purpose?**
-          
+
         - [ ] **5. Has it been completed with enough detail for the scale of the project?**
 
         - [ ] **6. Is the team trustworthy enough for the funding requirement?**
 
-        - [ ] **7. Are the objectives S.M.A.R.T?**  
+        - [ ] **7. Are the objectives S.M.A.R.T?**
         ⋅⋅⋅- [ ] A. Specific
         ⋅⋅⋅- [ ] B. Measurable
         ⋅⋅⋅- [ ] C. Agreed Upon
         ⋅⋅⋅- [ ] D. Realistic
-        ⋅⋅⋅- [ ] E. Time-bound 
+        ⋅⋅⋅- [ ] E. Time-bound
 
         - [ ] **8. Are the stakeholders realistically providing volunteered time?**
-          
+
         - [ ] **9. Is the cost vs impact satisfactory?**
-          
+
         Cost = TODO
 
         Impact
 
         - TODO
-          
-        - [ ] **10. Has the FPR been accepted or denied?**  
+
+        - [ ] **10. Has the FPR been accepted or denied?**
         ⋅⋅⋅- [ ] Accepted.
         ⋅⋅⋅- [ ] Accepted with Comments.
-        ⋅⋅⋅- [ ] Partially Accepted - See Comments. 
-        ⋅⋅⋅- [ ] Denied - See Comments.  
+        ⋅⋅⋅- [ ] Partially Accepted - See Comments.
+        ⋅⋅⋅- [ ] Denied - See Comments.
         ⋅⋅⋅- [ ] Denied.
-          
-        **11. Comments and, if denied, reasons for denial.**  
+
+        **11. Comments and, if denied, reasons for denial.**
         ⋅⋅⋅- TODO
       `;
 
       // Remove leading whitespace at the beginning of each line,
-      // escape characters that might break during templating, 
+      // escape characters that might break during templating,
       // then inject the formObject variables into the template.
       evaluationMarkdown = _.map(evaluationMarkdown.split('\n'), _.trim).join('\n').replace(/⋅⋅⋅/ig,'   ');
       evaluationMarkdown = _.escape(_.template(evaluationMarkdown)(evalOptions));
@@ -298,9 +298,9 @@ var githubHook = function(sails) {
         console.log('There was an error',someError);
         throw (someError);
       }
-      
+
       // Since the repo form is asyncronous, enter a loop
-      // that keeps us from proceeding until the repo 
+      // that keeps us from proceeding until the repo
       // shows up on the user's account.
       var delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -450,7 +450,7 @@ var githubHook = function(sails) {
 
       // Finally, delete the user's fork of the FPR repo since they
       // won't be needing it anymore.  Future updates will only happen
-      // through the web app and they will be done for the user by the 
+      // through the web app and they will be done for the user by the
       // FSR repo's administrative client.
       var repoDeletionResults;
       try {
@@ -605,17 +605,17 @@ var githubHook = function(sails) {
     // This is where the node-github instance representing the client
     // for the administrative Github account lives.  This account houses
     // the master repo containing all the FPRs approved for listing.
-    // 
-    // It is populated using the `initialize` function that runs after 
+    //
+    // It is populated using the `initialize` function that runs after
     // the app has successfully lifted.
     masterClient: undefined,
 
-    // Github Authentication Steps 
-    // 
+    // Github Authentication Steps
+    //
     // 1. User lands on home page and "logs in with Github"
     // 2. User approves the app for the requested permissions then is redirected to `/git/oauth/authorized` along with an oauth CODE
     // 3. We hit `https://github.com/login/oauth/access_token` and get the user's code which can be traded for an oauth token.
-    // 4. We use the oauth code to fetch oauth token.  
+    // 4. We use the oauth code to fetch oauth token.
     // 5. We use the oauth token to request the users email address and Github account info.
     // 6. At this point, if the user doesn't have an account with us, we create one, save his oauth token, then redirect him to the homepage. If they do have an account, we update the oauth token then redirect them to the homepage
 
@@ -631,17 +631,24 @@ var githubHook = function(sails) {
             return res.sendStatus(200);
           }
         },
+
         '/git/login': {
           skipAssets: true,
           fn: async function(req, res, next){
             console.log('Step 1: User initiates app authorization!');
 
-            return res.view('pages/github/login', {
-              beginInstallLink: 'http://github.com/login/oauth/authorize?scope=user,repo,delete_repo&client_id='+sails.config.github.oauth.clientId+'&redirect_uri='+sails.config.github.oauth.redirectUrl
-            });
 
+            // res.view('pages/github/login', {
+            //   beginInstallLink: 'http://github.com/login/oauth/authorize?scope=user,repo,delete_repo&client_id='+sails.config.github.oauth.clientId+'&redirect_uri='+sails.config.github.oauth.redirectUrl
+            // });
+
+
+            // return res.view( 'layouts/layout', {
+            //   loginLink: 'http://github.com/login/oauth/authorize?scope=user,repo,delete_repo&client_id='+sails.config.github.oauth.clientId+'&redirect_uri='+sails.config.github.oauth.redirectUrl
+            // });
           }
         },
+
         '/git/oauth/authorized': {
           skipAssets: true,
           fn: function(req, res, next){
@@ -681,8 +688,8 @@ var githubHook = function(sails) {
               });
 
               // Step 4: Using access token to get Github User info!
-              // 
-              // Get the user's Github information so we can 
+              //
+              // Get the user's Github information so we can
               // bootstrap their profile with it
               var githubUser = await client.users.get({}) || {};
               var githubUserEmails = await client.users.getEmails({}) || {};

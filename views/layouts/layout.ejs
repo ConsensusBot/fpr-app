@@ -77,7 +77,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="header-account-menu-link">
                     <a class="dropdown-item" href="/forms">My Proposals</a>
-                    <a class="dropdown-item" href="/form">New Proposal</a>
+                    <a class="dropdown-item" href="/forms">My Proposals</a>
                   </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -106,10 +106,15 @@
               <li class="nav-item">
                 <a class="nav-item nav-link" href="/faq">FAQ</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-item nav-link" href="#">{{loginLink}}</a>
+              </li>
             </ul>
           <%}%> <!-- ****************************** LOGGED OUT END ****************************** -->
         </div>
       </header> <!-- ****************************** END NAVBAR ****************************** -->
+
+      <%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
 
       <!-- Alert if email has not been confirmed -->
       <% if(typeof me !== 'undefined' && me.emailChangeCandidate) { %>
@@ -124,9 +129,11 @@
         Your email address still needs verification. Your account access may be limited until you click the link sent to <strong><%= me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress%></strong>.
         </div>
       </div>
+
+
       <% } %>
 
-      <%- body %>
+      <%- body%>
 
 <!--       <footer id="page-footer" class="navbar navbar-light justify-content-between">
         <small>Copyright &copy; The Bitcoin Cash Fund . All rights reserved.</small>
@@ -204,6 +211,7 @@
     <script src="/js/pages/homepage.page.js"></script>
     <script src="/js/pages/legal/privacy.page.js"></script>
     <script src="/js/pages/legal/terms.page.js"></script>
+    <script src="/js/pages/page-wrap.page.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>
