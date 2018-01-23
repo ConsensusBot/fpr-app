@@ -135,6 +135,9 @@
             v-on:click="toggleSubmission('pending')">Submit proposal for review
           </button>
 
+<!--           instead i could make a button that is greyed out with the message all fields must be filled to submit
+          which is then replaced by the submit button once all fields are filled
+ -->
           <button
             class="btn btn-primary"
             type="button"
@@ -142,8 +145,8 @@
             v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
           </button>
 
-
-          <p class="text-muted" v-if="submitMessage">{{ submitMessage }}</p>
+          <br>
+          <p class="text-muted" v-if="!filledStatus">{{ filledOrNot }}</p>
 
         </form>
       </div>
