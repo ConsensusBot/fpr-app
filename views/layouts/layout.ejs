@@ -61,22 +61,26 @@
             <!-- ****************************** LOGGED IN ****************************** -->
             <!-- ****************************** SUPER ADMIN ONLY ****************************** -->
               <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-item nav-link" href="/system/pending">Pending Proposals</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-item nav-link" href="/system/users">Users</a>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="header-account-menu-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Admin
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="header-account-menu-link">
+                    <a class="dropdown-item" href="/system/pending">Pending Proposals</a>
+                    <a class="dropdown-item" href="/system/users">Users</a>
+                  </div>
                 </li>
             <%}%> <!-- ****************************** SUPER ADMIN ONLY END****************************** -->
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="header-account-menu-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Proposals
+                    User
                   </a>
                   <div class="dropdown-menu" aria-labelledby="header-account-menu-link">
                     <a class="dropdown-item" href="/forms">My Proposals</a>
                     <a class="dropdown-item" href="/form">New Proposal</a>
                   </div>
                 </li>
+
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" id="header-account-menu-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Account
@@ -87,7 +91,6 @@
                     </div>
                 </li>
               </ul> <!-- ****************************** LOGGED IN END ****************************** -->
-
             <!-- Only in mobile nav -->
 <!--        <a class="nav-item nav-link d-block d-sm-none" href="/account">Account Settings</a>
             <a class="nav-item nav-link d-block d-sm-none" href="/logout">Logout</a> -->
