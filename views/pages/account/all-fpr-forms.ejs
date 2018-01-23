@@ -1,23 +1,32 @@
 <div id="all-fpr-forms" v-cloak>
-  <div class="container">
+
+  <div class="container mt-5" v-if="!(forms.draft || forms.pending || forms.listed)">
+    <div class="row">
+      <div class="col-md-12 mt-5">
+        <h2 class="text-center"><a href="/form">Start Your Funding Application!</a></h2>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="forms.draft || forms.pending || forms.listed" class="container">
     <h1>Funding Proposal Requests</h1>
     <br>
     <hr>
     <div class="row mb-3">
       <div class="col-sm-12">
         <h4>Saved Drafts</h4>
-        <h4>{{ forms.listed }}</h4>
       </div>
       <div class="col-sm-12">
         <p v-if="!(forms.draft&&forms.draft.length)"><a href="/form">Start a new proposal</p>
         <ul v-if="forms.draft&&forms.draft.length">
           <li v-for="item in forms.draft">
-            <a v-bind:href="'/form/'+item.id">{{ item.projectName }}</a>
+             <a v-if="item.projectName" v-bind:href="'/form/'+item.id">{{ item.projectName }}</a>
+             <a v-else v-bind:href="'/form/'+item.id">Draft Proposal {{ item.id }}</a>
           </li>
         </ul>
       </div>
     </div>
-    <div class="row mb-3">
+    <div v-if="forms.pending" class="row mb-3">
       <div class="col-sm-12">
         <h4>Pending Approval</h4>
       </div>

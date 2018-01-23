@@ -155,6 +155,16 @@
             </div>
           </div>
 
+          <button
+            class="btn btn-primary"
+            type="button"
+            v-if="formObject.status === 'pending' && !syncing.status"
+            v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
+          </button>
+
+          <br>
+          <p class="text-muted" v-if="!filledStatus">{{ filledOrNot }}</p>
+
         </form>
       </div>
     </div>

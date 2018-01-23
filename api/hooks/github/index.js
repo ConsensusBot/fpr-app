@@ -299,7 +299,7 @@ var githubHook = function(sails) {
         throw (someError);
       }
       
-      // Since the repo form is asyncronous, enter a loop
+      // Since the repo fork is asyncronous, enter a loop
       // that keeps us from proceeding until the repo 
       // shows up on the user's account.
       var delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -364,16 +364,20 @@ var githubHook = function(sails) {
       // Submit a pull request to the master repo on behalf of the user.
       var userPullRequestResults;
 
+      var pullRequestObject = {
+        owner: sails.config.github.githubAdminAccount,
+        repo: 'FPR',
+        title: 'Listing FPR-'+fprObject.fprId+': '+fprObject.chatName,
+        head: userOptions.githubLogin+':master',
+        base: 'master',
+        // body: '',
+        maintainer_can_modify: true
+      };
+
+      console.log('submitting PR:',pullRequestObject);
+
       try {
-        userPullRequestResults = await client.pullRequests.create({
-          owner: sails.config.github.githubAdminAccount,
-          repo: 'FPR',
-          title: 'Listing FPR-'+fprObject.fprId+': '+fprObject.chatName,
-          head: userOptions.githubLogin+':master',
-          base: 'master',
-          // body: '',
-          maintainer_can_modify: true
-        });
+        userPullRequestResults = await client.pullRequests.create(pullRequestObject);
       }
       catch (someError) {
         console.log('There was an error',someError);
@@ -431,22 +435,48 @@ var githubHook = function(sails) {
       // Using the client representing the master administrative Github
       // account, automatically merge the users pull request.
 
-      var masterMergeResults;
+      var tryMerge = async function() {
+        var masterMergeResults;
 
-      try {
-        masterMergeResults = await sails.hooks.github.masterClient.pullRequests.merge({
+        var mergePrData = {
           owner: sails.config.github.githubAdminAccount,
           repo: 'FPR',
           number: userPullRequestResults.data.number,
           commit_title: userPullRequestResults.data.title,
           merge_method: 'merge'
-        });
-        masterMergeResults = masterMergeResults.data;
+        };
+
+        try {
+          masterMergeResults = await sails.hooks.github.masterClient.pullRequests.merge(mergePrData);
+          masterMergeResults = masterMergeResults.data || {};
+          console.log('Tried to merge:',mergePrData);
+          console.log('Resulted in:',masterMergeResults);
+
+          if (masterMergeResults.merged === true) {
+            return true;
+          }
+
+        }
+        catch (someError) {
+          console.log('There was an error',someError);
+
+          return false
+
+        }
+
+      };
+
+      var isMergedYet = false;
+
+      for (let i = 4; i > 0; i--) {
+
+        if (!isMergedYet) {
+          await delay(3000);
+          isMergedYet = await tryMerge();
+        }
+        
       }
-      catch (someError) {
-        console.log('There was an error',someError);
-        throw (someError);
-      }
+
 
       // Finally, delete the user's fork of the FPR repo since they
       // won't be needing it anymore.  Future updates will only happen
