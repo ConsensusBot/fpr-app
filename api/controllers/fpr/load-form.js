@@ -99,13 +99,14 @@ module.exports = {
     // If a form `id` wasn't included, fetch the first draft of theirs that
     // you can find with "Example Project" as the title.
     //
-    // NOTE. Sean's change: I've commented this out for now, is it needed? If the user doesn't choose a form then maybe better to just
-    // give them a blank template.
+    //
+    //TODO: form currently creates a new template on page reload.
+    //could put in here look for the form that was updatedAt last and reload that in....?
     //
     // if (!formToReturn) {
 
     //   formToReturn = await FundingProposal.findOne({
-    //     projectName: 'Example Project',
+    //     updatedAt: , <-----
     //     user: this.req.session.userId
     //   });
 

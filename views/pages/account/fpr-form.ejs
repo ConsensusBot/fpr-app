@@ -38,7 +38,8 @@
 
 
   <div v-bind:hidden="hidden">
-
+    <div>{{ oldFormObject }}</div>
+    <div>{{ formObject }}</div>
     <div class="container">
       <div class="form-width-smaller">
         <div class="row">
@@ -149,21 +150,12 @@
                 v-if="formObject.status === 'pending' && !syncing.status"
                 v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
               </button>
+
             </div>
              <div class="col-md-8">
               <p class="text-muted" v-if="!filledStatus" v-html="filledOrNot"></p>
             </div>
           </div>
-
-          <button
-            class="btn btn-primary"
-            type="button"
-            v-if="formObject.status === 'pending' && !syncing.status"
-            v-on:click="toggleSubmission('draft')">Withdraw proposal from review pool
-          </button>
-
-          <br>
-          <p class="text-muted" v-if="!filledStatus">{{ filledOrNot }}</p>
 
         </form>
       </div>

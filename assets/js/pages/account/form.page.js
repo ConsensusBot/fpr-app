@@ -70,6 +70,7 @@ parasails.registerPage('form', {
     toggleSubmission: async function(newValue) {
 
       delete this.formObject.chatName;
+      delete this.oldFormObject.chatName;
 
       if (this.formObject.projectName && this.formObject.startDate && this.formObject.hashtag && this.formObject.stakeholders && this.formObject.projectSummary && this.formObject.resources && this.formObject.budget && this.formObject.timeline && this.formObject.goals) {
         // console.log('filled in!');
