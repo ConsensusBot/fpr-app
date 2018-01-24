@@ -28,7 +28,7 @@
     "sails-hook-sockets": "^1.4.3",
     "sails-postgresql": "1.0.0-12",
     "sails-stdlib": "^0.11.0",
-    "socket.io-redis": "4.0.0"
+    "socket.io-redis": "^5.0.0"
   },
   "devDependencies": {
     "@sailshq/lodash": "^3.10.2",
