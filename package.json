@@ -1,7 +1,7 @@
 {
   "name": "fpr-app",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A chat bot for the Bitcoin Cash Fund Gitter Community",
   "keywords": [],
   "dependencies": {
