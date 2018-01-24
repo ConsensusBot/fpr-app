@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:400,400i,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,800" rel="stylesheet">
 
     <!-- Font Awesome -->
     <script src="https://use.fontawesome.com/96cbd61ead.js"></script>
@@ -48,9 +48,9 @@
   <body>
     <div id="page-wrap">
 
-
-    <header id="page-header" class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <a class="cashfund-brand navbar-brand text-secondary" href="#">The Bitcoin Cash Fund</a>
+    <header id="page-header" class="navbar navbar-expand-sm navbar-light bg-light">
+        <img src="/images/fund-logo.png">
+        <a class="cashfund-brand navbar-brand text-secondary" href="#">Bitcoin Cash Fund Builder</a>
 
         <!---NAV COLLAPSE BUTTON-->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="[navbar-menu]" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,10 +99,11 @@
           <%} else {%> <!-- ****************************** LOGGED OUT ****************************** -->
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-item nav-link" href="https://github.com/the-bitcoin-cash-fund">Github</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-item nav-link" href="/chat">Chat</a>
+                <% if(typeof beginInstallLink !== 'undefined') { %>
+                <a class="nav-item nav-link" href="<%= beginInstallLink %>">Login with Github</a>
+                <% } else { %>
+                <a class="nav-item nav-link" href="/git/login/#start">Login with Github</a>
+                <% } %>
               </li>
               <li class="nav-item">
                 <a class="nav-item nav-link" href="/faq">FAQ</a>
