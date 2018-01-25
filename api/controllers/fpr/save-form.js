@@ -75,7 +75,7 @@ module.exports = {
 
     // Fetch the existing FundingProposal to make sure the id provided is
     // valid and that it it belongs to the logged in user.
-    var formObject = await FundingProposal.findOne(findProposalQuery);
+    var formObject = await FundingProposal.find(findProposalQuery).limit(1);
 
     // If this fails, return an error alerting the user .
     if (!formObject) {
@@ -83,9 +83,9 @@ module.exports = {
       throw ('badProposalId');
     }
 
-    // Don't allow the user to change the 'status' to "listed". 
+    // Don't allow the user to change the 'status' to "listed".
     // Also don't let them change the 'id'. If the document has
-    // already been listed on Github, call the Github Hook to 
+    // already been listed on Github, call the Github Hook to
     // submit a PR for the change.
     if (inputs.status && inputs.status === 'listed' && formObject.status !== 'listed') {
       delete inputs.status;

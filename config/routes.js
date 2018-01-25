@@ -36,6 +36,8 @@ module.exports.routes = {
   // Show the FPR submission form
   'GET /form':               { action: 'fpr/load-form', skipAssets: true },
 
+  'GET /form/new':            { action: 'fpr/new-form', skipAssets: true },
+
   // Load an existing FPR form
   'GET /form/:formId':       { action: 'fpr/load-form', skipAssets: true },
 

@@ -93,48 +93,9 @@ module.exports = {
       if (!formToReturn) {
         throw('badId');
       }
-
     }
 
-    // If a form `id` wasn't included, fetch the first draft of theirs that
-    // you can find with "Example Project" as the title.
-    //
-    //
-    //TODO: form currently creates a new template on page reload.
-    //could put in here look for the form that was updatedAt last and reload that in....?
-    //
-    // if (!formToReturn) {
-
-    //   formToReturn = await FundingProposal.findOne({
-    //     updatedAt: , <-----
-    //     user: this.req.session.userId
-    //   });
-
-    // }
-
-    // Otherwise, create an example project for them and
-    // return it.
-    //
-    // NOTE. Sean's change: I've made these blank so that the placeholders will go in the boxes instead.
-    if (!formToReturn) {
-
-      formToReturn = await FundingProposal.create({
-        projectName: '',
-        startDate: '',
-        hashtag: '',
-        chatName: '',
-        stakeholders: '',
-        projectSummary: '',
-        resources: '',
-        budget: '',
-        timeline: '',
-        goals: '',
-        other: '',
-        status: 'draft',
-        user: this.req.session.userId
-      }).fetch();
-
-    }
+    formToReturn = await FundingProposal.find().sort('createdAt DESC').limit(1);
 
     this.res.view('pages/account/fpr-form', {
       formObject: formToReturn.length ? formToReturn[0] : formToReturn
