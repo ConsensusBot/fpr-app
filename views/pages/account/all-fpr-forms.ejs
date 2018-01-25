@@ -3,7 +3,7 @@
   <div class="container mt-5" v-if="!(forms.draft || forms.pending || forms.listed)">
     <div class="row">
       <div class="col-md-12 mt-5">
-        <h2 class="text-center"><a href="/form">Start Your Funding Application!</a></h2>
+        <h2 class="text-center"><a href="/form/new">Start Your Funding Application!</a></h2>
       </div>
     </div>
   </div>
@@ -16,7 +16,7 @@
         <h4>Saved Drafts</h4>
       </div>
       <div class="col-sm-12">
-        <p v-if="!(forms.draft&&forms.draft.length)"><a href="/form">Start a new proposal</p>
+        <p v-if="!(forms.draft&&forms.draft.length)"><a href="/form/new">Start a new proposal</p>
         <ul v-if="forms.draft&&forms.draft.length">
           <li v-for="item in forms.draft">
              <a v-if="item.projectName" v-bind:href="'/form/'+item.id">{{ item.projectName }}</a>
