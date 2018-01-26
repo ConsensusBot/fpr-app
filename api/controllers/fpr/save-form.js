@@ -59,6 +59,8 @@ module.exports = {
 
   fn: async function (inputs, exits)  {
 
+    console.log('saved! yay!')
+
     // Grab the user so we can check if they are an admin
     var user = await User.findOne(this.req.session.userId);
 
@@ -74,8 +76,8 @@ module.exports = {
     }
 
     // Fetch the existing FundingProposal to make sure the id provided is
-    // valid and that it it belongs to the logged in user.
-    var formObject = await FundingProposal.find(findProposalQuery).limit(1);
+    // valid and that it belongs to the logged in user.
+    var formObject = await FundingProposal.findOne(findProposalQuery);
 
     // If this fails, return an error alerting the user .
     if (!formObject) {

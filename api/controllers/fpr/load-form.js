@@ -94,8 +94,10 @@ module.exports = {
         throw('badId');
       }
     }
+    if (!formToReturn) {
+      formToReturn = await FundingProposal.find().sort('createdAt DESC').limit(1);
 
-    formToReturn = await FundingProposal.find().sort('createdAt DESC').limit(1);
+    }
 
     this.res.view('pages/account/fpr-form', {
       formObject: formToReturn.length ? formToReturn[0] : formToReturn
