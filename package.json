@@ -23,7 +23,6 @@
     "request": "2.83.0",
     "sails": "^1.0.0-45",
     "sails-hook-apianalytics": "^2.0.0",
-    "sails-hook-grunt": "^2.0.0",
     "sails-hook-orm": "^2.0.0-21",
     "sails-hook-sockets": "^1.4.3",
     "sails-postgresql": "1.0.0-12",
@@ -32,12 +31,12 @@
   },
   "devDependencies": {
     "@sailshq/lodash": "^3.10.2",
-    "mocha": "3.0.2",
     "debug": "3.1.0",
     "eslint": "4.11.0",
-    "htmlhint": "0.9.13",
     "grunt": "1.0.1",
-    "sails-hook-grunt": "^2.0.0"
+    "htmlhint": "0.9.13",
+    "mocha": "3.0.2",
+    "sails-hook-grunt": "^3.0.2"
   },
   "scripts": {
     "start": "./web",
