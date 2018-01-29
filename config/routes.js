@@ -63,6 +63,11 @@ module.exports.routes = {
   'GET /account/password':   { action: 'account/view-change-password' },
   'GET /account/profile':    { action: 'account/view-edit-profile' },
 
+  // Let's Encrypt SSL Cert
+  'GET /.well-known/acme-challenge/WL9oNwZ30BrZHREsspJhwIVgZ32yuc6m1r2-4A0cR8g': function(req, res) {
+    res.send(sails.config.custom.sslKey);
+  },
+
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝

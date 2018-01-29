@@ -24,6 +24,9 @@ module.exports.custom = {
   **************************************************************************/
   baseUrl: 'http://localhost:1337',
   defaultAdminPassword: process.env.ADMIN_PASS,
+  // SSL Key generated with Let's Encrypt (https://medium.com/@franxyzxyz/setting-up-free-https-with-heroku-ssl-and-lets-encrypt-80cf6eac108e)
+  sslKey: process.env.SSL_KEY || '',
+
   /**************************************************************************
   *                                                                         *
   * The TTL (time-to-live) for various sorts of tokens before they expire.  *
