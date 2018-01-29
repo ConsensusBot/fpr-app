@@ -13,16 +13,17 @@ module.exports = function(grunt) {
 
   grunt.config.set('uglify', {
     options: {
-      mangle: {
-        except: [
-          'AsyncFunction',
-          'SailsSocket',
-          'Promise',
-          'File',
-          'Location',
-          'RttcRefPlaceholder'
-        ]
-      }
+      mangle: false
+      // mangle: {
+      //   except: [
+      //     'AsyncFunction',
+      //     'SailsSocket',
+      //     'Promise',
+      //     'File',
+      //     'Location',
+      //     'RttcRefPlaceholder'
+      //   ]
+      // }
     },
     dist: {
       src: ['.tmp/public/concat/production.js'],
