@@ -12,11 +12,14 @@
     <h1>Funding Proposal Requests</h1>
     <hr>
     <div class="row mb-3">
-      <div class="col-sm-12" v-if="submissionWarning" class="submission-warning">
-        <p>
-          {{ submissionWarning }}
-        </p>
+
+    <div class="card border-danger mb-5" v-if="submissionWarning" style="max-width: 100rem;">
+      <h5 class="card-header">Warning</h5>
+      <div class="card-body text-danger">
+        <h5 class="card-title text-danger">Don't Lose Your Previous Application!</h5>
+        <p class="card-text" v-html="submissionWarning"></p>
       </div>
+    </div>
 
       <div class="col-sm-12">
         <h4>Saved Drafts</h4>

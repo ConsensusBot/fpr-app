@@ -67,7 +67,7 @@ module.exports = {
     var githubAccountIsDirty = await sails.hooks.github.checkForExistingRepoFork({ id: this.req.session.userId });
 
     return this.res.view('pages/account/all-fpr-forms', {
-      submissionWarning: githubAccountIsDirty ? 'Your Github account already has a fork of the `The-Bitcoin-Cash-Fund/FPR` repo.  Please backup that work immediately.  When your new project is listed by the admins, YOUR WORK IN THAT REPO WILL BE DELETED ON GITHUB!!' : undefined,
+      submissionWarning: githubAccountIsDirty ? 'Your Github account already has a fork of the <code>The-Bitcoin-Cash-Fund/FPR</code> repo.  Please backup that work immediately.  When your new project is listed by the admins, YOUR WORK IN THAT REPO WILL BE DELETED ON GITHUB!!' : undefined,
       forms: _.groupBy(userForms, 'status')
     });
   }

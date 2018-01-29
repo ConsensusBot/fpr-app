@@ -96,8 +96,8 @@ module.exports = {
 
     }
 
-    // If a form `id` wasn't included, fetch the first draft of theirs that 
-    // you can find with "Example Project" as the title.  
+    // If a form `id` wasn't included, fetch the first draft of theirs that
+    // you can find with "Example Project" as the title.
     if (!formToReturn) {
 
       formToReturn = await FundingProposal.findOne({
@@ -135,7 +135,7 @@ module.exports = {
 
     this.res.view('pages/account/fpr-form', {
       formObject: formToReturn.length ? formToReturn[0] : formToReturn,
-      submissionWarning: githubAccountIsDirty ? 'Your Github account already has a fork of the `The-Bitcoin-Cash-Fund/FPR` repo.  Please backup that work immediately.  When your new project is listed by the admins, YOUR WORK IN THAT REPO WILL BE DELETED ON GITHUB!!' : undefined
+      submissionWarning: githubAccountIsDirty ? 'Your Github account already has a fork of the <code>The-Bitcoin-Cash-Fund/FPR</code> repo.  Please backup that work immediately.  When your new project is listed by the admins, YOUR WORK IN THAT REPO WILL BE DELETED ON GITHUB!!' : undefined
     });
 
   }
