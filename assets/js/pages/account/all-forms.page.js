@@ -12,6 +12,7 @@ parasails.registerPage('all-fpr-forms', {
   data: {
     me: {},
     forms: {},
+    submissionWarning: '',
     formObject:   {
 
       projectName: '',

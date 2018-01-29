@@ -236,6 +236,39 @@ var githubHook = function(sails) {
       };
 
     },
+    checkForExistingRepoFork: async function(userOptions) {
+
+      var client, userRepos;
+
+      // Fetch an instance of the object with which we will
+      // interface with the Github API.
+      try {
+        client = await sails.hooks.github.buildClientFromUser({id: userOptions.id});
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
+
+      // Check and see if the user has already forked the FPR repo.
+      try {
+        userRepos = await client.repos.getAll({visibility:'public'});
+        userRepos = userRepos.data;
+      }
+      catch (someError) {
+        console.log('There was an error',someError);
+        throw (someError);
+      }
+
+      // If the user already has the FPR repo forked, return true
+      // Otherwise return false
+      if (_.find(userRepos, { name: 'FPR' })) {
+        return true
+      }
+      else {
+        return false;
+      }
+    },
     submitUserFPR: async function(userQuery, fprQuery) {
 
       var userOptions = await User.findOne({ id: userQuery.id }).populate('githubOauthToken');

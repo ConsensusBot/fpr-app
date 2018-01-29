@@ -17,6 +17,7 @@ parasails.registerPage('form', {
     oldFormObject: {
 
     },
+    submissionWarning: '',
     formObject:   {
 
     },
@@ -57,6 +58,7 @@ parasails.registerPage('form', {
 
   beforeMount: function (){
     _.extend(this, window.SAILS_LOCALS);
+    console.log('SAILS LOCALS:',window.SAILS_LOCALS);
   },
   mounted: function(){
     this.oldFormObject = _.clone(this.formObject);
@@ -117,10 +119,10 @@ parasails.registerPage('form', {
 
           var addFirstStr = addFirstArr.join('</span>, <span class="text-danger">');
 
-          this.filledOrNot = 'You must fill in the following fields before the form can be submitted: <span class="text-danger">' + addFirstStr + '</span> and ' + '<span class="text-danger">' + this.formFriendlyNames[addLast] + '</span>.';
+          this.filledOrNot = 'All your progress has been saved but you may not submit this FPR for review without the following fields: <span class="text-danger">' + addFirstStr + '</span> and ' + '<span class="text-danger">' + this.formFriendlyNames[addLast] + '</span>.';
 
         } else if (unfilled.length === 1){ //check how many fields are unfilled and put them into a message for the user
-          this.filledOrNot = 'You must fill in the <span class="text-danger">' + this.formFriendlyNames[unfilled] + '</span> field before the form can be submitted';
+          this.filledOrNot = 'All your progress has been saved but you may not submit this FPR for review without the following field <span class="text-danger">' + this.formFriendlyNames[unfilled] + '</span>';
 
         }
 

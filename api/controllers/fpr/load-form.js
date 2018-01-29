@@ -96,30 +96,23 @@ module.exports = {
 
     }
 
-    // If a form `id` wasn't included, fetch the first draft of theirs that
-    // you can find with "Example Project" as the title.
-    //
-    //
-    //TODO: form currently creates a new template on page reload.
-    //could put in here look for the form that was updatedAt last and reload that in....?
-    //
-    // if (!formToReturn) {
+    // If a form `id` wasn't included, fetch the first draft of theirs that 
+    // you can find with "Example Project" as the title.  
+    if (!formToReturn) {
 
-    //   formToReturn = await FundingProposal.findOne({
-    //     updatedAt: , <-----
-    //     user: this.req.session.userId
-    //   });
+      formToReturn = await FundingProposal.findOne({
+        projectName: 'My New Proposal',
+        user: this.req.session.userId
+      });
 
-    // }
+    }
 
     // Otherwise, create an example project for them and
     // return it.
-    //
-    // NOTE. Sean's change: I've made these blank so that the placeholders will go in the boxes instead.
     if (!formToReturn) {
 
       formToReturn = await FundingProposal.create({
-        projectName: '',
+        projectName: 'My New Proposal',
         startDate: '',
         hashtag: '',
         chatName: '',
@@ -136,8 +129,13 @@ module.exports = {
 
     }
 
+    // Check if the owner has an existing fork of the `FPR` repo
+    // so we can warn them that it will be deleted
+    var githubAccountIsDirty = await sails.hooks.github.checkForExistingRepoFork({ id: this.req.session.userId });
+
     this.res.view('pages/account/fpr-form', {
-      formObject: formToReturn.length ? formToReturn[0] : formToReturn
+      formObject: formToReturn.length ? formToReturn[0] : formToReturn,
+      submissionWarning: githubAccountIsDirty ? 'Your Github account already has a fork of the `The-Bitcoin-Cash-Fund/FPR` repo.  Please backup that work immediately.  When your new project is listed by the admins, YOUR WORK IN THAT REPO WILL BE DELETED ON GITHUB!!' : undefined
     });
 
   }

@@ -12,13 +12,22 @@
     <h1>Funding Proposal Requests</h1>
     <hr>
     <div class="row mb-3">
+      <div class="col-sm-12" v-if="submissionWarning" class="submission-warning">
+        <p>
+          {{ submissionWarning }}
+        </p>
+      </div>
+
       <div class="col-sm-12">
         <h4>Saved Drafts</h4>
       </div>
+
       <div class="col-sm-12">
-        <p v-if="!(forms.draft&&forms.draft.length)"><a href="/form">Start a new proposal</p>
-        <ul v-if="forms.draft&&forms.draft.length">
-          <li v-for="item in forms.draft">
+        <ul>
+          <li>
+            <a href="/form">Start a new proposal</a>
+          </li>
+          <li v-if="forms.draft&&forms.draft.length" v-for="item in forms.draft">
              <a v-if="item.projectName" v-bind:href="'/form/'+item.id">{{ item.projectName }}</a>
              <a v-else v-bind:href="'/form/'+item.id">Draft Proposal {{ item.id }}</a>
           </li>

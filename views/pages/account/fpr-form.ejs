@@ -36,7 +36,6 @@
     </div>
   </div>
 
-
   <div v-bind:hidden="hidden">
     <div class="container">
       <div class="form-width-smaller">
@@ -48,6 +47,15 @@
             <h1 class="mb-0">BCF Funding Proposal Request Form</h1>
           </div>
         </div>
+        <div class="row" v-if="submissionWarning">
+          <div class="col-md-auto submission-warning">
+            <p>
+              {{ submissionWarning }}
+            </p>
+          </div>
+        </div>
+      </div>
+
         <hr>
         <div id="form-messages"></div>
         <form id="ajax-form">
