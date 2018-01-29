@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 
   grunt.config.set('uglify', {
     options: {
-      mangle: false
+      mangle: false,
       // mangle: {
       //   except: [
       //     'AsyncFunction',
