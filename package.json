@@ -36,7 +36,7 @@
     "grunt": "1.0.1",
     "htmlhint": "0.9.13",
     "mocha": "3.0.2",
-    "sails-hook-grunt": "^3.0.2"
+    "sails-hook-grunt": "^2.2.1"
   },
   "scripts": {
     "start": "./web",
