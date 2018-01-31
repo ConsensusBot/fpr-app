@@ -22,6 +22,15 @@ module.exports.http = {
 
   middleware: {
 
+    redirectToHTTPS: (req, res, next) => {
+      if (req.header['x-forwarded-proto'] && req.header['x-forwarded-proto'] !== 'https'){
+        res.redirect(`https://${req.header('host')}${req.url}`);
+      }
+      else {
+        return next();
+      }
+    },
+
     /***************************************************************************
     *                                                                          *
     * The order in which middleware should be run for HTTP requests.           *
@@ -29,16 +38,17 @@ module.exports.http = {
     *                                                                          *
     ***************************************************************************/
 
-    // order: [
-    //   'cookieParser',
-    //   'session',
-    //   'bodyParser',
-    //   'compress',
-    //   'poweredBy',
-    //   'router',
-    //   'www',
-    //   'favicon',
-    // ],
+    order: [
+      'redirectToHTTPS',
+      'cookieParser',
+      'session',
+      'bodyParser',
+      'compress',
+      'poweredBy',
+      'router',
+      'www',
+      'favicon',
+    ],
 
 
     /***************************************************************************
