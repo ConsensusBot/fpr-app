@@ -23,7 +23,7 @@ module.exports.http = {
   middleware: {
 
     redirectToHTTPS: (req, res, next) => {
-      if (req.header['x-forwarded-proto'] && req.header['x-forwarded-proto'] !== 'https'){
+      if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https'){
         res.redirect(`https://${req.header('host')}${req.url}`);
       }
       else {
