@@ -4,7 +4,7 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
-
+var _ = require('lodash');
 module.exports = {
 
   friendlyName: 'Submission from the form page to the FundingProposal endpoint',
@@ -58,9 +58,25 @@ module.exports = {
   },
 
   fn: async function (inputs, exits)  {
-    console.log('Returning forms for user:',this.req.me.id);
 
+    // Fetch all forms belonging to this user.
     var userForms = ( await FundingProposal.find({ user: this.req.me.id }) || [] );
+
+    // For all 'listed' FPRs, compose a link to their
+    // location on the Github master repo.
+    userForms = userForms.map( (oneUserForm) => {
+      var formattedFprId = oneUserForm.fprId;
+      if (oneUserForm.status === 'listed') {
+        formattedFprId = ''+formattedFprId;
+        while (formattedFprId.length < 4) {
+          formattedFprId = '0'+formattedFprId;
+        }
+        oneUserForm.githubLink = 'https://github.com/The-Bitcoin-Cash-Fund/FPR/blob/master/FPR-'+formattedFprId+'.md';
+      }
+
+      return oneUserForm;
+
+    });
 
     // Check if the owner has an existing fork of the `FPR` repo
     // so we can warn them that it will be deleted
