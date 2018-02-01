@@ -35,8 +35,7 @@ var githubHook = function(sails) {
     templateProposalMarkdown: function(userOptions, fprObject) {
 
       var proposalMarkdown = `
-        # ![BCF Logo Round Tiny](https://raw.githubusercontent.com/The-Bitcoin-Cash-Fund/Branding/master/BCF%20Symbol%20Round%20Tiny.png)
-        BCF Funding Proposal Request Template
+        # BCF Funding Proposal Request Template
 
         **Project Name:**
         <%= projectName %>
