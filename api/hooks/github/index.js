@@ -699,7 +699,7 @@ var githubHook = function(sails) {
             console.log('Step 1: User initiates app authorization!');
 
             return res.view('pages/github/login', {
-              beginInstallLink: 'http://github.com/login/oauth/authorize?scope=user,public_repo&client_id='+sails.config.github.oauth.clientId+'&redirect_uri='+sails.config.github.oauth.redirectUrl
+              beginInstallLink: 'http://github.com/login/oauth/authorize?scope=user,repo&client_id='+sails.config.github.oauth.clientId+'&redirect_uri='+sails.config.github.oauth.redirectUrl
             });
 
           }
