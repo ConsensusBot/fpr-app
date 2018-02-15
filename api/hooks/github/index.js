@@ -270,6 +270,8 @@ var githubHook = function(sails) {
     },
     submitUserFPR: async function(userQuery, fprQuery) {
 
+      var userRepos;
+
       var userOptions = await User.findOne({ id: userQuery.id }).populate('githubOauthToken');
       var fprObject = await FundingProposal.findOne({ id: fprQuery.id });
 
@@ -309,7 +311,7 @@ var githubHook = function(sails) {
       if (_.find(userRepos, { name: 'FPR' })) {
         var repoDeletionResults;
         try {
-          repoDeletionResults = await client.repos.delete({owner:userOptions.githubLogin, repo:'FPR'});
+          // repoDeletionResults = await client.repos.delete({owner:userOptions.githubLogin, repo:'FPR'});
         }
         catch (someError) {
           console.log('There was an error',someError);
@@ -516,7 +518,7 @@ var githubHook = function(sails) {
       // FSR repo's administrative client.
       var repoDeletionResults;
       try {
-        repoDeletionResults = await client.repos.delete({owner:userOptions.githubLogin, repo:'FPR'});
+        // repoDeletionResults = await client.repos.delete({owner:userOptions.githubLogin, repo:'FPR'});
       }
       catch (someError) {
         console.log('There was an error',someError);
