@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>The Bitcoin Cash Fund</title>
+    <title>BCF Proposal Builder</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow:400" rel="stylesheet">
 
     <!-- Font Awesome -->
     <script src="https://use.fontawesome.com/96cbd61ead.js"></script>
@@ -48,10 +49,41 @@
   <body>
     <div id="page-wrap">
 
+    <div id="bcf-nav">
+      <div class="inner-wrap">
+        <a href="https://thebitcoincash.fund">
+          <img src="/images/bcf-logo.svg">
+        </a>
+        <div class="nav-items">
+          <ul class="navbar-md-list pull-right">
+        
+            <li class="navbar-md-list-item">
+              <a href="https://thebitcoincash.fund/about/">About</a>
+            </li>
+            <li class="navbar-md-list-item active">
+              <a href="https://fpr.thebitcoincash.fund/">Submit a Proposal</a>
+            </li>
+            <li class="navbar-md-list-item">
+              <a href="https://thebitcoincash.fund/volunteer/">Volunteer</a>
+            </li>
+            <li class="navbar-md-list-item">
+              <a href="https://thebitcoincash.fund/donate/">Donate</a>
+            </li>
+            <li class="navbar-md-list-item">
+              <a href="https://thebitcoincash.fund/faqs/">FAQs</a>
+            </li>
+            <li class="navbar-md-list-item">
+              <a href="https://thebitcoincash.fund/contact/">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <% if(typeof me !== 'undefined' && me) { %>
     <header id="page-header" class="navbar navbar-expand-sm navbar-light bg-light">
       <div class="col-9">
-        <img src="/images/fund-logo.png">
-        <a class="cashfund-brand text-secondary" href="/">Bitcoin Cash Fund Builder</a>
+        <a class="cashfund-brand text-secondary" href="/">BCF Proposal Builder</a>
       </div>
 
         <!---NAV COLLAPSE BUTTON-->
@@ -94,9 +126,6 @@
                     <a class="dropdown-item" href="/logout">Logout</a>
                   </div>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-item nav-link" href="/faqs">FAQ</a>
-                </li>
               </ul> <!-- ****************************** LOGGED IN END ****************************** -->
             <!-- Only in mobile nav -->
 <!--        <a class="nav-item nav-link d-block d-sm-none" href="/account">Account Settings</a>
@@ -111,13 +140,12 @@
                 <a class="nav-item nav-link" href="/git/login/#start">Login with Github</a>
                 <% } %>
               </li>
-              <li class="nav-item">
-                <a class="nav-item nav-link" href="/faqs">FAQ</a>
-              </li>
             </ul>
           <%}%> <!-- ****************************** LOGGED OUT END ****************************** -->
         </div>
-      </header> <!-- ****************************** END NAVBAR ****************************** -->
+      </header> <!-- ****************************** END NAVBAR 
+      ****************************** -->
+      <%}%>
 
       <!-- Alert if email has not been confirmed -->
       <% if(typeof me !== 'undefined' && me.emailChangeCandidate) { %>
