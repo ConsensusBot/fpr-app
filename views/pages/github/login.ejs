@@ -4,14 +4,14 @@
 
       <div class="lead-wrap">
 
-        <h1>Have a brilliant marketing idea?</h1>
+        <h1><%= __('login.head') %></h1>
 
-        <h2>If you have an idea how to spread adoption of Bitcoin Cash, we'd like to help you fund it.</h2>
+        <h2><%= __('login.subhead') %></h2>
       </div>
 
       <img class="big-image hero-image" src="/images/proposal-hero-desktop.svg"/>
 
-      <h3 id="start"><a class="btn" :href="beginInstallLink">Log in with Github</a></h3>
+      <h3 id="start"><a class="btn" :href="beginInstallLink"><%= __('login.github.button') %></a></h3>
       
     </div>
   </div>
@@ -22,12 +22,9 @@
           <img class="big-image hero-image" src="/images/proposal-submit.svg"/>
         </div>
         <div class="col-sm-12 col-lg-8 text-wrap">
-          <h2>What we're looking for</h2>
-          <p><strong>We are looking to promote any non-profit project that will help promote the adoption of Bitcoin Cash.</strong></p>
-
-          <p>Examples of projects we're funding now are Bitcoin Cash video tutorials, a BCH-specific JavaScript library and an info pack to help businesses adopt BCH. We've previously funded the incredible TX Highway, as well as Bitcoin Cash meetups all over the world.</p>
-
-          <p>If you have an idea like this that you think will help make Bitcoin Cash the future of money, submit the form below and we'll evaluate your proposal.</p>
+          <h2><%= __('login.looking.title') %></h2>
+          <p><strong><%= __('login.looking.lead') %></strong></p>
+          <%- __('login.looking.text') %>
         </div>
       </div>
     </div>

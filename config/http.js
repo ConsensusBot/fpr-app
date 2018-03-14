@@ -30,6 +30,53 @@ module.exports.http = {
         return next();
       }
     },
+    
+    i18nPath: (req, res, next) => {
+        var debug = require('debug')('i18npath');
+        
+        // Find a matching prefix
+        var matchedLocale;
+        for (let locale of sails.config.i18n.locales) {
+            var prefix = "/" + locale;
+            if (req.path == prefix || req.path.startsWith(prefix + "/")) {
+                matchedLocale = locale
+                break;
+            }
+        }
+        
+        // Apply rewrite if matched
+        if (matchedLocale) {
+            // Remote the i18n path so that routers continue to match
+            req.url = "/" + req.url.substring(matchedLocale.length + 2);
+            debug("rewriting [" + matchedLocale + "] " + req.url);
+            
+            // Handle redirects to keep the i18n path
+            res.redirect = (function(redirect, locale) {
+                return function(url) {
+                    if (url.match(/^https?:/i)) {
+                        debug("redirecting absolute url " + url);
+                        return redirect(url);
+                    }
+                    else {
+                        debug("redirecting [" + locale + "] " + url);
+                        return redirect('/' + locale + url);
+                    }
+                };
+            })(res.redirect.bind(res), matchedLocale);
+        }
+
+        // We always set a fixed locale (English by default).
+        req.query.lang = matchedLocale || "en";
+
+        // Needed to override the internal logic that always
+        // defaults to the preferred language in the headers.
+        req.headers["accept-language"] = matchedLocale || "en";
+
+        // Set request property to help build urls
+        req.i18nPath = "/" + (matchedLocale || "en");
+        
+        return next();
+    },
 
     /***************************************************************************
     *                                                                          *
@@ -45,6 +92,7 @@ module.exports.http = {
       'bodyParser',
       'compress',
       'poweredBy',
+      'i18nPath',
       'router',
       'www',
       'favicon',

@@ -51,29 +51,29 @@
 
     <div id="bcf-nav">
       <div class="inner-wrap">
-        <a href="https://www.thebitcoincash.fund">
+        <a href="https://www.thebitcoincash.fund<%= req.i18nPath %>">
           <img src="/images/bcf-logo.svg">
         </a>
         <div class="nav-items">
           <ul class="navbar-md-list pull-right">
         
             <li class="navbar-md-list-item">
-              <a href="https://www.thebitcoincash.fund">About</a>
+              <a href="https://www.thebitcoincash.fund<%= req.i18nPath %>/about/"><%= __('nav.about') %></a>
             </li>
             <li class="navbar-md-list-item active">
-              <a href="https://fpr.thebitcoincash.fund">Submit a Proposal</a>
+              <a href="https://fpr.thebitcoincash.fund<%= req.i18nPath %>"><%= __('nav.proposal') %></a>
             </li>
             <li class="navbar-md-list-item">
-              <a href="https://www.thebitcoincash.fund/volunteer/">Volunteer</a>
+              <a href="https://www.thebitcoincash.fund<%= req.i18nPath %>/volunteer/"><%= __('nav.volunteer') %></a>
             </li>
             <li class="navbar-md-list-item">
-              <a href="https://www.thebitcoincash.fund/donate/">Donate</a>
+              <a href="https://www.thebitcoincash.fund<%= req.i18nPath %>/donate/"><%= __('nav.donate') %>x</a>
             </li>
             <li class="navbar-md-list-item">
-              <a href="https://www.thebitcoincash.fund/faqs/">FAQs</a>
+              <a href="https://www.thebitcoincash.fund<%= req.i18nPath %>/faqs/"><%= __('nav.faqs') %></a>
             </li>
             <li class="navbar-md-list-item">
-              <a href="https://www.thebitcoincash.fund/contact/">Contact</a>
+              <a href="https://www.thebitcoincash.fund<%= req.i18nPath %>/contact/"><%= __('nav.contact') %></a>
             </li>
           </ul>
         </div>
