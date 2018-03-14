@@ -73,7 +73,8 @@ module.exports.http = {
         req.headers["accept-language"] = matchedLocale || "en";
 
         // Set request property to help build urls
-        req.i18nPath = "/" + (matchedLocale || "en");
+        //req.i18nPath = "/" + (matchedLocale || "en");
+        req.i18nPath = "";
         
         return next();
     },
